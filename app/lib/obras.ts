@@ -108,6 +108,25 @@ export const OBRAS: Obra[] = [
     catalogOrder: 1,
     featuredOrder: 1,
   },
+  {
+    id: "dima",
+    title: "DIMA",
+    slug: "dima",
+    category: "apps-experiencias",
+    description:
+      "Diccionario Inteligente de Magia Alquímica. Una experiencia interactiva que explora la forma, la vibración y las posibilidades de una palabra.",
+    tagline: "Las palabras también configuran experiencia.",
+    note: "Versión activa en proceso de actualización.",
+    affiliations: ["Magia para Atrevidos", "Universo ¡Qué Embole!"],
+    images: {
+      cover: "/mpa-coin-ego-sum-v3-antique.png",
+    },
+    links: [{ label: "Abrir DIMA", url: "/dima" }],
+    published: true,
+    featured: false,
+    catalogOrder: 2,
+    featuredOrder: 2,
+  },
 ];
 
 /** /obras vista "Destacadas" (default) y Home: selección editorial. */

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DIMA — Conjuratio Dominus</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Merriweather:ital,wght@0,300;1,300&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#a07828;--gold-l:#c9a84c;--gold-glow:rgba(160,120,40,.35);--fc:#E336C3;--fc-dim:rgba(227,54,195,.13);--bg:#0e000d;--text:#e4dede;--td:rgba(228,222,222,.5);--brd:rgba(160,120,40,.25)}
+body{font-family:'Cinzel Decorative',serif;background-color:var(--bg);background-image:radial-gradient(ellipse at 15% 20%,rgba(40,2,35,.9) 0%,transparent 55%),radial-gradient(ellipse at 85% 75%,rgba(18,1,15,.9) 0%,transparent 55%),radial-gradient(ellipse at 50% 50%,rgba(58,1,48,.6) 0%,transparent 65%);color:var(--text);min-height:100vh;cursor:url('https://cur.cursors-4u.net/cursors/cur-13/cur1152.cur'),auto}
+.hero{display:flex;flex-direction:column;align-items:center;padding:3.5rem 2rem 2rem;text-align:center}
+.hero-img{width:min(320px,65vw);margin-bottom:1.8rem;filter:drop-shadow(0 0 35px rgba(227,54,195,.5)) drop-shadow(0 0 70px rgba(160,120,40,.2));animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-.5deg)}50%{transform:translateY(-14px) rotate(.5deg)}}
+h1{font-size:clamp(1.1rem,3.5vw,1.85rem);background:linear-gradient(60deg,#F6E27A,#c9a84c,#8a6520);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.7rem;line-height:1.35;letter-spacing:.04em}
+.hero-sub{font-size:.78rem;color:rgba(242,203,5,.75);max-width:500px;line-height:1.9;margin-bottom:.5rem}
+.hero-fc{color:var(--fc);font-size:.75rem;margin-bottom:1.2rem}
+
+/* TIPO CARDS */
+.tipo-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;max-width:760px;width:100%;margin-bottom:1.8rem}
+.tipo-card{background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:12px;padding:1rem 1.1rem;text-align:left;transition:border-color .25s,background .25s;cursor:default}
+.tipo-card:hover{border-color:rgba(160,120,40,.5);background:rgba(160,120,40,.05)}
+.tipo-card-title{font-size:.68rem;color:var(--gold-l);letter-spacing:.08em;margin-bottom:.4rem}
+.tipo-card-glyph{font-size:1.1rem;margin-bottom:.35rem;display:block}
+.tipo-card-desc{font-family:'Merriweather',serif;font-size:.67rem;color:var(--td);font-style:italic;line-height:1.7}
+
+.instruc{background:rgba(255,255,255,.025);border:1px solid var(--brd);border-radius:14px;padding:1rem 1.6rem;max-width:580px;font-size:.72rem;color:rgba(242,203,5,.65);line-height:2.2;text-align:left;margin-bottom:1.5rem}
+.instruc strong{color:var(--fc)}
+.btn-altar{display:inline-block;padding:.45rem 1rem;font-size:.7rem;font-family:'Cinzel Decorative',serif;background:transparent;color:rgba(242,203,5,.7);border:1px solid rgba(242,203,5,.3);border-radius:8px;cursor:pointer;transition:all .3s;margin-bottom:1.2rem}
+.btn-altar:hover{background:rgba(58,0,61,.5);border-color:var(--fc);color:var(--fc)}
+.frase-dia{background:linear-gradient(60deg,#F6E27A,#c9a84c,#8a6520);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:.88rem;max-width:560px;min-height:1.4rem;line-height:1.8;padding:0 1rem;margin-bottom:.4rem}
+#fraseSorpresa{font-size:.78rem;min-height:1rem;color:var(--fc);-webkit-text-fill-color:var(--fc);background:none;margin-bottom:.5rem}
+.divider{width:100%;max-width:960px;margin:2rem auto;display:flex;align-items:center;gap:1rem;padding:0 2rem}
+.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.divider-label{font-size:.62rem;letter-spacing:.3em;color:var(--gold);opacity:.75;white-space:nowrap}
+.main-wrap{padding:0 2rem 5rem;max-width:1100px;margin:0 auto}
+.sec-label{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+.badge{font-size:.6rem;letter-spacing:.28em;padding:.28rem .8rem;border-radius:20px;text-transform:uppercase}
+.badge-free{background:rgba(160,120,40,.14);border:1px solid rgba(160,120,40,.4);color:var(--gold-l)}
+.badge-plus{background:rgba(227,54,195,.12);border:1px solid rgba(227,54,195,.4);color:var(--fc)}
+.sec-desc{font-size:.68rem;color:var(--td);letter-spacing:.05em}
+
+/* tipo selector con descripción inline */
+.tipo-select-wrap{position:relative}
+.tipo-hint{font-family:'Merriweather',serif;font-size:.63rem;color:rgba(242,203,5,.45);font-style:italic;margin-top:.3rem;line-height:1.5;min-height:1.8em}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:.75rem;align-items:start;margin-bottom:1.2rem}
+.ff{display:flex;flex-direction:column;gap:.3rem}
+label{font-size:.62rem;color:rgba(242,203,5,.6);letter-spacing:.08em;text-transform:uppercase}
+select{padding:.65rem .8rem;font-size:.75rem;border-radius:8px;border:1px solid var(--brd);background:rgba(255,255,255,.04);color:var(--gold-l);font-family:'Cinzel Decorative',serif;outline:none;transition:border-color .2s}
+select:focus{border-color:var(--gold)}
+.btn-main{padding:.65rem 1.4rem;font-size:.72rem;border-radius:8px;border:1px solid var(--gold);background:linear-gradient(135deg,rgba(160,120,40,.25),rgba(90,60,10,.2));color:var(--gold-l);font-family:'Cinzel Decorative',serif;cursor:pointer;box-shadow:0 0 14px var(--gold-glow);transition:all .3s;white-space:nowrap;margin-top:1.4rem}
+.btn-main:hover{background:linear-gradient(135deg,rgba(160,120,40,.45),rgba(90,60,10,.35));box-shadow:0 0 24px var(--gold-glow)}
+.btn-row{display:flex;gap:.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.btn-sec{padding:.5rem 1rem;font-size:.65rem;border-radius:8px;border:1px solid var(--brd);background:transparent;color:rgba(160,120,40,.7);font-family:'Cinzel Decorative',serif;cursor:pointer;transition:all .3s}
+.btn-sec:hover{border-color:var(--fc);color:var(--fc)}
+.status-msg{font-family:'Merriweather',serif;font-size:.68rem;color:rgba(242,203,5,.5);font-style:italic;margin-bottom:1rem;min-height:1rem}
+
+.blocks-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2.5rem}
+.rb{border-radius:12px;padding:1.3rem 1.4rem;min-height:140px;opacity:0;transform:translateY(18px);transition:box-shadow .3s,transform .3s;position:relative;overflow:hidden}
+.rb.vis{animation:fiu .55s ease forwards}
+.rb:hover:not(.locked){transform:translateY(-3px)}
+#b1{background:#080008;box-shadow:0 0 18px rgba(160,120,40,.2);color:#f6e27a}
+#b2,#b3{box-shadow:0 0 18px rgba(160,120,40,.2)}
+#b2{background:#f5f0f5;color:#260033}
+#b3{background:#f0d060;color:#260033}
+.rb h2{font-size:.82rem;margin-bottom:.9rem;padding-bottom:.6rem;border-bottom:1px solid rgba(160,120,40,.2);background:linear-gradient(60deg,#F6E27A,#c9a84c,#8a6520);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.05em}
+#b2 h2,#b3 h2{background:linear-gradient(60deg,#3a003d,#1a0020);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.et{font-size:.67rem;font-weight:bold}
+#b1 .et{color:var(--fc)}
+#b2 .et,#b3 .et{color:#8b008b}
+.rb p{font-family:'Merriweather',serif;font-size:.76rem;line-height:1.8;margin-bottom:.5rem}
+.i{font-style:italic}
+.locked{cursor:default}
+.lo{position:absolute;inset:0;background:rgba(8,0,10,.88);backdrop-filter:blur(5px);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center;gap:.6rem;border:1px solid rgba(227,54,195,.18)}
+.lo svg{width:30px;height:30px;opacity:.8;margin-bottom:.2rem}
+.lo-title{font-size:.7rem;color:var(--fc);letter-spacing:.1em;line-height:1.4}
+.lo-prev{font-family:'Merriweather',serif;font-size:.67rem;color:rgba(255,255,255,.32);font-style:italic;line-height:1.7;max-width:190px}
+.lo-cta{font-size:.6rem;color:rgba(227,54,195,.7);letter-spacing:.1em;border:1px solid rgba(227,54,195,.28);border-radius:6px;padding:.32rem .8rem;margin-top:.2rem;cursor:pointer;transition:all .25s;background:transparent;font-family:'Cinzel Decorative',serif}
+.lo-cta:hover{background:var(--fc-dim);border-color:var(--fc);color:var(--fc)}
+.plus-sec{margin-top:3rem;background:rgba(227,54,195,.035);border:1px solid rgba(227,54,195,.14);border-radius:16px;padding:2rem 2rem 2.5rem;position:relative;overflow:hidden}
+.plus-sec::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(227,54,195,.07) 0%,transparent 70%);pointer-events:none}
+.plus-locked{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.8rem}
+.plus-lock-icon{font-size:1.8rem;opacity:.6}
+.plus-title{font-size:clamp(.85rem,2vw,1.05rem);background:linear-gradient(90deg,var(--fc),#ff8ae8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.08em}
+.plus-feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.7rem;max-width:700px;margin:.5rem 0}
+.pf{background:rgba(255,255,255,.03);border:1px solid rgba(227,54,195,.14);border-radius:10px;padding:.8rem 1rem;text-align:left}
+.pf-t{font-size:.63rem;color:var(--fc);margin-bottom:.28rem;letter-spacing:.07em}
+.pf-d{font-family:'Merriweather',serif;font-size:.65rem;color:var(--td);font-style:italic;line-height:1.6}
+.plus-code-area{display:flex;gap:.6rem;max-width:420px;width:100%}
+.pci{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(227,54,195,.3);border-radius:8px;color:var(--fc);font-family:'Cinzel Decorative',serif;font-size:.72rem;letter-spacing:.2em;padding:.65rem 1rem;outline:none;text-transform:uppercase}
+.pci::placeholder{color:rgba(227,54,195,.3);font-size:.63rem}
+.pci:focus{border-color:var(--fc);background:rgba(227,54,195,.06)}
+.pcb{background:rgba(227,54,195,.2);border:1px solid rgba(227,54,195,.5);border-radius:8px;color:var(--fc);font-family:'Cinzel Decorative',serif;font-size:.68rem;padding:.65rem 1.2rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.pcb:hover{background:rgba(227,54,195,.35)}
+.pce{font-size:.63rem;color:#ff6b6b;font-style:italic;opacity:0;transition:opacity .3s;font-family:'Merriweather',serif}
+.pce.vis{opacity:1}
+.plus-unlocked{display:none}
+.plus-unlocked.active{display:block}
+.psi-wrap{display:flex;gap:.75rem;margin-bottom:1.2rem;align-items:stretch}
+.psi{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(227,54,195,.35);border-radius:10px;color:#f6e27a;font-family:'Cinzel Decorative',serif;font-size:.85rem;letter-spacing:.12em;padding:.9rem 1.2rem;outline:none;text-transform:uppercase}
+.psi::placeholder{color:rgba(227,54,195,.3);font-size:.75rem}
+.psi:focus{border-color:var(--fc);background:rgba(227,54,195,.06)}
+.psb{background:linear-gradient(135deg,rgba(227,54,195,.3),rgba(160,50,150,.2));border:1px solid var(--fc);border-radius:10px;color:var(--fc);font-family:'Cinzel Decorative',serif;font-size:.72rem;padding:.9rem 1.5rem;cursor:pointer;transition:all .3s;white-space:nowrap}
+.psb:hover{background:linear-gradient(135deg,rgba(227,54,195,.5),rgba(160,50,150,.35));box-shadow:0 0 20px rgba(227,54,195,.3)}
+.psb:disabled{opacity:.5;cursor:not-allowed}
+.pbr{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.pb-sec{padding:.45rem .9rem;font-size:.62rem;border-radius:8px;border:1px solid rgba(227,54,195,.22);background:transparent;color:rgba(227,54,195,.6);font-family:'Cinzel Decorative',serif;cursor:pointer;transition:all .3s}
+.pb-sec:hover{border-color:var(--fc);color:var(--fc);background:var(--fc-dim)}
+.plus-loading{text-align:center;padding:2rem;color:var(--fc);font-size:.75rem;letter-spacing:.15em;display:none;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.pbg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+.pb{border-radius:12px;padding:1.3rem 1.4rem;min-height:120px;opacity:0;transform:translateY(18px);transition:box-shadow .3s,transform .3s}
+.pb.vis{animation:fiu .55s ease forwards}
+.pb:hover{transform:translateY(-3px)}
+#pb1{background:#080008;box-shadow:0 0 18px rgba(227,54,195,.14);color:#f6e27a}
+#pb2{background:#f5f0f5;box-shadow:0 0 18px rgba(227,54,195,.14);color:#260033}
+#pb3{background:#f0d060;box-shadow:0 0 18px rgba(227,54,195,.14);color:#260033}
+.pb h2{font-size:.82rem;margin-bottom:.9rem;padding-bottom:.6rem;border-bottom:1px solid rgba(227,54,195,.18);background:linear-gradient(60deg,#F6E27A,#c9a84c,#8a6520);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#pb2 h2,#pb3 h2{background:linear-gradient(60deg,#3a003d,#1a0020);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pb p{font-family:'Merriweather',serif;font-size:.76rem;line-height:1.8;margin-bottom:.5rem}
+#pb1 .et{color:var(--fc)}
+#pb2 .et,#pb3 .et{color:#8b008b}
+.libro-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.5rem}
+.libro-tag{background:rgba(227,54,195,.08);border:1px solid rgba(227,54,195,.25);border-radius:10px;padding:.7rem 1rem;font-size:.68rem;color:rgba(227,54,195,.8);cursor:pointer;transition:all .25s;text-align:center;font-family:'Cinzel Decorative',serif;letter-spacing:.05em;line-height:1.4}
+.libro-tag:hover{background:rgba(227,54,195,.2);border-color:var(--fc);color:var(--fc)}
+.libro-tag.activo{background:rgba(227,54,195,.25);border-color:var(--fc);color:var(--fc)}
+.hist-wrap{margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid rgba(227,54,195,.1);display:none}
+.hist-label{font-size:.62rem;color:rgba(227,54,195,.5);letter-spacing:.2em;margin-bottom:.6rem}
+.hist-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.htag{font-size:.62rem;padding:.25rem .7rem;border-radius:20px;border:1px solid rgba(227,54,195,.22);color:rgba(227,54,195,.6);cursor:pointer;transition:all .2s;font-family:'Cinzel Decorative',serif;letter-spacing:.07em}
+.htag:hover{border-color:var(--fc);color:var(--fc);background:var(--fc-dim)}
+body.modo-altar{background-image:radial-gradient(circle at 50% 50%,#0a0014 0%,#1b001f 100%) !important;background-color:#0a0014 !important}
+@keyframes fiu{to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInSurprise{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@media(max-width:800px){.form-grid,.blocks-grid,.pbg,.tipo-cards{grid-template-columns:1fr}.plus-feats{grid-template-columns:1fr}}
+@media(max-width:500px){.psi-wrap{flex-direction:column}}
+</style>
+</head>
+<body>
+<audio id="ding" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2e2a5f8844.mp3?filename=correct-2-46134.mp3"></audio>
+
+<div class="hero">
+  <img class="hero-img" src="https://i.ibb.co/gb7nGJDB/14-abr-2025-18-54-13-edited-edited.png" alt="DIMA"/>
+  <h1>🔮 DIMA — CONJURATIO DOMINUS</h1>
+  <p class="hero-sub">El conjuro que elijas activará la decodificación.<br/>DIMA mostrará lo que se oculta detrás del sonido...</p>
+  <p class="hero-fc">No busques una definición. Buscá una revelación.</p>
+
+  <!-- TIPO CARDS -->
+  <div class="tipo-cards">
+    <div class="tipo-card">
+      <span class="tipo-card-glyph">🔮</span>
+      <div class="tipo-card-title">Conjuratio Dominus</div>
+      <div class="tipo-card-desc">La palabra como entidad activa. Cada término es un conjuro que invoca una percepción. Analizamos su poder de nombrar y condicionar realidad.</div>
+    </div>
+    <div class="tipo-card">
+      <span class="tipo-card-glyph">🧬</span>
+      <div class="tipo-card-title">Verbum Prime</div>
+      <div class="tipo-card-desc">La estructura interna de la palabra. Raíces etimológicas, fragmentos morfológicos, el código fuente oculto que explica por qué una palabra genera cierto efecto.</div>
+    </div>
+    <div class="tipo-card">
+      <span class="tipo-card-glyph">🗝️</span>
+      <div class="tipo-card-title">Sermo Dominus</div>
+      <div class="tipo-card-desc">La palabra en acción con intención. Una frase, afirmación o enunciado usado como herramienta consciente para direccionar pensamiento y reconfigurar percepción.</div>
+    </div>
+  </div>
+
+  <div class="instruc">
+    <strong>¿Cómo funciona?</strong><br/>
+    1. Elegí un <strong>tipo de conjuro</strong> según lo que querés explorar<br/>
+    2. Seleccioná la <strong>forma</strong> que quiere ser desvelada hoy<br/>
+    3. Elegí tu <strong>vibración</strong> — Alta, Moderata o Gravis<br/>
+    4. Presioná <strong>CONSULTAR AL DIMA</strong> — o dejá que DIMA elija por vos
+  </div>
+
+  <button class="btn-altar" onclick="document.body.classList.toggle('modo-altar')">🌒 Activar Modo Altar</button>
+  <div class="frase-dia" id="fraseDia"></div>
+  <div id="fraseSorpresa"></div>
+</div>
+
+<div class="main-wrap">
+  <div class="divider"><div class="divider-line"></div><div class="divider-label">Acceso Libre</div><div class="divider-line"></div></div>
+  <div class="sec-label"><span class="badge badge-free">Free</span><span class="sec-desc">Consultá palabras del repositorio DIMA</span></div>
+
+  <div class="form-grid">
+    <div class="ff">
+      <label for="tipo">Tipo de conjuro</label>
+      <select id="tipo" onchange="updateTipoHint()">
+        <option value="CD">Conjuratio Dominus</option>
+        <option value="VP">Verbum Prime</option>
+        <option value="Sermo">Sermo Dominus</option>
+      </select>
+      <div class="tipo-hint" id="tipoHint">La palabra como entidad activa que invoca percepción.</div>
+    </div>
+    <div class="ff">
+      <label for="palabra">Forma a desvelar</label>
+      <select id="palabra"><option value="">— cargando —</option></select>
+    </div>
+    <div class="ff">
+      <label for="vib">Vibración</label>
+      <select id="vib">
+        <option value="Alta">Alta</option>
+        <option value="Moderata">Moderata</option>
+        <option value="Gravis">Gravis</option>
+      </select>
+    </div>
+    <button class="btn-main" onclick="consultarDIMA()">🔮 Consultar</button>
+  </div>
+
+  <div class="status-msg" id="statusMsg"></div>
+
+  <div class="btn-row">
+    <button class="btn-sec" onclick="eligePorMi()">🎲 Elegí por mí, DIMA</button>
+    <button class="btn-sec" onclick="sorprendemeDIMA()">✨ Sorpréndeme</button>
+  </div>
+
+  <div class="blocks-grid">
+    <div class="rb" id="b1"></div>
+    <div class="rb locked" id="b2">
+      <div class="lo">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="11" width="16" height="11" rx="2" fill="rgba(227,54,195,.55)"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="rgba(227,54,195,.8)" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1.5" fill="#0e000d"/></svg>
+        <div class="lo-title">▽ Decodificatio Vibratoria</div>
+        <div class="lo-prev">Tu análisis vibratorio completo — niveles, naturaleza, Gradus y Lectio de esta palabra.</div>
+        <button class="lo-cta" onclick="scrollToPlus()">✦ Desbloqueá DIMA Plus</button>
+      </div>
+    </div>
+    <div class="rb locked" id="b3">
+      <div class="lo">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="11" width="16" height="11" rx="2" fill="rgba(227,54,195,.55)"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="rgba(227,54,195,.8)" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1.5" fill="#0e000d"/></svg>
+        <div class="lo-title">✨ Resonantia Ultima</div>
+        <div class="lo-prev">Tu Sermo activador, el Dictum Mutare y la Provocatio — la reconfiguración completa.</div>
+        <button class="lo-cta" onclick="scrollToPlus()">✦ Desbloqueá DIMA Plus</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-label">Acceso Plus</div><div class="divider-line"></div></div>
+
+  <div class="plus-sec" id="plusSec">
+    <div class="plus-locked" id="plusLocked">
+      <div class="plus-lock-icon">🔐</div>
+      <div class="plus-title">DIMA Plus — Acceso Extendido</div>
+      <div class="plus-feats">
+        <div class="pf"><div class="pf-t">✦ Plus Libro</div><div class="pf-d">Accedé a todas las palabras del universo Qué Embole con análisis completo.</div></div>
+        <div class="pf"><div class="pf-t">✦ Plus VIP</div><div class="pf-d">Cualquier palabra, análisis con IA en tiempo real, historial y descarga.</div></div>
+        <div class="pf"><div class="pf-t">✦ 3 bloques completos</div><div class="pf-d">Sigillum Verbi, Decodificatio Vibratoria y Resonantia Ultima sin límites.</div></div>
+        <div class="pf"><div class="pf-t">✦ Ordo MPAe</div><div class="pf-d">Categorización completa: Evigela, Lude, Translude o Transmuta.</div></div>
+      </div>
+      <div class="plus-code-area">
+        <input class="pci" id="pci" placeholder="ingresá tu código" maxlength="30"/>
+        <button class="pcb" onclick="checkPlus()">Desbloquear</button>
+      </div>
+      <div class="pce" id="pce">Código incorrecto. Verificá tu acceso.</div>
+    </div>
+
+    <div class="plus-unlocked" id="plusU">
+      <div class="sec-label"><span class="badge badge-plus">Plus</span><span class="sec-desc" id="nivel-badge">Analizá cualquier palabra con inteligencia DIMA</span></div>
+
+      <!-- LIBRO: selector de palabras -->
+      <div id="libro-selector" style="display:none;margin-bottom:1.5rem">
+        <div style="font-size:.65rem;color:rgba(227,54,195,.6);letter-spacing:.2em;margin-bottom:.8rem">✦ Palabras del universo Qué Embole</div>
+        <div class="libro-grid" id="libroGrid"></div>
+      </div>
+
+      <!-- VIP: buscador libre -->
+      <div id="vip-buscador" style="display:none">
+        <div class="psi-wrap">
+          <input class="psi" id="psi" placeholder="escribí cualquier palabra..." maxlength="50"/>
+          <button class="psb" id="psb" onclick="analizarIA()">🔮 Analizar con DIMA</button>
+        </div>
+        <div class="pbr">
+          <button class="pb-sec" onclick="sorprendemePlus()">✨ Sorpréndeme, DIMA</button>
+          <button class="pb-sec" onclick="descargar()">↓ Descargar análisis</button>
+        </div>
+      </div>
+
+      <div class="plus-loading" id="pload">🔮 DIMA está analizando...</div>
+      <div class="pbg">
+        <div class="pb" id="pb1"></div>
+        <div class="pb" id="pb2"></div>
+        <div class="pb" id="pb3"></div>
+      </div>
+      <div class="hist-wrap" id="hw">
+        <div class="hist-label">✦ Palabras consultadas esta sesión</div>
+        <div class="hist-tags" id="ht"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PLUS_CODE='EgoSUMDIMAPLUS';
+
+// Palabras fallback por tipo (se usan si Google Sheets no carga — CORS en local)
+const FALLBACK={
+  CD:[
+    {Forma:"REALIDAD","Indicia Obscura":"Viene de RES (cosa), no de verdad. Nombra lo relativo a la cosa, no lo absoluto.","Ludum MPAe":"Juego de percepción — ¿cuál realidad estás habitando?","Causa MPAe":"Porque cambiar la palabra cambia el mundo que habitás."},
+    {Forma:"PROBLEMA","Indicia Obscura":"Pro-bállein: lanzar hacia adelante. No es un muro, es un proyectil.","Ludum MPAe":"¿Proyectás el problema o lo habitás?","Causa MPAe":"La palabra activa bloqueo antes de que empieces a pensar."},
+    {Forma:"INTEGRACIÓN","Indicia Obscura":"Integer: entero, intacto. Integrar no es sumar partes, es restituir lo que ya era uno.","Ludum MPAe":"¿Qué estás restituyendo?","Causa MPAe":"Clave del proceso alquímico interior — el tercer cuerpo."},
+    {Forma:"TRANSMUTACIÓN","Indicia Obscura":"Trans+mutare: cambio que cruza un umbral. No es modificación, es transformación de naturaleza.","Ludum MPAe":"¿Cruzaste el umbral o solo redecoaste?","Causa MPAe":"La palabra final del proceso MPA — el estado al que apunta todo."},
+    {Forma:"FORMA","Indicia Obscura":"Del latín forma: molde, figura. La forma precede al contenido — moldea lo que cabe en ella.","Ludum MPAe":"¿Sos la forma o lo que la habita?","Causa MPAe":"Entender que somos formas permite salir de ellas."},
+    {Forma:"CONCIENCIA","Indicia Obscura":"Con-scire: saber junto. No es solo saber, es saber que sabés.","Ludum MPAe":"¿Con quién sabés? ¿Con tu patraña o con tu eje?","Causa MPAe":"El punto de partida de cualquier transmutación real."}
+  ],
+  VP:[
+    {Forma:"AMAN (אמן)","Indicia Obscura":"Raíz hebrea de firmeza estructural. No fe ciega — base que sostiene.","Ludum MPAe":"¿Tu base es creencia o presencia?","Causa MPAe":"El Verbus de Emuná — la raíz de todo lo que permanece."},
+    {Forma:"RES (latín)","Indicia Obscura":"Cosa, objeto. Origen de 'realidad'. Lo que existe como cosa, no como verdad.","Ludum MPAe":"¿Estás nombrando cosas o verdades?","Causa MPAe":"Revela la ilusión estructural del lenguaje cotidiano."},
+    {Forma:"IUNGERE (latín)","Indicia Obscura":"Unir con propósito. No mezcla — alineación funcional. Origen de 'conjunción'.","Ludum MPAe":"¿Tus partes están juntas o integradas?","Causa MPAe":"El núcleo alquímico de la cuarta etapa del proceso."},
+    {Forma:"NIGREDO (latín)","Indicia Obscura":"Negro, oscuridad. Primera etapa alquímica — la calcinación de lo que ya no sirve.","Ludum MPAe":"¿Estás en tu nigredo o escapándolo?","Causa MPAe":"Sin nigredo no hay albedo. Sin oscuridad no hay transmutación."}
+  ],
+  Sermo:[
+    {Forma:"Evigila. Lude. Transmuta.","Indicia Obscura":"El mantra fundacional de MPA. Tres acciones que son tres estados.","Ludum MPAe":"¿Cuál de los tres estás habitando ahora?","Causa MPAe":"La síntesis del sistema en tres palabras."},
+    {Forma:"No te emboles. Transmuta.","Indicia Obscura":"Comando directo que convierte el estado en acción. Reconoce el embolamiento sin juzgarlo.","Ludum MPAe":"¿Desde dónde lo decís? ¿Desde la bola o desde afuera?","Causa MPAe":"El Sermo que activa el pasaje del estado al movimiento."},
+    {Forma:"No creo. Permanezco.","Indicia Obscura":"Emuná en Sermo. Reemplaza la fe por la presencia estructural.","Ludum MPAe":"¿Podés permanecer sin necesitar prueba?","Causa MPAe":"Activa el eje interno cuando la evidencia externa falta."},
+    {Forma:"La conjunción no es regresar. Es reconfigurar.","Indicia Obscura":"Resignifica la unión como alquimia, no como repetición.","Ludum MPAe":"¿Qué estás reconfigurando en este momento?","Causa MPAe":"Diferencia recaída de reingreso consciente."}
+  ]
+};
+
+const URLS={
+  CD:"https://docs.google.com/spreadsheets/d/e/2PACX-1vT3ENMxScg8YKXXTyIIYwkxF7Hh2VHP8f3Rlo8VSsigr420Q_alu8cU2Ft5j3vyyqEib3mlb9tvZ4Lt/pub?gid=1680193813&single=true&output=csv",
+  VP:"https://docs.google.com/spreadsheets/d/e/2PACX-1vRgyKZQ09SI34-N19kUF8Psm79XQfwHj6QVuE3RrLUlBih54QN7lOtRZOc8_Hf2BWUakJMutJ0HZsnX/pub?gid=1003692858&single=true&output=csv",
+  Sermo:"https://docs.google.com/spreadsheets/d/e/2PACX-1vRgyKZQ09SI34-N19kUF8Psm79XQfwHj6QVuE3RrLUlBih54QN7lOtRZOc8_Hf2BWUakJMutJ0HZsnX/pub?gid=1871206921&single=true&output=csv"
+};
+
+let data=[];
+let historial=[];
+
+const TIPO_HINTS={
+  CD:"La palabra como entidad activa que invoca percepción.",
+  VP:"Las raíces — el código fuente oculto de la palabra.",
+  Sermo:"Frases con intención: lenguaje usado como herramienta consciente."
+};
+
+function updateTipoHint(){
+  const t=document.getElementById('tipo').value;
+  document.getElementById('tipoHint').textContent=TIPO_HINTS[t]||'';
+}
+
+function setStatus(msg){document.getElementById('statusMsg').textContent=msg;}
+
+function poblarSelect(d){
+  const s=document.getElementById('palabra');
+  s.innerHTML='';
+  d.forEach(r=>{
+    const o=document.createElement('option');
+    o.value=r['Forma'];o.textContent=r['Forma'];
+    s.appendChild(o);
+  });
+}
+
+function cargar(tipo,cb){
+  setStatus('Cargando palabras...');
+  Papa.parse(URLS[tipo],{
+    download:true,header:true,
+    complete:function(r){
+      const d=r.data.filter(x=>x['Forma']);
+      if(d.length>0){
+        data=d;
+        poblarSelect(data);
+        setStatus('');
+        if(cb)cb();
+      } else {
+        usarFallback(tipo,cb);
+      }
+    },
+    error:function(){
+      usarFallback(tipo,cb);
+    }
+  });
+  // timeout fallback — si no cargó en 4 segundos, usa fallback
+  setTimeout(function(){
+    if(document.getElementById('palabra').options.length===0||document.getElementById('palabra').options[0].value===''){
+      usarFallback(tipo,cb);
+    }
+  },4000);
+}
+
+function usarFallback(tipo,cb){
+  data=FALLBACK[tipo]||[];
+  poblarSelect(data);
+  setStatus('Mostrando palabras de ejemplo. Las planillas completas cargarán cuando estés en línea.');
+  if(cb)cb();
+}
+
+document.getElementById('tipo').addEventListener('change',function(){
+  cargar(this.value,null);
+  updateTipoHint();
+});
+cargar('CD',null);
+
+function playDing(){const a=document.getElementById('ding');if(a){a.currentTime=0;a.play().catch(()=>{});}}
+
+function consultarDIMA(){
+  const p=document.getElementById('palabra').value;
+  const v=document.getElementById('vib').value;
+  if(!p)return;
+  const row=data.find(r=>r['Forma']===p);
+  if(!row)return;
+  playDing();
+  const b=document.getElementById('b1');
+  b.className='rb';
+  b.innerHTML=`<h2>🔐 Sigillum Verbi</h2>
+    <p><span class="et">🔤 FORMA:</span> ${row['Forma']}</p>
+    <p><span class="et">🎯 LUDUM TUAE:</span> ${v}</p>
+    <p><span class="et">❓ INDICIA OBSCURA:</span> ${row['Indicia Obscura']||'—'}</p>
+    <p><span class="et">🎯 LUDUM MPAE:</span> ${row['Ludum MPAe']||'—'}</p>
+    <p><span class="et">⚡ CAUSA MPAE:</span> ${row['Causa MPAe']||'—'}</p>`;
+  setTimeout(()=>b.classList.add('vis'),50);
+}
+
+function eligePorMi(){
+  const ts=['CD','VP','Sermo'],vs=['Alta','Moderata','Gravis'];
+  const t=ts[Math.floor(Math.random()*ts.length)];
+  document.getElementById('tipo').value=t;
+  document.getElementById('vib').value=vs[Math.floor(Math.random()*vs.length)];
+  updateTipoHint();
+  cargar(t,function(){
+    const opts=Array.from(document.getElementById('palabra').options);
+    if(opts.length)document.getElementById('palabra').value=opts[Math.floor(Math.random()*opts.length)].value;
+    consultarDIMA();
+  });
+}
+
+const frS=["La palabra que evitás... es la que te contiene.","Tu vibración no miente. ¿Vos sí?","DIMA no define. Te muestra lo que temés mirar.","El lenguaje no es inocente. Vos tampoco.","Cada sílaba es una llave... o una cárcel.","¿Y si el conjuro no es externo, sino vos?","No sabés lo que decís... hasta que DIMA te lo revela.","El silencio también es una palabra. Pero rara vez es tuya."];
+function sorprendemeDIMA(){
+  const el=document.getElementById('fraseSorpresa');
+  el.textContent=frS[Math.floor(Math.random()*frS.length)];
+  el.style.animation='none';
+  setTimeout(()=>{el.style.animation='fadeInSurprise 1s ease';},10);
+  eligePorMi();
+}
+
+const frD=["Evigila: La verdad no siempre grita, a veces susurra.","Si repetís una palabra sin cuestionarla, ¿a quién pertenece?","La vibración que elegís es el conjuro que te habita.","DIMA no define. DIMA revela. ¿Te atreves?","Tu voz crea. Tus palabras son llaves.","Lo que llamás sombra quizás sea semilla.","No temas la pregunta. Teme la repetición sin sentido."];
+const hoy=new Date();
+const elF=document.getElementById('fraseDia');
+const fr=frD[(hoy.getMonth()*31+hoy.getDate())%frD.length];
+let fi=0;elF.textContent='';
+function tw(){if(fi<fr.length){elF.textContent+=fr.charAt(fi++);setTimeout(tw,45);}}tw();
+
+function norm(s){return s.trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z0-9]/g,'');}
+document.getElementById('pci').addEventListener('keydown',e=>{if(e.key==='Enter')checkPlus();});
+const LIBRO_CODE='CLUBQUEEMBOLE1';
+let nivelActivo='vip';
+
+const PALABRAS_LIBRO=[
+  'Bola','Embole','Patrañas','Disolución','Vibración','Resonancia','Potencia','Nigredo',
+  'Forma','Estructura','Transmutación','Conciencia','Percepción','Patraña','Umbral',
+  'Quiebre','Grieta','Reconfiguración','Separación','Sombra','Espejo','Retorno',
+  'Punctum non reditus','No poder desver','La incomodidad que despierta'
+];
+
+function buildLibroGrid(){
+  const grid=document.getElementById('libroGrid');
+  grid.innerHTML=PALABRAS_LIBRO.map(p=>
+    `<div class="libro-tag" onclick="seleccionarLibro('${p}')">${p}</div>`
+  ).join('');
+}
+
+function seleccionarLibro(palabra){
+  document.querySelectorAll('.libro-tag').forEach(t=>t.classList.remove('activo'));
+  event.target.classList.add('activo');
+  document.getElementById('psi')||document.createElement('input');
+  // usar el input oculto para pasar la palabra
+  analizarLibro(palabra);
+}
+
+async function analizarLibro(palabra){
+  const load=document.getElementById('pload');
+  load.style.display='block';
+  ['pb1','pb2','pb3'].forEach(id=>{const b=document.getElementById(id);b.className='pb';b.innerHTML='';});
+  try{
+    const res=await fetch('/api/dima',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({palabra,nivel:'libro'})});
+    const p=await res.json();
+    if(p.error){
+      load.style.display='none';
+      document.getElementById('pb1').innerHTML='<p style="color:rgba(227,54,195,.7);font-family:Merriweather,serif;font-size:.75rem;">'+p.error+'</p>';
+      document.getElementById('pb1').classList.add('vis');
+      return;
+    }
+    load.style.display='none';
+    if(!historial.includes(palabra.toUpperCase())){historial.push(palabra.toUpperCase());renderHist();}
+    playDing();
+    renderBloques(p);
+  }catch(e){
+    load.style.display='none';
+    document.getElementById('pb1').innerHTML='<p style="color:rgba(227,54,195,.7);font-family:Merriweather,serif;font-size:.75rem;">Error al conectar. Intentá de nuevo.</p>';
+    document.getElementById('pb1').classList.add('vis');
+  }
+}
+
+function renderBloques(p){
+  const fuente=p.fuente==='base'?'📚 Desde la base DIMA':'🔮 Generado por IA';
+  const b1=document.getElementById('pb1');
+  b1.className='pb';
+  b1.innerHTML='<h2>'+p.bloque1.titulo+'</h2>'
+    +'<p style="font-size:.6rem;color:rgba(227,54,195,.5);font-family:Merriweather,serif;font-style:italic;margin-bottom:.8rem">'+fuente+'</p>'
+    +'<p><span class="et">🔤 FORMA:</span> '+p.bloque1.forma+'</p>'
+    +'<p><span class="et">🜂 ORDO MPAE:</span> '+(p.bloque1.ordo||'—')+'</p>'
+    +'<p><span class="et">❓ INDICIA OBSCURA:</span> '+p.bloque1.indicia+'</p>'
+    +'<p><span class="et">🎯 LUDUM MPAE:</span> '+p.bloque1.ludum_mpae+'</p>'
+    +'<p><span class="et">⚡ CAUSA MPAE:</span> '+p.bloque1.causa_mpae+'</p>';
+  setTimeout(()=>b1.classList.add('vis'),50);
+  const b2=document.getElementById('pb2');
+  b2.className='pb';
+  b2.innerHTML='<h2>'+p.bloque2.titulo+'</h2>'
+    +'<p><span class="et">📜 INITIUM DIMA:</span> <span class="i">'+p.bloque2.initium+'</span></p>'
+    +'<p><span class="et">📖 LECTIO:</span> '+p.bloque2.lectio+'</p>'
+    +'<p><span class="et">📊 GRADUS:</span> '+p.bloque2.gradus+'</p>'
+    +'<p><span class="et">🌿 NATURA:</span> '+p.bloque2.natura+'</p>';
+  setTimeout(()=>b2.classList.add('vis'),250);
+  const b3=document.getElementById('pb3');
+  b3.className='pb';
+  b3.innerHTML='<h2>'+p.bloque3.titulo+'</h2>'
+    +'<p><span class="et">✨ VIAE:</span> '+p.bloque3.viae+'</p>'
+    +'<p><span class="et">🖋️ DICTUM MUTARE:</span> <span class="i">'+p.bloque3.dictum+'</span></p>'
+    +'<p><span class="et">💥 PROVOCATIO:</span> '+p.bloque3.provocatio+'</p>'
+    +'<p><span class="et">🌀 SUSSURRO:</span> <span class="i">'+(p.bloque3.sussurro||'—')+'</span></p>'
+    +'<p><span class="et">🗝️ ACTIVATIO:</span> '+p.bloque3.activatio+'</p>'
+    +'<p><span class="et">🔚 CIERRE:</span> <span class="i">'+p.bloque3.cierre+'</span></p>';
+  setTimeout(()=>b3.classList.add('vis'),450);
+}
+
+function checkPlus(){
+  const v=document.getElementById('pci').value,err=document.getElementById('pce');
+  if(norm(v)===norm(PLUS_CODE)){
+    nivelActivo='vip';
+    document.getElementById('plusLocked').style.display='none';
+    document.getElementById('plusU').classList.add('active');
+    document.getElementById('nivel-badge').textContent='✦ VIP — Búsqueda libre con IA';
+    document.getElementById('vip-buscador').style.display='block';
+    document.getElementById('libro-selector').style.display='none';
+    err.classList.remove('vis');
+  }else if(norm(v)===norm(LIBRO_CODE)){
+    nivelActivo='libro';
+    document.getElementById('plusLocked').style.display='none';
+    document.getElementById('plusU').classList.add('active');
+    document.getElementById('nivel-badge').textContent='✦ Plus Libro — Universo Qué Embole';
+    document.getElementById('libro-selector').style.display='block';
+    document.getElementById('vip-buscador').style.display='none';
+    buildLibroGrid();
+    err.classList.remove('vis');
+  }else{
+    err.classList.add('vis');
+    setTimeout(()=>err.classList.remove('vis'),2500);
+  }
+}
+
+function scrollToPlus(){
+  document.getElementById('plusSec').scrollIntoView({behavior:'smooth',block:'center'});
+  setTimeout(()=>document.getElementById('pci').focus(),600);
+}
+
+document.getElementById('psi').addEventListener('keydown',e=>{if(e.key==='Enter')analizarIA();});
+
+async function analizarIA(){
+  const palabra=document.getElementById('psi').value.trim();
+  if(!palabra)return;
+  const btn=document.getElementById('psb'),load=document.getElementById('pload');
+  btn.disabled=true;load.style.display='block';
+  ['pb1','pb2','pb3'].forEach(id=>{const b=document.getElementById(id);b.className='pb';b.innerHTML='';});
+  try{
+    const res=await fetch('/api/dima',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({palabra,nivel:nivelActivo})});
+    const p=await res.json();
+    if(p.error)throw new Error(p.error);
+    load.style.display='none';btn.disabled=false;
+    if(!historial.includes(palabra.toUpperCase())){historial.push(palabra.toUpperCase());renderHist();}
+    playDing();
+    renderBloques(p);
+  }catch(e){
+    load.style.display='none';btn.disabled=false;
+    const b=document.getElementById('pb1');
+    b.innerHTML='<p style="color:rgba(227,54,195,.7);font-family:Merriweather,serif;font-size:.75rem;">Error: '+e.message+'</p>';
+    b.classList.add('vis');
+  }
+}
+
+function renderHist(){
+  const hw=document.getElementById('hw'),ht=document.getElementById('ht');
+  hw.style.display='block';
+  ht.innerHTML=historial.map(p=>`<span class="htag" onclick="usarHist('${p}')">${p}</span>`).join('');
+}
+function usarHist(p){document.getElementById('psi').value=p;analizarIA();}
+
+const srpPlus=["TRANSMUTACIÓN","EMUNÁ","NIGREDO","CONJUNCIÓN","PATRAÑA","EMBOLARSE","EVIGILA","UMBRAL","SOMBRA","INTEGRACIÓN","FORMA","CONCIENCIA","FRACTURA","RETORNO"];
+function sorprendemePlus(){const p=srpPlus[Math.floor(Math.random()*srpPlus.length)];document.getElementById('psi').value=p;analizarIA();}
+
+function descargar(){
+  const b1=document.getElementById('pb1').innerText;
+  const b2=document.getElementById('pb2').innerText;
+  const b3=document.getElementById('pb3').innerText;
+  if(!b1&&!b2&&!b3)return;
+  const p=document.getElementById('psi').value.toUpperCase();
+  const txt=`DIMA — ANÁLISIS DE: ${p}\n${'='.repeat(40)}\n\n${b1}\n\n${'-'.repeat(30)}\n\n${b2}\n\n${'-'.repeat(30)}\n\n${b3}\n\n${'='.repeat(40)}\nMAGIA PARA ATREVIDOS — magiaparaatrevidos.com`;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));
+  a.download=`DIMA_${p}.txt`;a.click();
+}
+</script>
+</body>
+</html>
