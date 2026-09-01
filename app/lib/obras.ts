@@ -121,7 +121,13 @@ export const OBRAS: Obra[] = [
     images: {
       cover: "/mpa-coin-ego-sum-v3-antique.png",
     },
-    links: [{ label: "Abrir DIMA", url: "/dima" }],
+    links: [
+      {
+        label: "Abrir DIMA",
+        url: "https://dima.magiaparaatrevidos.com",
+        external: true,
+      },
+    ],
     published: true,
     featured: false,
     catalogOrder: 2,

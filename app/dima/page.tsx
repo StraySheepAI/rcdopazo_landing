@@ -1,12 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function DimaPage() {
-  return (
-    <main className="dima-live-shell">
-      <iframe
-        className="dima-live-frame"
-        src="/dima-app/index.html"
-        title="DIMA — Diccionario Inteligente de Magia Alquímica"
-        allow="clipboard-write"
-      />
-    </main>
-  );
+  redirect("https://dima.magiaparaatrevidos.com");
 }
