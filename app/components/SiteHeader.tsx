@@ -143,13 +143,15 @@ export function SiteHeader() {
                 </span>
                 <span className="mobile-parent-chevron" aria-hidden="true">⌄</span>
               </button>
-              <div className="mobile-children">
-                {link.children.map((child) => (
-                  <a className="mobile-child" key={child.href} href={child.href} onClick={closeMobileMenu}>
-                    {child.label}
-                  </a>
-                ))}
-              </div>
+              {mobileSection === link.href && (
+                <div className="mobile-children">
+                  {link.children.map((child) => (
+                    <a className="mobile-child" key={child.href} href={child.href} onClick={closeMobileMenu}>
+                      {child.label}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             <Link href={link.href} onClick={closeMobileMenu}>

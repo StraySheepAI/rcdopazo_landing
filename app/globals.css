@@ -142,7 +142,7 @@ main,footer{position:relative;z-index:1}
    of the fixed .cosmos backdrop) instead of being compared against .cosmos
    globally — without it .cosmos's opaque z-index:-1 layer always painted
    over the photo (z-index:-2) and it never showed at all. */
-.hero{position:relative;padding:200px 0 120px;overflow:hidden;isolation:isolate}
+.hero{position:relative;padding:140px 0 64px;overflow:hidden;isolation:isolate}
 .hero-photo{position:absolute;inset:0;z-index:-2}
 .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:66% 47%;opacity:.49;filter:brightness(.86) contrast(1.07) saturate(.96)}
 .hero-photo::after{content:'';position:absolute;inset:0;background:
@@ -357,7 +357,7 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
 }
 
 @media(max-width:560px){
-  .hero{padding:150px 0 70px}
+  .hero{padding:118px 0 48px}
   .section{padding:88px 0}
   .novedades{padding:0 0 72px}
   .nodes-grid{grid-template-columns:1fr}
