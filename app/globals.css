@@ -37,16 +37,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fuchsia);outline-of
 .cosmos{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:var(--bg)}
 main,footer{position:relative;z-index:1}
 .cosmic-motion-overlay{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible;mix-blend-mode:screen}
-.light-branch{fill:none;stroke-width:.7;stroke-linecap:round;stroke-linejoin:round;opacity:.42;transform-box:fill-box;transform-origin:center}
-.light-branch path{stroke:currentColor;filter:drop-shadow(0 0 3px currentColor)}
-.light-branch circle{fill:currentColor;stroke:none;filter:drop-shadow(0 0 5px currentColor);animation:branchNodePulse 2.8s ease-in-out infinite alternate}
-.light-branch circle:nth-of-type(2){animation-delay:-1.1s}.light-branch circle:nth-of-type(3){animation-delay:-2s}
-.branch-gold{color:#d8b96e;animation:branchDriftA 16s ease-in-out infinite alternate}
-.branch-violet{color:#9a6ae0;animation:branchDriftB 19s ease-in-out -5s infinite alternate}
-.branch-pink{color:#d65a9f;animation:branchDriftA 21s ease-in-out -9s infinite alternate-reverse}
-@keyframes branchDriftA{0%{transform:translate3d(-18px,10px,0) rotate(-1deg);opacity:.25}50%{opacity:.58}100%{transform:translate3d(34px,-18px,0) rotate(1.5deg);opacity:.38}}
-@keyframes branchDriftB{0%{transform:translate3d(28px,-12px,0) rotate(1deg);opacity:.24}55%{opacity:.62}100%{transform:translate3d(-38px,22px,0) rotate(-1.2deg);opacity:.4}}
-@keyframes branchNodePulse{0%{r:2;opacity:.45}100%{r:4.5;opacity:1}}
+.light-speck{transform-box:fill-box;transform-origin:center;opacity:.28;animation:speckFloat 12s ease-in-out infinite alternate;filter:blur(.35px) drop-shadow(0 0 4px currentColor) drop-shadow(0 0 11px currentColor)}
+.gold-speck{fill:#d8b96e;color:#d8b96e}.violet-speck{fill:#9a6ae0;color:#9a6ae0}.pink-speck{fill:#d65a9f;color:#d65a9f}
+.s2{animation-duration:16s;animation-delay:-5s}.s3{animation-duration:14s;animation-delay:-9s}.s4{animation-duration:18s;animation-delay:-3s}.s5{animation-duration:15s;animation-delay:-11s}.s6{animation-duration:20s;animation-delay:-7s}.s7{animation-duration:17s;animation-delay:-13s}.s8{animation-duration:19s;animation-delay:-4s}
+@keyframes speckFloat{0%{transform:translate3d(-10px,12px,0) scale(.72);opacity:.18}48%{opacity:.62}100%{transform:translate3d(22px,-18px,0) scale(1.35);opacity:.34}}
 .cosmos::before{content:"";position:absolute;inset:-4%;background:url('/hero-cosmic-bg.jpg') 66% 47%/cover no-repeat;opacity:.16;filter:brightness(.7) saturate(.92);transform:scale(1.04);animation:cosmicBreath 22s ease-in-out infinite alternate}
 .cosmos::after{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 72% 38%,rgba(221,121,51,.12),transparent 20%),radial-gradient(circle at 58% 64%,rgba(119,62,190,.13),transparent 25%),radial-gradient(circle at 84% 72%,rgba(214,67,154,.1),transparent 19%);filter:blur(42px);animation:cosmicEmbers 28s ease-in-out infinite alternate}
 .nebula{position:absolute;border-radius:50%;filter:blur(110px);opacity:.45;animation:nebulaDrift 24s ease-in-out infinite}
