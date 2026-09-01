@@ -11,6 +11,41 @@ export default function BitacoraPage() {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
 
+  const playThresholdSound = () => {
+    const AudioContextClass = window.AudioContext;
+    if (!AudioContextClass) return;
+
+    const context = new AudioContextClass();
+    const master = context.createGain();
+    master.gain.setValueAtTime(0.0001, context.currentTime);
+    master.gain.exponentialRampToValueAtTime(0.12, context.currentTime + 0.16);
+    master.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 3.8);
+    master.connect(context.destination);
+
+    [220, 277.18, 329.63, 440].forEach((frequency, index) => {
+      const oscillator = context.createOscillator();
+      const voice = context.createGain();
+      const begins = context.currentTime + index * 0.34;
+      oscillator.type = index % 2 === 0 ? "sine" : "triangle";
+      oscillator.frequency.setValueAtTime(frequency, begins);
+      oscillator.detune.setValueAtTime(index % 2 === 0 ? -5 : 5, begins);
+      voice.gain.setValueAtTime(0.0001, begins);
+      voice.gain.exponentialRampToValueAtTime(0.22, begins + 0.22);
+      voice.gain.exponentialRampToValueAtTime(0.0001, begins + 2.45);
+      oscillator.connect(voice);
+      voice.connect(master);
+      oscillator.start(begins);
+      oscillator.stop(begins + 2.55);
+    });
+
+    window.setTimeout(() => void context.close(), 4100);
+  };
+
+  const toggleMessage = () => {
+    if (!open) playThresholdSound();
+    setOpen((value) => !value);
+  };
+
   return (
     <>
       <Cosmos />
@@ -106,7 +141,7 @@ export default function BitacoraPage() {
                   type="button"
                   className="fragment-toggle"
                   aria-expanded={open}
-                  onClick={() => setOpen((value) => !value)}
+                  onClick={toggleMessage}
                 >
                   {open ? t.bitacora.cerrar : t.bitacora.abrir}
                   <span aria-hidden="true">{open ? "↑" : "↓"}</span>

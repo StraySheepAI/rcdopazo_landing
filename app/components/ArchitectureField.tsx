@@ -101,15 +101,15 @@ export function ArchitectureField() {
       const bend = Math.sin(t * 0.00018 + rank * 2.1) * Math.min(46, len * 0.13);
       const c = { x: (a.x + b.x) / 2 + nx * bend, y: (a.y + b.y) / 2 + ny * bend };
       const g = ctx!.createLinearGradient(a.x, a.y, b.x, b.y);
-      g.addColorStop(0, rgba(color, 0.05));
+      g.addColorStop(0, rgba(color, 0.09));
       g.addColorStop(0.48, rgba(color, alpha));
-      g.addColorStop(1, rgba(color, 0.06));
+      g.addColorStop(1, rgba(color, 0.1));
       [-5, 0, 6].forEach((o, i) => {
         ctx!.beginPath();
         ctx!.moveTo(a.x + nx * o, a.y + ny * o);
         ctx!.quadraticCurveTo(c.x + nx * o, c.y + ny * o, b.x + nx * o, b.y + ny * o);
         ctx!.strokeStyle = g;
-        ctx!.lineWidth = i === 1 ? 1 : 0.45;
+        ctx!.lineWidth = i === 1 ? 1.35 : 0.62;
         ctx!.stroke();
       });
       const u = (t * 0.000055 + rank * 0.27) % 1;
@@ -119,7 +119,7 @@ export function ArchitectureField() {
       ctx!.moveTo(trail.x, trail.y);
       ctx!.lineTo(p.x, p.y);
       ctx!.strokeStyle = rgba(color, 0.68);
-      ctx!.lineWidth = 1.5;
+      ctx!.lineWidth = 1.9;
       ctx!.stroke();
       const glow = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, 9);
       glow.addColorStop(0, rgba(color, 0.8));
@@ -136,7 +136,7 @@ export function ArchitectureField() {
       const narrow = w < 480;
       const cx = w * (narrow ? 0.5 : 0.52);
       const cy = h * 0.48;
-      const orbit = Math.min(w * (narrow ? 0.26 : 0.31), h * (narrow ? 0.26 : 0.31));
+      const orbit = Math.min(w * (narrow ? 0.27 : 0.34), h * (narrow ? 0.27 : 0.34));
       return ROOTS.map((r, i) => {
         const drift = Math.sin(t * 0.00013 + i * 2.2) * 0.08;
         const a = r.angle + drift;
@@ -191,9 +191,9 @@ export function ArchitectureField() {
       if (logo!.complete) {
         ctx!.save();
         ctx!.translate(cx, cy);
-        ctx!.globalAlpha = 0.78;
-        ctx!.shadowBlur = 22;
-        ctx!.shadowColor = "rgba(224,166,70,.2)";
+        ctx!.globalAlpha = 0.92;
+        ctx!.shadowBlur = 30;
+        ctx!.shadowColor = "rgba(224,166,70,.32)";
         ctx!.drawImage(logo!, -R * pulse, -R * pulse, R * 2 * pulse, R * 2 * pulse);
         ctx!.restore();
       }
@@ -209,23 +209,24 @@ export function ArchitectureField() {
 
     function network(P: Root[], cx: number, cy: number, R: number) {
       const narrow = w < 480;
-      const orbit = Math.min(w * (narrow ? 0.26 : 0.31), h * (narrow ? 0.26 : 0.31));
-      tri(cx, cy, orbit * 1.03, -Math.PI / 2 + t * 0.000008, COLORS[0], 0.11, 0.8, 0.005);
+      const orbit = Math.min(w * (narrow ? 0.27 : 0.34), h * (narrow ? 0.27 : 0.34));
+      tri(cx, cy, orbit * 1.03, -Math.PI / 2 + t * 0.000008, COLORS[0], 0.18, 1.05, 0.008);
       P.forEach((p, i) =>
-        curve({ x: cx + Math.cos(p.angle) * R * 0.72, y: cy + Math.sin(p.angle) * R * 0.72 }, p, p.color, i, 0.33)
+        curve({ x: cx + Math.cos(p.angle) * R * 0.72, y: cy + Math.sin(p.angle) * R * 0.72 }, p, p.color, i, 0.46)
       );
-      P.forEach((p, i) => curve(p, P[(i + 1) % 3], p.color, i + 3, 0.16));
+      P.forEach((p, i) => curve(p, P[(i + 1) % 3], p.color, i + 3, 0.24));
       P.forEach((p, i) => {
         const heat = pointer.on ? Math.max(0, 1 - Math.hypot(pointer.x - p.x, pointer.y - p.y) / 150) : 0;
-        tri(p.x, p.y, 39 + Math.sin(t * 0.00035 + i) * 4, -Math.PI / 2 + t * 0.00005 * (i % 2 ? 1 : -1), p.color, 0.42 + heat * 0.25, 1, 0.018);
-        tri(p.x, p.y, 49, -Math.PI / 2 - t * 0.000027, p.color, 0.13, 0.55);
+        const rootRadius = narrow ? 37 : Math.max(43, Math.min(56, w * 0.048));
+        tri(p.x, p.y, rootRadius + Math.sin(t * 0.00035 + i) * 4, -Math.PI / 2 + t * 0.00005 * (i % 2 ? 1 : -1), p.color, 0.5 + heat * 0.25, 1.15, 0.025);
+        tri(p.x, p.y, rootRadius * 1.25, -Math.PI / 2 - t * 0.000027, p.color, 0.18, 0.7);
         ctx!.textAlign = "center";
         ctx!.textBaseline = "middle";
         ctx!.font = `600 ${Math.max(9, Math.min(13, w * 0.011))}px Rajdhani, sans-serif`;
         ctx!.fillStyle = "rgba(248,242,236,.92)";
         ctx!.fillText(p.name, p.x, p.y - (narrow ? 34 : 58));
         p.children.forEach((ch, j) => {
-          curve(p, ch, p.color, 7 + i * 3 + j, 0.105);
+          curve(p, ch, p.color, 7 + i * 3 + j, 0.18);
           tri(ch.x, ch.y, 9 + j * 1.7, -Math.PI / 2 + t * 0.00006 * (j % 2 ? 1 : -1), p.color, 0.3, 0.55, 0.01);
           ctx!.font = `500 ${Math.max(8, Math.min(11, w * 0.009))}px Rajdhani, sans-serif`;
           ctx!.fillStyle = "rgba(248,242,236,.62)";
@@ -234,9 +235,9 @@ export function ArchitectureField() {
         ctx!.beginPath();
         p.children.forEach((ch, j) => (j ? ctx!.lineTo(ch.x, ch.y) : ctx!.moveTo(ch.x, ch.y)));
         ctx!.closePath();
-        ctx!.strokeStyle = rgba(p.color, 0.1);
-        ctx!.fillStyle = rgba(p.color, 0.008);
-        ctx!.lineWidth = 0.5;
+        ctx!.strokeStyle = rgba(p.color, 0.18);
+        ctx!.fillStyle = rgba(p.color, 0.014);
+        ctx!.lineWidth = 0.75;
         ctx!.fill();
         ctx!.stroke();
       });
@@ -250,7 +251,7 @@ export function ArchitectureField() {
       const narrow = w < 480;
       const cx = w * (narrow ? 0.5 : 0.52);
       const cy = h * 0.48;
-      const R = narrow ? Math.max(46, Math.min(78, Math.min(w, h) * 0.13)) : Math.max(70, Math.min(116, Math.min(w, h) * 0.13));
+      const R = narrow ? Math.max(50, Math.min(84, Math.min(w, h) * 0.145)) : Math.max(88, Math.min(142, Math.min(w, h) * 0.155));
       const P = positions();
       network(P, cx, cy, R);
       center(cx, cy, R);

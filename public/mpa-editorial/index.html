@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MPA Publishing House</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d0618;--gold:#967B45;--gold-l:#967B45;--gold-rose:#967B45;--silver:#9aa0a6;--bronze:#7a6235;--text:#e8e0d0;--text-dim:rgba(232,224,208,0.5)}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(ellipse at 20% 10%,rgba(150,123,69,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 90%,rgba(150,123,69,0.04) 0%,transparent 50%);pointer-events:none;z-index:0}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(1px 1px at 10% 15%,rgba(255,255,255,0.6) 0%,transparent 100%),radial-gradient(1px 1px at 25% 40%,rgba(255,255,255,0.4) 0%,transparent 100%),radial-gradient(1px 1px at 40% 20%,rgba(255,255,255,0.5) 0%,transparent 100%),radial-gradient(1px 1px at 55% 60%,rgba(255,255,255,0.3) 0%,transparent 100%),radial-gradient(1px 1px at 70% 35%,rgba(255,255,255,0.6) 0%,transparent 100%),radial-gradient(1px 1px at 85% 75%,rgba(255,255,255,0.4) 0%,transparent 100%),radial-gradient(1px 1px at 90% 20%,rgba(255,255,255,0.5) 0%,transparent 100%),radial-gradient(1px 1px at 15% 80%,rgba(255,255,255,0.3) 0%,transparent 100%),radial-gradient(1px 1px at 60% 85%,rgba(255,255,255,0.4) 0%,transparent 100%),radial-gradient(1px 1px at 35% 65%,rgba(255,255,255,0.5) 0%,transparent 100%)}
+.hero{position:relative;z-index:1;text-align:center;padding:5rem 2rem 4rem;display:flex;flex-direction:column;align-items:center}
+.hero-eyebrow{font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:0.5em;color:var(--gold);opacity:0.7;margin-bottom:1.5rem;text-transform:uppercase}
+.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.6rem,5vw,3rem);font-weight:700;background:linear-gradient(135deg,#967B45 0%,#967B45 40%,#967B45 70%,#967B45 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:1rem}
+.hero-sep{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.5rem auto}
+.hero-sub{font-size:1.1rem;font-style:italic;color:var(--text-dim);max-width:560px;line-height:1.8;margin-bottom:1rem}
+.hero-mantra{font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:0.3em;color:var(--gold);opacity:0.6}
+.colecciones{position:relative;z-index:1;padding:2rem 2rem 5rem;max-width:1100px;margin:0 auto}
+.colecciones-title{font-family:'Cinzel Decorative',serif;font-size:0.7rem;letter-spacing:0.4em;color:var(--gold);opacity:0.6;text-align:center;margin-bottom:3rem;text-transform:uppercase}
+.col-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.col-card{background:rgba(255,255,255,0.025);border-radius:20px;overflow:hidden;position:relative;transition:transform 0.4s ease,box-shadow 0.4s ease;cursor:default}
+.col-card:hover{transform:translateY(-6px)}
+.col-card.stray{border:1px solid rgba(196,132,90,0.3)}
+.col-card.stray:hover{box-shadow:0 20px 60px rgba(196,132,90,0.2)}
+.col-card.evigila{border:1px solid rgba(212,160,23,0.35)}
+.col-card.evigila:hover{box-shadow:0 20px 60px rgba(212,160,23,0.2)}
+.col-card.transmuta{border:1px solid rgba(154,160,166,0.3)}
+.col-card.transmuta:hover{box-shadow:0 20px 60px rgba(154,160,166,0.15)}
+.col-card.lude{border:1px solid rgba(139,105,20,0.35)}
+.col-card.lude:hover{box-shadow:0 20px 60px rgba(139,105,20,0.2)}
+.col-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.col-card.stray::before{background:linear-gradient(90deg,transparent,#c4845a,transparent)}
+.col-card.evigila::before{background:linear-gradient(90deg,transparent,#967B45,transparent)}
+.col-card.transmuta::before{background:linear-gradient(90deg,transparent,#9aa0a6,transparent)}
+.col-card.lude::before{background:linear-gradient(90deg,transparent,#8b6914,transparent)}
+.col-inner{padding:2rem 1.75rem 2.5rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.2rem}
+.col-medal{width:240px;height:240px;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.5));transition:transform 0.4s ease}
+.col-card:hover .col-medal{transform:scale(1.08) rotate(3deg)}
+.col-name{font-family:'Cinzel Decorative',serif;font-size:1rem;letter-spacing:0.08em;line-height:1.3;margin-bottom:0.3rem}
+.col-card.stray .col-name{color:#967B45}
+.col-card.evigila .col-name{color:#967B45}
+.col-card.transmuta .col-name{color:#8a9095}
+.col-card.lude .col-name{color:#967B45}
+.col-ordo{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.35em;opacity:0.5;text-transform:uppercase;margin-top:0}
+.col-sep{width:40px;height:1px;opacity:0.3}
+.col-card.stray .col-sep{background:#c4845a}
+.col-card.evigila .col-sep{background:#967B45}
+.col-card.transmuta .col-sep{background:#9aa0a6}
+.col-card.lude .col-sep{background:#8b6914}
+.col-desc{font-size:0.88rem;font-style:italic;color:var(--text-dim);line-height:1.75;max-width:280px}
+.col-tipo{font-family:'Cinzel',serif;font-size:0.58rem;letter-spacing:0.25em;padding:0.3rem 0.9rem;border-radius:20px;text-transform:uppercase;opacity:0.75}
+.col-card.stray .col-tipo{border:1px solid rgba(196,132,90,0.4);color:#c4845a}
+.col-card.evigila .col-tipo{border:1px solid rgba(212,160,23,0.4);color:#967B45}
+.col-card.transmuta .col-tipo{border:1px solid rgba(154,160,166,0.35);color:#9aa0a6}
+.col-card.lude .col-tipo{border:1px solid rgba(139,105,20,0.4);color:#967B45}
+.col-soon{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.2em;opacity:0.35;text-transform:uppercase}
+.footer-editorial{position:relative;z-index:1;text-align:center;padding:3rem 2rem 4rem;border-top:1px solid rgba(184,134,11,0.1)}
+.footer-mantra{font-family:'Cinzel Decorative',serif;font-size:0.65rem;letter-spacing:0.4em;color:var(--gold);opacity:0.4;margin-bottom:0.8rem}
+.footer-copy{font-size:0.8rem;color:var(--text-dim);opacity:0.5;font-style:italic}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hero{animation:fadeUp .8s ease forwards}
+.col-card{opacity:0;animation:fadeUp .7s ease forwards}
+.col-card:nth-child(1){animation-delay:.1s}
+.col-card:nth-child(2){animation-delay:.2s}
+.col-card:nth-child(3){animation-delay:.3s}
+.col-card:nth-child(4){animation-delay:.4s}
+@media(max-width:600px){.col-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-eyebrow">Magia para Atrevidos</div>
+  <h1 class="hero-title">MPA Publishing House</h1>
+  <div class="hero-sep"></div>
+  <p class="hero-sub">Ideas, historias y experiencias editoriales para explorar el universo de las formas y su transmutación.</p>
+  <div class="hero-mantra">Evigila · Lude · Transmuta</div>
+</div>
+<div class="colecciones">
+  <div class="colecciones-title">Colecciones</div>
+  <div class="col-grid">
+    <div class="col-card stray" onclick="window.open('/mpa/publishing-house/stray-sheep-collection','_top')" style="cursor:pointer">
+      <div class="col-inner">
+        <img class="col-medal" src="/imported-assets/stray-medal.png" onerror="this.style.opacity='0.3'" alt="Stray Sheep"/>
+        <div>
+          <div class="col-name">Stray Sheep</div>
+          <div class="col-ordo">Aurum Roseum · MPA 2026</div>
+        </div>
+        <div class="col-sep"></div>
+        <p class="col-desc">Narrativa breve, gráfica y de estilo directo. Textos que despiertan. Lecturas que no se olvidan.</p>
+        <div class="col-tipo">Narrativa · Reflexión</div>
+        <div class="col-soon">Primer título · Mayo 2026</div>
+        <a href="/mpa/publishing-house/stray-sheep-collection" target="_top" style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.2em;color:#b07050;border:1px solid rgba(196,132,90,0.4);border-radius:20px;padding:.3rem .9rem;margin-top:.3rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block">VER COLECCIÓN →</a>
+      </div>
+    </div>
+    <div class="col-card evigila">
+      <div class="col-inner">
+        <img class="col-medal" src="/imported-assets/evigila-logo.png" alt="Evigila"/>
+        <div>
+          <div class="col-name">Evigila</div>
+          <div class="col-ordo">Aurum · MPA</div>
+        </div>
+        <div class="col-sep"></div>
+        <p class="col-desc">Narrativa y desarrollo personal con enfoque literario. Cuentos de transformación y contenido simbólico.</p>
+        <div class="col-tipo">Narrativa · Simbólico</div>
+        <div class="col-soon">Próximamente</div>
+      </div>
+    </div>
+    <div class="col-card transmuta">
+      <div class="col-inner">
+        <img class="col-medal" src="/imported-assets/transmuta-collection.png" alt="Transmuta"/>
+        <div>
+          <div class="col-name">Transmuta</div>
+          <div class="col-ordo">Argentum · MPA</div>
+        </div>
+        <div class="col-sep"></div>
+        <p class="col-desc">Línea ensayística y conceptual. Ensayos breves, análisis y obras vinculadas a procesos de cambio.</p>
+        <div class="col-tipo">Ensayo · Conceptual</div>
+        <div class="col-soon">Próximamente</div>
+      </div>
+    </div>
+    <div class="col-card lude">
+      <div class="col-inner">
+        <img class="col-medal" src="/imported-assets/lude-collection.png" alt="Lude"/>
+        <div>
+          <div class="col-name">Lude</div>
+          <div class="col-ordo">Aes · MPA</div>
+        </div>
+        <div class="col-sep"></div>
+        <p class="col-desc">Línea lúdica y participativa. Juegos editoriales, publicaciones interactivas y dinámicas reflexivas.</p>
+        <div class="col-tipo">Lúdico · Interactivo</div>
+        <div class="col-soon">Próximamente</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="footer-editorial">
+  <div class="footer-mantra">Evigila · Lude · Transmuta</div>
+  <div class="footer-copy">MPA Publishing House · R.C. Dopazo · 2026</div>
+</div>
+<canvas id="universe"></canvas>
+<style>#universe{position:fixed;inset:0;z-index:0;pointer-events:none}</style>
+<script>
+const canvas=document.getElementById('universe');const ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
+const stars=Array.from({length:350},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.5+0.3,o:Math.random()*0.85+0.4,speed:Math.random()*0.0005+0.0002,twinkle:Math.random()*Math.PI*2,dx:(Math.random()-.5)*0.00008,dy:(Math.random()-.5)*0.00004}));
+const nebulas=[{x:0.15,y:0.25,r:0.35,c:'80,20,120',o:0.08},{x:0.85,y:0.7,r:0.3,c:'120,40,180',o:0.06},{x:0.5,y:0.5,r:0.45,c:'40,0,80',o:0.05},{x:0.7,y:0.15,r:0.25,c:'150,100,20',o:0.04}];
+const shoots=[];
+function spawnShoot(){if(shoots.length<5&&Math.random()<0.025)shoots.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height*0.5,len:Math.random()*120+60,speed:Math.random()*8+4,angle:Math.PI/4+(Math.random()-.5)*0.3,life:1})}
+let t=0;
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);nebulas.forEach(n=>{const g=ctx.createRadialGradient(n.x*canvas.width,n.y*canvas.height,0,n.x*canvas.width,n.y*canvas.height,n.r*Math.min(canvas.width,canvas.height));g.addColorStop(0,`rgba(${n.c},${n.o})`);g.addColorStop(1,`rgba(${n.c},0)`);ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height)});stars.forEach(s=>{s.twinkle+=s.speed*60;s.x+=s.dx;s.y+=s.dy;if(s.x<0)s.x=1;if(s.x>1)s.x=0;if(s.y<0)s.y=1;if(s.y>1)s.y=0;const op=s.o*(0.55+0.45*Math.sin(s.twinkle));if(s.r>1.4){ctx.beginPath();ctx.arc(s.x*canvas.width,s.y*canvas.height,s.r*2.5,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,220,${op*0.15})`;ctx.fill()}ctx.beginPath();ctx.arc(s.x*canvas.width,s.y*canvas.height,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${op})`;ctx.fill()});spawnShoot();for(let i=shoots.length-1;i>=0;i--){const s=shoots[i];s.x+=Math.cos(s.angle)*s.speed;s.y+=Math.sin(s.angle)*s.speed;s.life-=0.02;if(s.life<=0){shoots.splice(i,1);continue}const g=ctx.createLinearGradient(s.x,s.y,s.x-Math.cos(s.angle)*s.len,s.y-Math.sin(s.angle)*s.len);g.addColorStop(0,`rgba(232,112,180,${s.life*0.95})`);g.addColorStop(1,'rgba(200,60,150,0)');ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x-Math.cos(s.angle)*s.len,s.y-Math.sin(s.angle)*s.len);ctx.strokeStyle=g;ctx.lineWidth=2;ctx.stroke()}t+=0.001;nebulas[0].x=0.15+Math.sin(t)*0.02;nebulas[1].y=0.7+Math.cos(t*0.7)*0.02;requestAnimationFrame(draw)}
+draw();
+</script>
+</body>
+</html>

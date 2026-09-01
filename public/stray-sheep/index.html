@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stray Sheep · Custos</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+:root {
+  --bg: #1a0520;
+  --fc: #ff4db8;
+  --fc2: #e8359a;
+  --gold: #967B45;
+  --text: #f0e8f8;
+  --text-dim: rgba(240,232,248,0.55);
+  --purple: #c0186e;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.site-language{position:fixed;z-index:50;top:18px;right:20px;display:flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid rgba(255,77,184,.26);border-radius:999px;background:rgba(18,4,24,.74);backdrop-filter:blur(12px);font:600 11px 'Inter',sans-serif;color:rgba(240,232,248,.35)}
+.site-language button{border:0;background:none;color:rgba(240,232,248,.42);font:600 11px 'Inter',sans-serif;cursor:pointer}.site-language button.active{color:var(--fc)}
+
+canvas#universe {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* All content above canvas */
+.page { position: relative; z-index: 1; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 4rem 5vw;
+  gap: 3rem;
+  position: relative;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(13,6,24,0.7) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-left { position: relative; z-index: 2; }
+
+.hero-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.45em;
+  color: var(--fc);
+  opacity: 0.8;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 700;
+  color: var(--fc);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 40px rgba(227,54,195,0.4);
+}
+
+.hero-subtitle {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.hero-mantra {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--fc);
+  opacity: 0.85;
+  letter-spacing: 0.05em;
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+}
+
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.btn-primary {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  border: 2px solid var(--fc);
+  background: rgba(227,54,195,0.15);
+  color: var(--fc);
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+.btn-primary:hover {
+  background: rgba(227,54,195,0.35);
+  box-shadow: 0 0 25px rgba(227,54,195,0.4);
+}
+
+.btn-secondary {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  border: 1px solid rgba(150,123,69,0.5);
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+.btn-secondary:hover {
+  background: rgba(150,123,69,0.15);
+  border-color: var(--gold);
+}
+
+.hero-right {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-img-wrap {
+  position: relative;
+  width: min(620px, 110%);
+  margin-right: -4vw;
+}
+
+.hero-img-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(ellipse, rgba(227,54,195,0.2) 0%, transparent 70%);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%,100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.hero-img {
+  width: 100%;
+  filter: drop-shadow(0 0 40px rgba(227,54,195,0.5));
+  animation: float 6s ease-in-out infinite;
+}
+.hero-universe-btn{position:relative;display:table;margin:1.4rem auto 0;border-color:rgba(255,77,184,.38);color:var(--fc);background:rgba(227,54,195,.08);box-shadow:0 0 28px rgba(227,54,195,.08)}
+.hero-universe-btn:hover{border-color:var(--fc);background:rgba(227,54,195,.17);box-shadow:0 0 25px rgba(227,54,195,.2)}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* ── CONOCE SECTION ── */
+.conoce {
+  padding: 5rem 5vw;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.section-sep {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--fc), transparent);
+  margin: 0 auto 4rem;
+}
+
+.cards-conoce {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.card-conoce {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,77,184,0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-conoce:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(255,77,184,0.2);
+  border-color: rgba(255,77,184,0.55);
+}
+
+.card-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-q {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 0.85rem;
+  color: var(--fc);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.05em;
+}
+
+.card-a {
+  font-size: 0.72rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.08em;
+  font-family: 'Cinzel', serif;
+}
+
+.card-text {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+/* ── QUOTE BAND ── */
+.quote-band {
+  padding: 3rem 5vw;
+  background: linear-gradient(135deg, rgba(227,54,195,0.08), rgba(107,33,168,0.08));
+  border-top: 1px solid rgba(227,54,195,0.15);
+  border-bottom: 1px solid rgba(227,54,195,0.15);
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.quote-text {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  color: var(--fc);
+  opacity: 0.9;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 20px rgba(227,54,195,0.3);
+}
+
+/* ── CTA SECTION ── */
+.cta-section {
+  padding: 5rem 5vw;
+  text-align: center;
+}
+
+.cta-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  color: var(--gold);
+  margin-bottom: 2rem;
+}
+
+/* ── FOOTER ── */
+.footer {
+  padding: 2.5rem;
+  text-align: center;
+  border-top: 1px solid rgba(150,123,69,0.15);
+}
+
+.footer-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  opacity: 0.5;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .hero { grid-template-columns: 1fr; text-align: center; padding: 6rem 5vw 3rem; }
+  .hero-btns { justify-content: center; }
+  .cards-conoce { grid-template-columns: 1fr; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-left { animation: fadeUp 0.8s ease forwards; }
+.card-conoce { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+.card-conoce:nth-child(1) { animation-delay: 0.2s; }
+.card-conoce:nth-child(2) { animation-delay: 0.35s; }
+.card-conoce:nth-child(3) { animation-delay: 0.5s; }
+</style>
+</head>
+<body>
+<script>if(location.protocol==='file:'){location.replace('http://localhost:3002/stray-sheep');}</script>
+<canvas id="universe"></canvas>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow" data-es="Magia para Atrevidos · Colección" data-en="Magic for the Bold · Collection">Magia para Atrevidos · Colección</div>
+      <h1 class="hero-title">Stray<br/>Sheep</h1>
+      <div class="hero-subtitle">Custos · MPA 2026</div>
+      <div class="hero-mantra" data-es="&quot;No te emboles, transmuta.&quot;" data-en="&quot;Don't get stuck. Transmute.&quot;">"No te emboles, transmuta."</div>
+      <div class="hero-btns">
+        <a href="#conoce" class="btn-primary" data-es="Conocé a Stray" data-en="Meet Stray">Conocé a Stray</a>
+        <a href="/mpa/publishing-house/stray-sheep-collection" class="btn-secondary" target="_top" data-es="Conocé mis obras" data-en="Discover my work">Conocé mis obras</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-img-wrap">
+        <img class="hero-img" src="../imported-assets/stray-hero.png" alt="Stray Sheep"/>
+        <a href="#conoce" class="btn-secondary hero-universe-btn" data-es="Descubrir su universo ↓" data-en="Discover her universe ↓">Descubrir su universo ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <div class="quote-band">
+    <div class="quote-text" data-es="&quot;Conocé a STRAY SHEEP&quot;" data-en="&quot;Meet STRAY SHEEP&quot;">"Conocé a STRAY SHEEP"</div>
+  </div>
+
+  <!-- CONOCE -->
+  <section class="conoce" id="conoce">
+    <h2 class="section-title" data-es="La ovejita atrevida" data-en="The daring little sheep">La ovejita atrevida</h2>
+    <div class="section-sep"></div>
+    <div class="cards-conoce">
+
+      <div class="card-conoce">
+        <img class="card-img" src="../imported-assets/stray-hero.png" alt="¿Quién es Stray?"/>
+        <div class="card-body">
+          <div class="card-q" data-es="¿Quién es Stray?" data-en="Who is Stray?">¿Quién es Stray?</div>
+          <div class="card-a" data-es="La ovejita atrevida." data-en="The daring little sheep.">La ovejita atrevida.</div>
+          <div class="card-text" data-es="La que se sale del rebaño… pero no para liderarlo. Stray no quiere que la sigan. Solo camina unos pasos al costado y pregunta: &quot;Che… ¿y si esto que estamos repitiendo todos es una patraña?&quot;<br><br>No empuja. No convence. Solo mira la escena desde afuera… y de golpe todo empieza a verse raro." data-en="The one who steps outside the flock—but not to lead it. Stray does not want followers. She simply takes a few steps aside and asks: &quot;What if this thing everyone keeps repeating is a sham?&quot;<br><br>She does not push or persuade. She watches from outside the scene… and suddenly everything begins to look strange.">La que se sale del rebaño… pero no para liderarlo. Stray no quiere que la sigan. Solo camina unos pasos al costado y pregunta: "Che… ¿y si esto que estamos repitiendo todos es una patraña?"<br/><br/>No empuja. No convence. Solo mira la escena desde afuera… y de golpe todo empieza a verse raro.</div>
+        </div>
+      </div>
+
+      <div class="card-conoce">
+        <img class="card-img" src="../imported-assets/stray-appears.png" alt="¿Cuándo aparece?"/>
+        <div class="card-body">
+          <div class="card-q" data-es="¿Cuándo aparece?" data-en="When does she appear?">¿Cuándo aparece?</div>
+          <div class="card-a" data-es="Cuando se le canta." data-en="Whenever she feels like it.">Cuando se le canta.</div>
+          <div class="card-text" data-es="Cuando la historia que te contabas empieza a hacer ruido. Stray aparece cuando algo ya no cierra, cuando la explicación perfecta empieza a crujir, cuando la bola de sentido empieza a rodar sola.<br><br>Y justo ahí dice: &quot;Pará… mirá bien. Esto estaba armado.&quot;" data-en="When the story you were telling yourself begins to make noise. Stray appears when things no longer add up, when the perfect explanation starts to crack, when the ball of meaning begins to roll on its own.<br><br>Right then she says: &quot;Stop… look closely. This was constructed.&quot;">Cuando la historia que te contabas empieza a hacer ruido. Stray aparece cuando algo ya no cierra, cuando la explicación perfecta empieza a crujir, cuando la bola de sentido empieza a rodar sola.<br/><br/>Y justo ahí, como quien no quiere la cosa, dice: "Pará… mirá bien. Esto estaba armado."</div>
+        </div>
+      </div>
+
+      <div class="card-conoce">
+        <img class="card-img" src="../imported-assets/stray-detective.png" alt="¿Qué simboliza?"/>
+        <div class="card-body">
+          <div class="card-q" data-es="¿Qué simboliza?" data-en="What does she symbolize?">¿Qué simboliza?</div>
+          <div class="card-a" data-es="La grieta en la patraña." data-en="The crack in the sham.">La grieta en la patraña.</div>
+          <div class="card-text" data-es="Ese momento incómodo en que una realidad que parecía sólida se revela como lo que era: una historia demasiado bien contada.<br><br>Stray no viene a salvarte. Ni a explicarte la vida. Solo viene a mostrarte los hilos.<br><br>Después… arreglate." data-en="That uncomfortable moment when a reality that seemed solid reveals itself for what it was: a story told a little too well.<br><br>Stray is not here to save you or explain life. She is only here to show you the strings.<br><br>After that… it is up to you.">Ese momento incómodo en que una realidad que parecía sólida se revela como lo que era: una historia demasiado bien contada.<br/><br/>Stray no viene a salvarte. Ni a explicarte la vida. Solo viene a mostrarte los hilos.<br/><br/>Después… arreglate.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-title" data-es="Explorá más del universo Stray Sheep" data-en="Explore more of the Stray Sheep universe">Explorá más del universo Stray Sheep</div>
+    <a href="/stray-sheep/universo" class="btn-primary" target="_top" data-es="Ver Universo Completo →" data-en="Enter the Full Universe →">Ver Universo Completo →</a>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logo">R.C. DOPAZO · MPA Publishing House · 2026</div>
+  </div>
+
+</div>
+
+<script src="/site-language.js"></script>
+<script>
+const canvas = document.getElementById('universe');
+const ctx = canvas.getContext('2d');
+
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const stars = Array.from({length: 300}, () => ({
+  x: Math.random(), y: Math.random(),
+  r: Math.random() * 1.5 + 0.3,
+  o: Math.random() * 0.8 + 0.3,
+  speed: Math.random() * 0.0005 + 0.0002,
+  twinkle: Math.random() * Math.PI * 2,
+  dx: (Math.random() - 0.5) * 0.00008,
+  dy: (Math.random() - 0.5) * 0.00004
+}));
+
+const nebulas = [
+  { x: 0.1,  y: 0.2,  r: 0.4,  c: '200,20,120',  o: 0.14 },
+  { x: 0.9,  y: 0.7,  r: 0.35, c: '220,40,100',   o: 0.11 },
+  { x: 0.5,  y: 0.5,  r: 0.5,  c: '150,10,80',    o: 0.07 },
+  { x: 0.7,  y: 0.1,  r: 0.3,  c: '240,80,160',   o: 0.09 },
+  { x: 0.2,  y: 0.8,  r: 0.3,  c: '180,30,120',   o: 0.08 },
+];
+
+const shoots = [];
+function spawnShoot() {
+  if (shoots.length < 5 && Math.random() < 0.025) {
+    shoots.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * 0.5,
+      len: Math.random() * 130 + 70,
+      speed: Math.random() * 9 + 5,
+      angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+      life: 1
+    });
+  }
+}
+
+let t = 0;
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  nebulas.forEach(n => {
+    const grd = ctx.createRadialGradient(
+      n.x * canvas.width, n.y * canvas.height, 0,
+      n.x * canvas.width, n.y * canvas.height, n.r * Math.min(canvas.width, canvas.height)
+    );
+    grd.addColorStop(0, `rgba(${n.c},${n.o})`);
+    grd.addColorStop(1, `rgba(${n.c},0)`);
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  });
+
+  stars.forEach(s => {
+    s.twinkle += s.speed * 60;
+    s.x += s.dx; s.y += s.dy;
+    if (s.x < 0) s.x = 1; if (s.x > 1) s.x = 0;
+    if (s.y < 0) s.y = 1; if (s.y > 1) s.y = 0;
+    const opacity = s.o * (0.55 + 0.45 * Math.sin(s.twinkle));
+    if (s.r > 1.4) {
+      ctx.beginPath();
+      ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,150,200,${opacity * 0.18})`;
+      ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${opacity})`;
+    ctx.fill();
+  });
+
+  spawnShoot();
+  for (let i = shoots.length - 1; i >= 0; i--) {
+    const s = shoots[i];
+    s.x += Math.cos(s.angle) * s.speed;
+    s.y += Math.sin(s.angle) * s.speed;
+    s.life -= 0.02;
+    if (s.life <= 0) { shoots.splice(i, 1); continue; }
+    const grd = ctx.createLinearGradient(s.x, s.y, s.x - Math.cos(s.angle) * s.len, s.y - Math.sin(s.angle) * s.len);
+    grd.addColorStop(0, `rgba(232,112,180,${s.life * 0.95})`);
+    grd.addColorStop(1, 'rgba(200,60,150,0)');
+    ctx.beginPath();
+    ctx.moveTo(s.x, s.y);
+    ctx.lineTo(s.x - Math.cos(s.angle) * s.len, s.y - Math.sin(s.angle) * s.len);
+    ctx.strokeStyle = grd;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  t += 0.001;
+  nebulas[0].x = 0.1 + Math.sin(t) * 0.02;
+  nebulas[1].y = 0.7 + Math.cos(t * 0.7) * 0.02;
+  nebulas[3].x = 0.7 + Math.sin(t * 0.5) * 0.015;
+
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>

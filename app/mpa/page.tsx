@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Cosmos } from "../components/Cosmos";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
@@ -10,11 +11,11 @@ export default function MpaPage() {
   const { t } = useLanguage();
 
   const CHILDREN = [
-    { href: "/mpa/que-es-mpa", label: t.nav.queEsMpa },
-    { href: "/mpa/universe", label: t.nav.mpaUniverse },
-    { href: "/mpa/transmuta", label: t.nav.mpaTransmuta },
-    { href: "/mpa/flow", label: t.nav.mpaFlow },
-    { href: "/mpa/publishing-house", label: t.nav.mpaPublishingHouse },
+    { href: "/mpa/que-es-mpa", label: t.nav.queEsMpa, symbol: "/mpa-general-logo.png" },
+    { href: "/mpa/universe", label: t.nav.mpaUniverse, symbol: "/mpa-universe-logo.png" },
+    { href: "/mpa/transmuta", label: t.nav.mpaTransmuta, symbol: "/mpa-coin-transmuta.png" },
+    { href: "https://mpaflow.com", label: t.nav.mpaFlow, symbol: "/mpa-flow-logo.png" },
+    { href: "/mpa/publishing-house", label: t.nav.mpaPublishingHouse, symbol: "/mpa-publishing-house-logo.png" },
   ];
 
   return (
@@ -42,7 +43,8 @@ export default function MpaPage() {
               {CHILDREN.map((child, i) => (
                 <Link className="pillar-link-card" href={child.href} key={child.href}>
                   <b>{String(i + 1).padStart(2, "0")}</b>
-                  <h3>{child.label}</h3>
+                  <Image className="pillar-link-symbol" src={child.symbol} alt="" width={240} height={240} sizes="(max-width: 700px) 100px, 130px" />
+                  <div className="pillar-link-copy"><h3>{child.label}</h3><small>Entrar al territorio</small></div>
                   <span className="arrow" aria-hidden="true">
                     →
                   </span>

@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reto de Iniciación — Magia para Atrevidos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+    :root {
+      --bg-deep:#0d0618;--gold:#967B45;--gold-light:#b8965a;--gold-pale:#c9a87a;
+      --fucsia:#E336C3;--fucsia-dim:#a0237f;--violet:#3d1a6e;
+      --text:#d8d4df;--text-dim:rgba(207,201,216,.62);
+      --border:rgba(201,168,76,.18);--border-f:rgba(227,54,195,.2);
+      --card:rgba(255,255,255,.035);
+      --evigila:#C9A84C; --lude:#8B6340; --transmuta:#7B2FBE;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth}
+    ::-webkit-scrollbar{width:3px}
+    ::-webkit-scrollbar-thumb{background:rgba(201,168,76,.4);border-radius:2px}
+    body{background:var(--bg-deep);color:var(--text);font-family:'Crimson Text',Georgia,serif;min-height:100vh;overflow-x:hidden;overflow-y:auto;transition:background 1.1s ease;}
+    #cosmos{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+    /* PRIMERA ITERACIÓN · EL UMBRAL */
+    body::before{content:'';position:fixed;inset:-20%;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 8%,rgba(201,168,76,.13),transparent 28%),radial-gradient(ellipse at 28% 58%,rgba(123,47,190,.14),transparent 36%),radial-gradient(ellipse at 76% 78%,rgba(227,54,195,.1),transparent 34%);filter:blur(24px);animation:tunnelBreathe 16s ease-in-out infinite alternate}
+    @keyframes tunnelBreathe{from{transform:scale(1) translate3d(-2%,-1%,0)}to{transform:scale(1.1) translate3d(3%,4%,0)}}
+    .depth-plane{position:fixed;inset:-12%;z-index:0;pointer-events:none;will-change:transform;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+    .depth-plane.one{background:radial-gradient(ellipse at 50% 46%,transparent 0 26%,rgba(8,4,14,.22) 39%,rgba(3,1,7,.84) 76%),radial-gradient(ellipse at 8% 38%,rgba(60,31,66,.36),transparent 27%),radial-gradient(ellipse at 92% 63%,rgba(42,20,58,.4),transparent 31%)}
+    .depth-plane.two{inset:-20%;background:radial-gradient(circle at 16% 22%,rgba(227,54,195,.18) 0 2px,transparent 3px),radial-gradient(circle at 76% 64%,rgba(201,168,76,.16) 0 2px,transparent 3px),radial-gradient(circle at 60% 17%,rgba(255,255,255,.12) 0 1px,transparent 2px);background-size:190px 170px,240px 220px,140px 130px;opacity:.72}
+    .depth-plane.three{inset:auto;left:50%;top:50%;width:min(76vw,760px);height:min(78vh,760px);border:1px solid rgba(227,54,195,.12);border-radius:43% 57% 48% 52% / 55% 42% 58% 45%;translate:-50% -50%;box-shadow:0 0 120px rgba(61,26,110,.3),inset 0 0 100px rgba(201,168,76,.05);animation:caveBreath 9s ease-in-out infinite alternate}
+    .depth-plane,.light-fissure,#cosmos{transition:filter 1.8s ease,opacity 1.8s ease,transform 1.8s cubic-bezier(.2,.8,.2,1)}
+    body.entered:not(.phase-evigila):not(.phase-lude):not(.phase-transmuta) .depth-plane{filter:brightness(.42) saturate(.72)}
+    body.entered:not(.phase-evigila):not(.phase-lude):not(.phase-transmuta) #cosmos{filter:brightness(.44);opacity:.48}
+    body.entered:not(.phase-evigila):not(.phase-lude):not(.phase-transmuta) .light-fissure{filter:blur(25px) brightness(.52);opacity:.42}
+    body.phase-evigila .depth-plane{filter:brightness(.68) saturate(.88)}
+    body.phase-evigila #cosmos{filter:brightness(.7);opacity:.66}
+    body.phase-evigila .cave-foreground{transform:scale(1.2);opacity:.42}
+    body.phase-lude .depth-plane{filter:brightness(.9) saturate(1)}
+    body.phase-lude #cosmos{filter:brightness(.92);opacity:.82}
+    body.phase-lude .light-fissure{filter:blur(13px) brightness(1.05);opacity:.78}
+    body.phase-lude .cave-foreground{transform:scale(1.28);opacity:.25}
+    body.phase-transmuta .depth-plane{filter:brightness(1.16) saturate(1.14)}
+    body.phase-transmuta #cosmos{filter:brightness(1.22);opacity:1}
+    body.phase-transmuta .light-fissure{filter:blur(8px) brightness(1.4);opacity:1;transform:scaleX(1.55)}
+    body.phase-transmuta .cave-foreground{transform:scale(1.42);opacity:.08}
+    @keyframes caveBreath{from{border-radius:43% 57% 48% 52% / 55% 42% 58% 45%;filter:blur(0)}to{border-radius:49% 51% 42% 58% / 48% 57% 43% 52%;filter:blur(.6px)}}
+    body.pulse-wrong .depth-plane.three{animation:worldReject .5s ease}
+    body.phase-evigila .depth-plane.three{border-color:rgba(201,168,76,.42);box-shadow:0 0 160px rgba(201,168,76,.22),inset 0 0 110px rgba(201,168,76,.12)}
+    @keyframes worldReject{0%,100%{scale:1}40%{scale:.94;filter:saturate(.4)}70%{scale:1.025}}
+    .cave-foreground{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;transition:transform 1.4s cubic-bezier(.2,.8,.2,1),opacity 1.1s ease}
+    .cave-foreground::before,.cave-foreground::after{content:'';position:absolute;top:-8%;bottom:-8%;width:37%;background:linear-gradient(90deg,#020103 0%,#09050c 58%,rgba(18,8,22,.92));filter:drop-shadow(0 0 38px #000)}
+    .cave-foreground::before{left:-7%;clip-path:polygon(0 0,100% 0,79% 9%,92% 18%,72% 27%,88% 38%,67% 48%,82% 59%,61% 71%,76% 83%,55% 100%,0 100%)}
+    .cave-foreground::after{right:-7%;transform:scaleX(-1);clip-path:polygon(0 0,100% 0,79% 9%,92% 18%,72% 27%,88% 38%,67% 48%,82% 59%,61% 71%,76% 83%,55% 100%,0 100%)}
+    body.entered .cave-foreground{transform:scale(1.16);opacity:.52}
+    .light-fissure{position:fixed;z-index:0;left:50%;top:-12%;width:24%;height:120%;translate:-50% 0;pointer-events:none;background:linear-gradient(180deg,rgba(201,168,76,.14),rgba(227,54,195,.07) 42%,transparent 86%);clip-path:polygon(48% 0,57% 17%,49% 34%,63% 53%,43% 72%,55% 100%,31% 74%,44% 51%,36% 31%);filter:blur(18px);animation:fissurePulse 7s ease-in-out infinite alternate}
+    @keyframes fissurePulse{from{opacity:.38;transform:scaleX(.76)}to{opacity:.84;transform:scaleX(1.16)}}
+    .mote{position:fixed;z-index:3;width:3px;height:3px;border-radius:50%;background:var(--gold-pale);pointer-events:none;opacity:0;box-shadow:0 0 9px var(--gold);animation:moteRise var(--duration) linear var(--delay) infinite}
+    @keyframes moteRise{0%{opacity:0;transform:translate3d(0,12vh,0) scale(.4)}15%{opacity:var(--alpha)}70%{opacity:calc(var(--alpha) * .7)}100%{opacity:0;transform:translate3d(var(--drift),-115vh,0) scale(1.25)}}
+
+    #transition-overlay{position:fixed;inset:0;z-index:999;pointer-events:none;opacity:0;background:radial-gradient(circle at center,#C9A84C 0%,#0d0618 70%);transition:none;}
+    #ripple-canvas{position:fixed;inset:0;z-index:998;pointer-events:none;}
+
+    .stage{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:30px 24px 100px;}
+
+    /* HEADER */
+    .header{text-align:center;margin:0 auto 76px;min-height:92vh;padding:28px 0 54px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;animation:fadeUp 1s ease 0.3s forwards;position:relative;isolation:isolate;}
+    .header::before,.header::after{content:'';position:absolute;left:50%;top:50%;translate:-50% -50%;pointer-events:none;z-index:-1}
+    .header::before{width:100vw;height:110vh;background:radial-gradient(ellipse at 50% 48%,transparent 0 25%,rgba(7,3,12,.22) 35%,rgba(5,2,9,.82) 63%,#020104 82%),radial-gradient(circle at 13% 18%,rgba(91,55,91,.18) 0 4%,transparent 12%),radial-gradient(circle at 86% 26%,rgba(102,68,91,.13) 0 5%,transparent 15%),radial-gradient(circle at 20% 81%,rgba(72,43,82,.2) 0 7%,transparent 18%);filter:drop-shadow(inset 0 0 80px #000)}
+    .header::after{width:min(580px,76vw);height:min(700px,78vh);border:1px solid rgba(201,168,76,.16);border-radius:44% 56% 48% 52% / 57% 39% 61% 43%;background:radial-gradient(ellipse at 50% 56%,rgba(227,54,195,.13),rgba(61,26,110,.08) 46%,transparent 68%);box-shadow:0 0 75px rgba(123,47,190,.2),inset 0 0 70px rgba(227,54,195,.08);animation:caveMouth 8s ease-in-out infinite alternate}
+    @keyframes caveMouth{from{transform:scale(.97);border-radius:44% 56% 48% 52% / 57% 39% 61% 43%}to{transform:scale(1.035);border-radius:51% 49% 42% 58% / 45% 57% 43% 55%}}
+    .universe-emblem{position:relative;width:clamp(112px,14vw,166px);height:auto;margin:0 auto 22px;display:block;filter:drop-shadow(0 0 14px rgba(201,168,76,.3)) drop-shadow(0 0 38px rgba(227,54,195,.13));animation:emblemFloat 7s ease-in-out infinite;z-index:2}
+    .universe-emblem::selection{background:transparent}
+    @keyframes emblemFloat{0%,100%{transform:translateY(0) scale(1);filter:drop-shadow(0 0 13px rgba(201,168,76,.28)) drop-shadow(0 0 36px rgba(227,54,195,.12))}50%{transform:translateY(-7px) scale(1.018);filter:drop-shadow(0 0 22px rgba(201,168,76,.42)) drop-shadow(0 0 50px rgba(227,54,195,.2))}}
+    .eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.46em;text-transform:uppercase;color:var(--fucsia);opacity:.74;margin-bottom:14px;}
+    .main-title{font-family:'Cinzel Decorative',serif;font-weight:400;line-height:.92;margin-bottom:20px;text-align:center;color:#d9d5dd;letter-spacing:-.025em;text-shadow:0 3px 30px rgba(0,0,0,.75)}
+    .main-title .title-small{display:block;font-family:'Cinzel',serif;font-size:clamp(12px,1.5vw,17px);font-weight:400;letter-spacing:.48em;text-transform:uppercase;color:#aaa3b1;margin:0 0 11px .48em}
+    .main-title .title-large{display:block;font-size:clamp(38px,6.8vw,72px);background:linear-gradient(180deg,#e1dde4 8%,#aaa4b0 70%,#716a79);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .divider{display:flex;align-items:center;gap:16px;width:min(270px,58vw);margin:22px auto;opacity:.64}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.55));}
+    .divider::after{transform:scaleX(-1)}
+    .div-glyph{font-family:'Cinzel Decorative',serif;font-size:13px;color:var(--gold-light);text-shadow:0 0 12px rgba(201,168,76,.5)}
+    .header-sub{font-family:'Cinzel',serif;font-size:clamp(10px,1.2vw,13px);color:#bbb5c2;letter-spacing:.24em;text-transform:uppercase;}
+    .header-intro{margin-top:28px;display:grid;gap:7px;font-family:'Crimson Text',Georgia,serif;font-size:clamp(16px,1.7vw,20px);color:rgba(216,212,223,.68);line-height:1.45;letter-spacing:.025em;font-style:italic;}
+    .header-intro span{display:block;opacity:0;animation:whisperIn .8s ease forwards}
+    .header-intro span:nth-child(1){animation-delay:.85s}.header-intro span:nth-child(2){animation-delay:1.08s}.header-intro span:nth-child(3){animation-delay:1.31s;color:#ddd8e2}
+    @keyframes whisperIn{from{opacity:0;transform:translateY(7px);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+    .header-intro-sub{margin-top:34px;font-size:13px;color:var(--text-dim);font-style:italic;}
+    .header-intro-sub iframe{width:min(520px,72vw)!important;height:auto!important;aspect-ratio:16/9;border-radius:45% 55% 48% 52% / 55% 43% 57% 45%!important;border:1px solid rgba(201,168,76,.28)!important;box-shadow:0 0 45px rgba(123,47,190,.24);background:#08040e}
+    .cross-threshold{margin-top:28px;padding:15px 34px;border:1px solid rgba(227,54,195,.5);border-radius:999px;background:rgba(61,26,110,.34);color:var(--gold-pale);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 0 rgba(227,54,195,0);transition:transform .3s,box-shadow .3s,background .3s}
+    .cross-threshold:hover{transform:translateY(-2px);background:rgba(98,33,126,.5);box-shadow:0 0 34px rgba(227,54,195,.25)}
+    .ambient-toggle{position:fixed;z-index:1000;right:20px;top:20px;display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(201,168,76,.16);border-radius:999px;background:rgba(5,2,9,.52);backdrop-filter:blur(10px);color:rgba(207,201,216,.5);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:color .3s,opacity .3s,border-color .3s;padding:8px 12px}
+    .ambient-toggle:hover,.ambient-toggle.active{color:rgba(227,54,195,.88);border-color:rgba(227,54,195,.34)}
+    .ambient-toggle .sound-mark{position:relative;width:22px;height:22px;border:1px solid rgba(201,168,76,.3);border-radius:50%;display:grid;place-items:center;box-shadow:0 0 0 rgba(227,54,195,0);transition:all .4s}
+    .ambient-toggle .sound-mark::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 7px var(--gold)}
+    .ambient-toggle.active .sound-mark{border-color:rgba(227,54,195,.65);box-shadow:0 0 18px rgba(227,54,195,.26);animation:soundPulse 2.6s ease-in-out infinite}
+    .site-language{position:fixed;z-index:1001;top:20px;right:166px;display:flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid rgba(201,168,76,.18);border-radius:999px;background:rgba(5,2,9,.58);backdrop-filter:blur(12px);font:600 9px 'Cinzel',serif;color:rgba(207,201,216,.34)}
+    .site-language button{border:0;background:none;color:rgba(207,201,216,.42);font:600 9px 'Cinzel',serif;cursor:pointer}.site-language button.active{color:var(--fucsia)}
+    .initiation-exit{position:fixed;z-index:1001;top:20px;left:20px;display:inline-flex;align-items:center;gap:10px;padding:10px 15px;border:1px solid rgba(201,168,76,.2);border-radius:999px;background:rgba(5,2,9,.58);backdrop-filter:blur(12px);color:rgba(207,201,216,.64);font:600 9px 'Cinzel',serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;transition:color .3s,border-color .3s,transform .3s}.initiation-exit:before{content:'←';color:#c09157}.initiation-exit:hover{color:#eee8f0;border-color:rgba(201,168,76,.52);transform:translateY(-2px)}
+    @keyframes soundPulse{50%{transform:scale(1.12);box-shadow:0 0 28px rgba(227,54,195,.38)}}
+    body.entered .header{animation:thresholdExit .9s cubic-bezier(.7,0,.3,1) forwards;pointer-events:none}
+    @keyframes thresholdExit{to{opacity:0;transform:scale(1.24);filter:blur(20px);min-height:0;height:0;margin:0;overflow:hidden}}
+
+    /* PROGRESS */
+    .pips{display:flex;justify-content:center;gap:56px;margin:0 auto 54px;opacity:0;transform:translateY(28px);transition:opacity .8s ease .65s,transform .8s ease .65s;position:relative;width:max-content;pointer-events:none}
+    body.entered .pips{opacity:1;transform:translateY(0)}
+    .pips::before{content:'';position:absolute;left:8px;right:8px;top:50%;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.35),rgba(227,54,195,.25));z-index:-1}
+    .pip{width:17px;height:17px;transform:rotate(45deg);border:1px solid rgba(201,168,76,.55);background:var(--bg-deep);transition:all .5s;box-shadow:0 0 18px rgba(201,168,76,.08);}
+    .pip.done{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px var(--gold);}
+
+    /* CARD */
+    .card{
+      background:radial-gradient(ellipse at 50% 8%,rgba(201,168,76,.105),transparent 34%),linear-gradient(90deg,rgba(4,2,8,.96),rgba(28,15,40,.72) 18%,rgba(18,9,30,.82) 50%,rgba(28,15,40,.72) 82%,rgba(4,2,8,.96));
+      border:1px solid rgba(201,168,76,.13);
+      border-radius:47% 53% 22px 22px / 110px 94px 22px 22px;
+      padding:108px 58px 52px;
+      position:relative;
+      transition:border-color .4s,box-shadow .4s;
+      overflow:hidden;
+    }
+    #ch-0{opacity:0;transform:translateY(70px) scale(.96);pointer-events:none;transition:opacity 1s ease .45s,transform 1.1s cubic-bezier(.2,.8,.2,1) .45s}
+    body.entered #ch-0{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+    #ch-0::after{content:'';position:absolute;left:7%;right:7%;bottom:-74px;height:135px;border-radius:50%;background:radial-gradient(ellipse,rgba(201,168,76,.12),rgba(123,47,190,.07) 35%,transparent 70%);filter:blur(14px);pointer-events:none}
+    .evigila-glyph{width:82px;height:82px;margin:0 auto 24px;position:relative;border:1px solid rgba(201,168,76,.34);border-radius:50% 50% 45% 45%;display:grid;place-items:center;box-shadow:0 0 32px rgba(201,168,76,.1),inset 0 0 24px rgba(123,47,190,.12)}
+    .evigila-glyph::before{content:'';width:42px;height:24px;border:1px solid rgba(216,212,223,.52);border-radius:50% / 65%;box-shadow:0 0 14px rgba(216,212,223,.16)}
+    .evigila-glyph::after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 13px var(--gold);animation:evigilaLook 4s ease-in-out infinite}
+    @keyframes evigilaLook{0%,100%{transform:translateX(-8px)}50%{transform:translateX(8px)}}
+    .ch-subtitle{text-align:center;margin:-23px auto 40px;font-family:'Crimson Text',Georgia,serif;font-size:16px;font-style:italic;color:rgba(207,201,216,.5);letter-spacing:.04em}
+    .evigila-path{position:relative;display:grid;grid-template-columns:repeat(3,1fr);max-width:540px;margin:0 auto 48px;counter-reset:evigila-step}
+    .evigila-path::before{content:'';position:absolute;left:15%;right:15%;top:14px;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.2),rgba(227,54,195,.16),rgba(201,168,76,.2))}
+    .evigila-step{counter-increment:evigila-step;position:relative;text-align:center;color:rgba(207,201,216,.3);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.2em;text-transform:uppercase;transition:color .6s ease,transform .6s ease}
+    .evigila-step::before{content:counter(evigila-step,upper-roman);position:relative;z-index:1;width:29px;height:29px;margin:0 auto 10px;display:grid;place-items:center;border:1px solid rgba(201,168,76,.2);background:#100817;transform:rotate(45deg);color:rgba(207,201,216,.32);font-size:8px;letter-spacing:0;transition:all .6s ease}
+    .evigila-step span{display:block}
+    .evigila-step.active{color:#d0cbd5;transform:translateY(-2px)}
+    .evigila-step.active::before{border-color:rgba(227,54,195,.65);color:#fff;box-shadow:0 0 23px rgba(227,54,195,.25);background:rgba(61,26,110,.68)}
+    .evigila-step.done{color:rgba(201,168,76,.7)}
+    .evigila-step.done::before{border-color:rgba(201,168,76,.65);background:rgba(201,168,76,.16);color:var(--gold-pale);box-shadow:0 0 18px rgba(201,168,76,.2)}
+    .scene-shift{position:fixed;inset:0;z-index:997;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(227,54,195,.22),rgba(13,6,24,.2) 38%,transparent 70%)}
+    .scene-shift.play{animation:sceneShift .95s ease forwards}
+    @keyframes sceneShift{0%{opacity:0;transform:scale(.86);filter:blur(20px)}35%{opacity:.74}100%{opacity:0;transform:scale(1.15);filter:blur(0)}}
+    #ch-0.ritual-step-1 .ch-body>:nth-child(n+4),#ch-0.ritual-step-1>.hint-tog,#ch-0.ritual-step-1>#pista-1,#ch-0.ritual-step-1>#pista-2,#ch-0.ritual-step-1>#pista-3,#ch-0.ritual-step-1>.input-row,#ch-0.ritual-step-1>.fb,#ch-0.ritual-step-1>.rev{display:none!important}
+    #ch-0.ritual-step-2>.hint-tog,#ch-0.ritual-step-2>#pista-1,#ch-0.ritual-step-2>#pista-2,#ch-0.ritual-step-2>#pista-3,#ch-0.ritual-step-2>.input-row,#ch-0.ritual-step-2>.fb,#ch-0.ritual-step-2>.rev{display:none!important}
+    .ritual-next{display:block;margin:34px auto 0;padding:13px 28px;border:1px solid rgba(201,168,76,.4);border-radius:999px;background:rgba(13,6,24,.58);color:var(--gold-pale);font-family:'Cinzel',serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+    .ritual-next:hover{border-color:var(--fucsia);color:var(--fucsia);box-shadow:0 0 28px rgba(227,54,195,.18)}
+    .mirror-vision{position:relative;width:min(610px,92%);margin:48px auto!important;padding:12px;border:1px solid rgba(201,168,76,.34);border-radius:48% 52% 47% 53% / 12% 12% 10% 10%;background:linear-gradient(145deg,rgba(201,168,76,.1),rgba(61,26,110,.12));box-shadow:0 0 55px rgba(123,47,190,.24),inset 0 0 25px rgba(201,168,76,.09);animation:mirrorBreathe 7s ease-in-out infinite alternate}
+    #ch-0.ritual-step-2 .mirror-vision{animation:mirrorArrival 1.15s cubic-bezier(.18,.8,.2,1) both,mirrorBreathe 7s ease-in-out 1.15s infinite alternate}
+    @keyframes mirrorArrival{from{opacity:0;transform:translateY(70px) scale(.76);filter:blur(16px)}to{opacity:1;transform:none;filter:none}}
+    .mirror-vision::before,.mirror-vision::after{content:'';position:absolute;inset:-9px;border:1px solid rgba(201,168,76,.14);border-radius:inherit;pointer-events:none}.mirror-vision::after{inset:-18px;border-color:rgba(227,54,195,.09)}
+    .mirror-vision img{display:block!important;border:0!important;border-radius:47% 53% 46% 54% / 11% 11% 9% 9%!important;filter:saturate(.82) contrast(1.06) brightness(.84);transition:filter .8s ease}
+    .mirror-vision:hover img{filter:saturate(1) contrast(1.08) brightness(.96)}
+    @keyframes mirrorBreathe{from{box-shadow:0 0 38px rgba(123,47,190,.17),inset 0 0 20px rgba(201,168,76,.06)}to{box-shadow:0 0 72px rgba(123,47,190,.3),inset 0 0 34px rgba(201,168,76,.12)}}
+    #ch-0 .input-row{max-width:610px;margin:38px auto 0;position:relative}
+    #ch-0 .answer-input{background:radial-gradient(ellipse at center,rgba(201,168,76,.065),rgba(5,2,9,.78));border-radius:9px 24px 9px 24px;text-align:center;padding:17px 24px;box-shadow:inset 0 0 24px rgba(123,47,190,.08)}
+    #ch-0 .btn-go{min-width:58px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.16),rgba(61,26,110,.48));font-size:19px}
+    #ch-0 .hint-tog{display:table;margin:19px auto 0;color:rgba(207,201,216,.46);border:0;letter-spacing:.18em}
+    #ch-0 .hint-tog::before{content:'◇';margin-right:8px;color:rgba(227,54,195,.58)}
+    .sound-relic{width:112px;height:112px;margin:24px auto 30px;display:grid;place-items:center;border:1px solid rgba(201,168,76,.4);border-radius:46% 54% 48% 52% / 55% 44% 56% 45%;background:radial-gradient(circle,rgba(201,168,76,.22),rgba(61,26,110,.18) 38%,rgba(5,2,9,.78) 70%);color:var(--gold-pale);font-family:'Cinzel',serif;font-size:9px;line-height:1.5;letter-spacing:.18em;text-transform:uppercase;text-align:center;cursor:pointer;box-shadow:0 0 38px rgba(123,47,190,.2),inset 0 0 24px rgba(201,168,76,.08);animation:relicIdle 4s ease-in-out infinite;transition:all .4s}
+    .sound-relic::before{content:'◉';display:block;font-size:22px;letter-spacing:0;margin-bottom:3px;color:var(--gold)}
+    .sound-relic.playing{border-color:var(--fucsia);box-shadow:0 0 52px rgba(227,54,195,.36),inset 0 0 32px rgba(201,168,76,.16);animation:relicPlay 1.7s ease-in-out infinite}
+    .sound-relic.playing::before{content:'Ⅱ';color:var(--fucsia)}
+    @keyframes relicIdle{50%{transform:translateY(-5px) rotate(1deg)}}
+    @keyframes relicPlay{50%{transform:scale(1.06);filter:brightness(1.25)}}
+    .ritual-audio-label{text-align:center!important;color:rgba(201,168,76,.72)!important}
+    .ritual-native-audio{position:absolute!important;width:1px!important;height:1px!important;opacity:.01!important;pointer-events:none!important}
+    .card::before{
+      content:'';position:absolute;top:-84px;left:50%;translate:-50% 0;width:82%;height:220px;border:1px solid rgba(201,168,76,.13);border-radius:46% 54% 44% 56% / 62% 42% 58% 38%;
+      background:radial-gradient(ellipse,rgba(201,168,76,.1),rgba(61,26,110,.08) 43%,transparent 70%);filter:blur(.1px);pointer-events:none;box-shadow:0 22px 70px rgba(0,0,0,.45);
+    }
+    .card:hover{border-color:rgba(201,168,76,.38);}
+    .card.solved{border-color:rgba(201,168,76,.55);animation:pulseGold 2.5s ease infinite;}
+
+    /* LOCKED */
+    .locked{display:none;margin-top:32px;}
+    .locked.open{display:block;animation:fadeUp .9s ease forwards;}
+    body.scene-two #ch-0{display:none!important}
+    body.scene-two #wrap-1{padding-top:0;margin-top:0}
+    body.scene-three #ch-0,body.scene-three #wrap-1{display:none!important}
+    body.scene-three #wrap-2{padding-top:0;margin-top:0}
+    body.scene-final #ch-0,body.scene-final #wrap-1,body.scene-final #wrap-2{display:none!important}
+    #wrap-arca.open{position:relative;isolation:isolate;min-height:100vh;margin:0;padding:clamp(65px,8vh,105px) 0 90px;animation:revelationEnter 1.15s cubic-bezier(.18,.82,.2,1) forwards}
+    #wrap-arca.open::before{content:'';position:absolute;z-index:-1;inset:-12vh -12vw;background:radial-gradient(ellipse at 50% 36%,rgba(151,69,174,.3),transparent 38%),radial-gradient(ellipse at 50% 78%,rgba(210,154,64,.11),transparent 44%);animation:tunnelBreathe 11s ease-in-out infinite alternate}
+    #wrap-arca>.unlock-banner{max-width:700px;margin:0 auto 42px;border:0;border-radius:0;background:transparent;padding:28px 20px}
+    #wrap-arca>.unlock-banner::before{top:auto;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.55),transparent)}
+    #wrap-arca>.card{width:min(850px,94vw);margin:0 auto;padding:clamp(52px,7vw,82px);border-color:rgba(201,168,76,.3);border-radius:50% 50% 26px 26px / 115px 115px 26px 26px;background:radial-gradient(circle at 50% 25%,rgba(149,62,166,.24),transparent 33%),linear-gradient(160deg,rgba(28,12,39,.96),rgba(7,3,12,.98));box-shadow:0 45px 120px rgba(0,0,0,.54),inset 0 0 90px rgba(123,47,190,.07)}
+    #wrap-arca>.card img{max-width:360px!important;filter:drop-shadow(0 24px 34px rgba(0,0,0,.55)) drop-shadow(0 0 42px rgba(201,168,76,.28))!important}
+
+    /* UNLOCK BANNER */
+    .unlock-banner{
+      text-align:center;padding:32px 24px;margin-bottom:32px;
+      border:1px solid var(--border-f);
+      border-radius:18px;
+      background:rgba(227,54,195,.06);
+      position:relative;overflow:hidden;
+    }
+    .unlock-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,rgba(227,54,195,.7),transparent);}
+    .unlock-eye{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--fucsia);margin-bottom:12px;}
+    .unlock-title{font-family:'Cinzel Decorative',serif;font-size:clamp(16px,3vw,22px);background:linear-gradient(135deg,var(--gold-pale),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;}
+    .unlock-sub{font-size:15px;color:var(--text-dim);font-style:italic;line-height:1.8;}
+
+    /* CÁMARA II · LUDE */
+    #wrap-1{padding-top:72px;position:relative}
+    #wrap-1::before{content:'';position:absolute;left:50%;top:3px;width:1px;height:64px;background:linear-gradient(180deg,rgba(201,168,76,.65),rgba(139,99,64,.08));box-shadow:0 0 13px rgba(201,168,76,.3)}
+    #wrap-1 .unlock-banner{max-width:610px;margin:0 auto 45px;border:0;border-radius:0;background:transparent;padding:26px 20px}
+    #wrap-1 .unlock-banner::before{top:auto;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,99,64,.65),transparent)}
+    #ch-1{isolation:isolate;border:1px solid rgba(139,99,64,.25);border-radius:34px 11px 42px 15px;background:radial-gradient(circle at 22% 18%,rgba(139,99,64,.16),transparent 27%),radial-gradient(circle at 82% 72%,rgba(195,118,64,.09),transparent 33%),linear-gradient(145deg,rgba(30,16,34,.95),rgba(10,6,15,.96));padding:62px 54px 52px;box-shadow:0 35px 100px rgba(0,0,0,.45),inset 0 0 80px rgba(139,99,64,.045)}
+    #ch-1::before{top:-160px;left:-90px;translate:0;width:380px;height:380px;border:1px dashed rgba(139,99,64,.22);border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(139,99,64,.12) 0 2deg,transparent 2deg 18deg);animation:ludeWheel 38s linear infinite;box-shadow:none}
+    #ch-1::after{content:'';position:absolute;right:-120px;bottom:-110px;width:330px;height:330px;border:1px dashed rgba(227,54,195,.12);border-radius:50%;background:repeating-conic-gradient(from 9deg,rgba(227,54,195,.07) 0 1deg,transparent 1deg 24deg);animation:ludeWheel 29s linear infinite reverse;z-index:-1}
+    @keyframes ludeWheel{to{transform:rotate(360deg)}}
+    #ch-1>.ch-num{text-align:center;color:#b67f56;letter-spacing:.48em;font-size:9px}
+    #ch-1>.ch-word{text-align:center;font-size:clamp(28px,4.5vw,46px)!important;background:linear-gradient(180deg,#d7d1d9,#8d7c78)!important;-webkit-background-clip:text!important;background-clip:text!important;margin-bottom:40px!important}
+    .lude-subtitle{text-align:center;max-width:520px;margin:-24px auto 42px;font-family:'Crimson Text',Georgia,serif;font-size:clamp(16px,1.6vw,19px);font-style:italic;color:rgba(207,201,216,.52);text-wrap:balance}
+    .lude-mechanism{position:relative;width:min(340px,72vw);aspect-ratio:1;margin:0 auto 38px;border:1px solid rgba(139,99,64,.29);border-radius:50%;animation:ludeTilt 9s ease-in-out infinite alternate;pointer-events:auto;box-shadow:0 0 62px rgba(139,99,64,.09),inset 0 0 55px rgba(123,47,190,.08)}
+    .lude-mechanism::before,.lude-mechanism::after{content:'';position:absolute;border-radius:50%;border:1px dashed rgba(201,168,76,.22)}
+    .lude-mechanism::before{inset:14%;animation:ludeWheel 24s linear infinite}.lude-mechanism::after{inset:31%;animation:ludeWheel 16s linear infinite reverse;background:radial-gradient(circle,rgba(139,99,64,.18),transparent 64%)}
+    .lude-piece{position:absolute;width:25px;height:25px;border:1px solid rgba(201,168,76,.55);background:#160d18;transform:rotate(45deg);box-shadow:0 0 16px rgba(139,99,64,.38);animation:piecePulse 3.8s ease-in-out infinite}
+    .lude-piece::before{content:'?';position:absolute;inset:0;display:grid;place-items:center;transform:rotate(-45deg);font-family:'Cinzel',serif;font-size:9px;color:rgba(201,168,76,.68)}
+    .lude-piece:nth-child(1){left:12%;top:25%;animation-delay:-.7s}.lude-piece:nth-child(1)::before{content:'I'}.lude-piece:nth-child(2){right:9%;top:38%;border-radius:50%;animation-delay:-1.4s}.lude-piece:nth-child(2)::before{content:'○'}.lude-piece:nth-child(3){left:47%;bottom:5%;animation-delay:-2.1s}.lude-piece:nth-child(3)::before{content:'↺'}.lude-piece:nth-child(4){left:8%;bottom:27%;border-radius:50%;animation-delay:-2.8s}.lude-piece:nth-child(4)::before{content:'+'}.lude-piece:nth-child(5){right:28%;top:8%;animation-delay:-3.5s}.lude-piece:nth-child(5)::before{content:'II'}
+    @keyframes piecePulse{50%{filter:brightness(1.5);box-shadow:0 0 24px rgba(139,99,64,.55)}}
+    .lude-core{position:absolute;z-index:4;left:50%;top:50%;translate:-50% -50%;width:112px;height:112px;border:1px solid rgba(201,168,76,.48);border-radius:43% 57% 46% 54% / 55% 43% 57% 45%;background:radial-gradient(circle,rgba(139,99,64,.25),rgba(61,26,110,.28) 48%,rgba(8,4,13,.94));color:#c8b9b5;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;box-shadow:0 0 30px rgba(139,99,64,.22),inset 0 0 25px rgba(201,168,76,.08);transition:all .45s;animation:ludeCore 4.5s ease-in-out infinite}
+    .lude-core::before{content:'◇';display:block;font-size:21px;margin-bottom:7px;color:#bd865e;text-shadow:0 0 12px rgba(201,168,76,.48)}
+    .lude-core:hover{transform:scale(1.08) rotate(-3deg);border-color:#c18a62;box-shadow:0 0 48px rgba(139,99,64,.35),inset 0 0 28px rgba(201,168,76,.15)}
+    @keyframes ludeCore{50%{border-radius:55% 45% 54% 46% / 44% 57% 43% 56%;filter:brightness(1.15)}}
+    @keyframes ludeTilt{from{transform:perspective(600px) rotateX(3deg) rotateZ(-2deg)}to{transform:perspective(600px) rotateX(-3deg) rotateZ(3deg)}}
+    #ch-1.lude-step-1 #poem-wrap>*{display:none!important}
+    #ch-1.lude-step-1 .lude-mechanism{display:block}
+    #ch-1.lude-open .lude-mechanism{width:92px;opacity:.38;transition:width .9s cubic-bezier(.2,.8,.2,1),opacity .8s ease;margin-bottom:18px;pointer-events:none}
+    #ch-1.lude-open .lude-core{opacity:0}
+    #ch-1.lude-open #poem-wrap{animation:ludeReveal 1s cubic-bezier(.18,.8,.2,1) both}
+    @keyframes ludeReveal{from{opacity:0;transform:translateY(65px);filter:blur(12px)}to{opacity:1;transform:none;filter:none}}
+    .lude-trigger{display:block;margin:28px auto 8px;padding:13px 28px;border:1px solid rgba(139,99,64,.5);border-radius:9px 22px 8px 18px;background:rgba(65,35,31,.28);color:#bca6a2;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;transition:all .35s}
+    .lude-trigger:hover{transform:rotate(-1deg) translateY(-2px);border-color:#c18a62;box-shadow:0 0 28px rgba(139,99,64,.2)}
+    body.approaching-lude .light-fissure{background:linear-gradient(180deg,rgba(139,99,64,.18),rgba(227,54,195,.045) 48%,transparent 88%)}
+
+    /* SEP */
+    .sep{display:flex;align-items:center;gap:16px;margin:28px 0;}
+    .sep::before,.sep::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.3) 50%,transparent);}
+    .sep span{font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);letter-spacing:2px;white-space:nowrap;text-transform:uppercase;}
+
+    /* CHALLENGE */
+    .ch-num{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--fucsia);margin-bottom:12px;}
+    .ch-word{font-family:'Cinzel Decorative',serif;font-size:clamp(18px,3.5vw,26px);background:linear-gradient(135deg,var(--gold-pale),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+    #ch-0>.ch-num{text-align:center;color:rgba(227,54,195,.76);font-size:9px;letter-spacing:.48em;margin-bottom:14px}
+    #ch-0>.ch-word{text-align:center!important;font-size:clamp(30px,5vw,49px)!important;font-weight:400!important;letter-spacing:.015em!important;background:linear-gradient(180deg,#d9d5de,#918a99)!important;-webkit-background-clip:text!important;background-clip:text!important;margin-bottom:38px!important;text-shadow:none}
+    .ch-body{font-size:clamp(17px,1.65vw,20px);color:rgba(216,212,223,.78);line-height:1.82;letter-spacing:.008em;}
+    #ch-0 .ch-body>p{max-width:600px;margin-left:auto;margin-right:auto;text-align:center;text-wrap:balance}
+    #ch-0 .ch-body>p:first-of-type{font-size:clamp(19px,2vw,23px);color:#d7d2dc;line-height:1.68}
+    .badge{display:none;font-size:9px;letter-spacing:2px;color:#4caf89;border:1px solid rgba(76,175,137,.4);border-radius:12px;padding:3px 10px;margin-left:10px;vertical-align:middle;}
+
+    /* GIF */
+    .gif-block{text-align:center;margin:28px 0;}
+    .gif-block img{max-width:100%;border:1px solid rgba(201,168,76,.18);border-radius:14px;}
+    .gif-cap{font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);letter-spacing:.15em;margin-top:12px;font-style:italic;text-transform:uppercase;}
+
+    /* WALLY */
+    .wally-wrap{position:relative;margin:24px 0;cursor:crosshair;}
+    .wally-wrap img{width:100%;display:block;border-radius:14px;border:1px solid rgba(201,168,76,.18);}
+    .arca-zone{position:absolute;bottom:5%;left:5%;width:22%;height:28%;cursor:pointer;border-radius:8px;}
+    .wally-hint{font-size:14px;color:var(--text-dim);text-align:center;margin-top:8px;font-style:italic;}
+    .arca-msg{display:none;margin-top:20px;padding:22px 26px;background:rgba(227,54,195,.06);border:1px solid var(--border-f);border-radius:16px;font-family:'Cinzel',serif;font-size:13px;line-height:1.9;color:var(--text);text-align:center;}
+    .arca-msg.show{display:block;animation:fadeUp .6s ease forwards;}
+
+    /* POEM */
+    .poem-block{background:rgba(61,26,110,.15);border-left:2px solid rgba(227,54,195,.4);padding:24px 28px;margin:20px 0;border-radius:0 14px 14px 0;}
+    .poem-line{font-family:'Cinzel',serif;font-size:14px;line-height:2.4;color:var(--text);}
+    .fl{color:var(--fucsia);font-weight:600;font-size:16px;}
+    #poem-wrap{display:block;}
+
+    /* INPUT */
+    .input-row{display:flex;gap:10px;margin-top:24px;}
+    .answer-input{
+      flex:1;background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:13px 22px;
+      font-family:'Cinzel',serif;font-size:14px;letter-spacing:2px;
+      color:var(--gold-pale);text-transform:uppercase;outline:none;
+      transition:border-color .3s;
+    }
+    .answer-input::placeholder{color:var(--text-dim);text-transform:none;letter-spacing:0;font-family:'Crimson Text',serif;font-size:15px;font-style:italic;}
+    .answer-input:focus{border-color:var(--gold);}
+    .answer-input.correct{border-color:#4caf89;color:#4caf89;}
+    .answer-input.wrong{border-color:#c0392b;animation:shake .4s;}
+    .btn-go{
+      background:linear-gradient(135deg,var(--violet),rgba(61,26,110,.6));
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:13px 24px;
+      font-family:'Cinzel',serif;font-size:14px;
+      color:var(--gold-light);cursor:pointer;transition:all .3s;
+    }
+    .btn-go:hover{border-color:var(--fucsia-dim);color:var(--fucsia);}
+    .fb{font-size:13px;margin-top:10px;min-height:18px;letter-spacing:.5px;font-style:italic;}
+    .fb.ok{color:#4caf89;}
+    .fb.err{color:#e57373;}
+
+    /* REVELATION */
+    .rev{display:none;margin-top:24px;padding:24px 28px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;position:relative;overflow:hidden;}
+    .rev::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold-light),transparent);}
+    .rev.show{display:block;animation:fadeUp .7s ease forwards;}
+    .rev-word{font-family:'Cinzel Decorative',serif;font-size:17px;background:linear-gradient(135deg,var(--gold-pale),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;}
+    .rev p{font-size:15px;color:var(--text-dim);line-height:1.95;}
+    body.revelation-open{overflow:hidden}
+    #rev-0.show{display:block;position:fixed;z-index:996;inset:0;margin:0;padding:clamp(70px,8vh,110px) 22px 80px;border:0;border-radius:0;background:radial-gradient(ellipse at 50% 20%,rgba(201,168,76,.18),transparent 35%),radial-gradient(ellipse at 50% 72%,rgba(123,47,190,.2),transparent 48%),rgba(6,3,11,.97);overflow-y:auto;animation:revelationEnter 1.25s cubic-bezier(.18,.82,.2,1) forwards}
+    #rev-0.show::before{content:'◉';position:fixed;left:50%;top:8vh;translate:-50% 0;width:min(70vw,680px);height:min(70vw,680px);display:grid;place-items:center;border:1px solid rgba(201,168,76,.13);border-radius:48% 52% 46% 54% / 56% 44% 56% 44%;font-size:clamp(46px,8vw,84px);color:rgba(201,168,76,.13);text-shadow:0 0 48px rgba(201,168,76,.28);pointer-events:none;animation:revelationEye 8s ease-in-out infinite alternate}
+    @keyframes revelationEnter{from{opacity:0;transform:scale(1.08);filter:blur(18px)}to{opacity:1;transform:none;filter:none}}
+    @keyframes revelationEye{from{transform:scale(.96);border-radius:48% 52% 46% 54% / 56% 44% 56% 44%}to{transform:scale(1.05);border-radius:54% 46% 52% 48% / 44% 57% 43% 56%}}
+    #rev-0>*{position:relative;z-index:1;max-width:760px;margin-left:auto;margin-right:auto}
+    #rev-0 .rev-word{text-align:center;font-size:clamp(34px,6vw,68px);font-weight:400;letter-spacing:.02em;background:linear-gradient(180deg,#e1dde4,#9a929f)!important;-webkit-background-clip:text!important;background-clip:text!important;margin-bottom:32px}
+    #rev-0>p{text-align:center;font-size:clamp(18px,1.8vw,22px);line-height:1.85;color:rgba(216,212,223,.72);text-wrap:balance}
+    #rev-0 iframe{border-radius:46% 54% 48% 52% / 14% 14% 12% 12%!important;box-shadow:0 0 50px rgba(123,47,190,.2)}
+    #rev-0 .rev-word{font-size:clamp(27px,5vw,58px);line-height:1.16;letter-spacing:.015em;padding:.08em .12em;overflow-wrap:anywhere;text-wrap:balance}
+    #wrap-1>.unlock-banner{display:none}
+    #wrap-2>.unlock-banner{display:none}
+    #rev-1.show{display:block;position:fixed;z-index:996;inset:0;margin:0;padding:clamp(80px,10vh,130px) 22px 80px;border:0;border-radius:0;background:radial-gradient(ellipse at 50% 22%,rgba(139,99,64,.22),transparent 38%),radial-gradient(ellipse at 50% 74%,rgba(201,168,76,.12),transparent 48%),rgba(6,3,11,.98);overflow-y:auto;animation:revelationEnter 1.1s cubic-bezier(.18,.82,.2,1) forwards}
+    #rev-1.show>*{position:relative;z-index:1;max-width:720px;margin-left:auto;margin-right:auto}
+    #rev-1.show .rev-word{text-align:center;font-size:clamp(34px,6vw,64px);line-height:1.15;background:linear-gradient(180deg,#ddd7df,#9c8d8a)!important;-webkit-background-clip:text!important;background-clip:text!important;margin-bottom:30px}
+    #rev-1.show>p{text-align:center;font-size:clamp(18px,1.8vw,22px);line-height:1.85;color:rgba(216,212,223,.74);text-wrap:balance}
+    #rev-2.show{display:block;position:fixed;z-index:996;inset:0;margin:0;padding:clamp(80px,10vh,130px) 22px 80px;border:0;border-radius:0;background:radial-gradient(ellipse at 50% 22%,rgba(123,47,190,.3),transparent 40%),radial-gradient(ellipse at 50% 72%,rgba(227,54,195,.16),transparent 50%),rgba(5,2,10,.98);overflow-y:auto;animation:revelationEnter 1.1s cubic-bezier(.18,.82,.2,1) forwards}
+    #rev-2.show>*{position:relative;z-index:1;max-width:720px;margin-left:auto;margin-right:auto}
+    #rev-2.show .rev-word{text-align:center;font-size:clamp(32px,5.8vw,62px);line-height:1.15;background:linear-gradient(180deg,#ded9e3,#a78abb)!important;-webkit-background-clip:text!important;background-clip:text!important;margin-bottom:30px}
+    #rev-2.show>p{text-align:center;font-size:clamp(18px,1.8vw,22px);line-height:1.85;color:rgba(216,212,223,.76);text-wrap:balance}
+    #ch-1{scroll-margin-top:28px}
+    #ch-1>.ch-word{font-size:clamp(27px,4vw,42px)!important;line-height:1.14;overflow-wrap:anywhere;text-wrap:balance;padding:.05em .1em}
+    .accept-mark{display:block;margin:42px auto 0;padding:16px 34px;border:1px solid rgba(201,168,76,.46);border-radius:999px;background:rgba(201,168,76,.08);color:#c8c1cb;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.27em;text-transform:uppercase;cursor:pointer;transition:all .35s}
+    .accept-mark:hover{border-color:var(--fucsia);color:#fff;box-shadow:0 0 34px rgba(227,54,195,.22);transform:translateY(-2px)}
+    .chamber-back{display:table;margin:0 auto 34px;padding:10px 18px;border:1px solid rgba(207,201,216,.18);border-radius:999px;background:rgba(7,3,12,.38);color:rgba(207,201,216,.66);font-family:'Cinzel',serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+    .chamber-back::before{content:'←';margin-right:10px;color:#b67f56}
+    .chamber-back:hover{color:#eee8f0;border-color:rgba(201,168,76,.48);transform:translateY(-2px)}
+
+    /* HINT */
+    .hint-tog{font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;margin-top:16px;display:inline-block;transition:color .3s;border-bottom:1px solid rgba(201,168,76,.2);padding-bottom:2px;}
+    .hint-tog:hover{color:var(--gold-light);}
+    .hint-box{margin-top:12px;background:rgba(61,26,110,.2);border:1px solid var(--border-f);border-radius:14px;padding:16px 20px;font-size:14px;color:var(--text-dim);line-height:1.8;display:none;}
+    .hint-box.open{display:block;}
+
+    /* FINAL */
+    #lema-section{visibility:hidden;opacity:0;pointer-events:none;text-align:center;}
+    #lema-section.revealed{visibility:visible;position:fixed;z-index:996;inset:0;display:block;padding:clamp(70px,9vh,120px) max(22px,calc((100vw - 850px)/2)) 90px;overflow-y:auto;opacity:1;pointer-events:all;background:radial-gradient(ellipse at 50% 23%,rgba(119,42,157,.38),transparent 42%),radial-gradient(ellipse at 50% 78%,rgba(226,52,193,.16),transparent 48%),rgba(6,2,11,.985);animation:revelationEnter 1.1s cubic-bezier(.18,.82,.2,1) forwards;}
+    #lema-section.revealed::before{content:'';position:fixed;z-index:-1;inset:0;background-image:radial-gradient(circle at 14% 18%,rgba(232,175,102,.75) 0 1px,transparent 2px),radial-gradient(circle at 78% 24%,rgba(226,75,190,.7) 0 1px,transparent 2px),radial-gradient(circle at 42% 68%,rgba(154,102,218,.65) 0 1px,transparent 2px);background-size:127px 119px,181px 173px,231px 217px;animation:tunnelBreathe 13s ease-in-out infinite alternate;}
+    .lema-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--fucsia);margin-bottom:24px;}
+    .lema-words{display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:32px;}
+    .lema-word{font-family:'Cinzel Decorative',serif;font-size:clamp(14px,3.5vw,24px);background:linear-gradient(135deg,var(--gold-pale),var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;transform:scale(.8);transition:all .6s cubic-bezier(.34,1.56,.64,1);}
+    .lema-word.show{opacity:1;transform:scale(1);}
+    .lema-sep{color:var(--fucsia);font-size:20px;opacity:.6;}
+    .portal-msg{font-family:'Cinzel',serif;font-size:13px;color:var(--text-dim);letter-spacing:1px;margin-bottom:36px;line-height:2;}
+    .btn-portal{
+      display:inline-block;
+      background:linear-gradient(135deg,rgba(227,54,195,.2),rgba(61,26,110,.6));
+      border:1px solid var(--fucsia-dim);
+      border-radius:28px;
+      padding:16px 40px;
+      font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;
+      color:var(--fucsia);text-decoration:none;transition:all .3s;
+    }
+    .btn-portal:hover{background:linear-gradient(135deg,rgba(227,54,195,.4),rgba(61,26,110,.9));box-shadow:0 0 30px rgba(227,54,195,.3);}
+
+    /* OPCIONES */
+    .opcion-btn{
+      display:block;padding:14px 20px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      border-radius:14px;
+      font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.5px;
+      color:var(--gold-light);text-decoration:none;transition:all .3s;text-align:center;
+    }
+    .opcion-btn:hover{border-color:var(--fucsia-dim);color:var(--fucsia);background:rgba(227,54,195,.06);}
+    .opcion-btn.elegida{border-color:var(--fucsia);color:var(--fucsia);}
+
+    /* ANIMATIONS */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes logoExplode{0%{opacity:0;transform:scale(0.2) rotate(-15deg);filter:brightness(3) blur(8px);}60%{opacity:1;transform:scale(1.15) rotate(3deg);filter:brightness(1.5) blur(0);}80%{transform:scale(0.95) rotate(-1deg);filter:brightness(1);}100%{opacity:1;transform:scale(1) rotate(0deg);filter:brightness(1);}}
+    @keyframes floatLogo{0%,100%{transform:translateY(0px);filter:drop-shadow(0 0 18px rgba(227,54,195,.7)) drop-shadow(0 0 40px rgba(123,47,190,.5)) drop-shadow(0 0 8px rgba(201,168,76,.4));}50%{transform:translateY(-14px);filter:drop-shadow(0 0 28px rgba(227,54,195,.9)) drop-shadow(0 0 60px rgba(123,47,190,.7)) drop-shadow(0 0 14px rgba(201,168,76,.6));}}
+    @keyframes shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
+    @keyframes pulseGold{0%,100%{box-shadow:0 0 0 rgba(201,168,76,0);}50%{box-shadow:0 0 24px rgba(201,168,76,.18);}}
+
+    @media(max-width:500px){.stage{padding:18px 14px 80px}.header{min-height:94vh;margin-bottom:44px}.universe-emblem{width:112px;margin-bottom:18px}.header-intro{line-height:1.5;gap:5px}.header::after{width:91vw;height:82vh}.header-intro-sub iframe{width:84vw!important}.ambient-toggle{right:10px;top:10px;padding:7px}.ambient-toggle .ambient-label{display:none}.site-language{left:10px;right:auto;top:10px;padding:8px 10px}.initiation-exit{left:10px;top:54px;padding:8px 10px}.card{padding:82px 20px 30px;border-radius:46% 54% 20px 20px / 82px 72px 20px 20px}.mirror-vision{width:100%;padding:7px}.evigila-glyph{width:66px;height:66px}#ch-1{padding:54px 18px 34px;border-radius:27px 9px 31px 12px}.lude-mechanism{width:72vw}.input-row{flex-direction:column;}.btn-go{width:100%;border-radius:28px;}#ch-0 .btn-go{border-radius:28px}}
+    @media(prefers-reduced-motion:reduce){body::before,.header::after,.depth-plane.three{animation:none}}
+</style>
+</head>
+<body>
+<script>if(location.protocol==='file:'){location.replace('http://localhost:3002/reto');}</script>
+
+<canvas id="ripple-canvas"></canvas>
+<div id="transition-overlay"></div>
+<canvas id="cosmos"></canvas>
+<div class="depth-plane one" aria-hidden="true"></div>
+<div class="depth-plane two" aria-hidden="true"></div>
+<div class="depth-plane three" aria-hidden="true"></div>
+<div class="light-fissure" aria-hidden="true"></div>
+<div class="cave-foreground" aria-hidden="true"></div>
+<div class="scene-shift" id="scene-shift" aria-hidden="true"></div>
+<a class="initiation-exit" href="/stray-sheep/universo" target="_top" data-es="Volver" data-en="Back">Volver</a>
+<button class="ambient-toggle" id="ambient-toggle" type="button" aria-pressed="false" title="Activar o silenciar atmósfera"><span class="sound-mark" aria-hidden="true"></span><span class="ambient-label">Sonido</span></button>
+
+<div class="stage">
+
+  <!-- HEADER -->
+  <header class="header">
+    <img class="universe-emblem" src="/mpa-universe-logo.png" alt="Símbolo de Universo MPA" />
+    <p class="eyebrow">Universo MPA</p>
+    <h1 class="main-title"><span class="title-small" data-es="Reto de" data-en="Challenge of">Reto de</span><span class="title-large" data-es="Iniciación" data-en="Initiation">Iniciación</span></h1>
+    <div class="divider"><span class="div-glyph">✦</span></div>
+    <p class="header-sub" data-es="Tres señales. Una llave. Un umbral." data-en="Three signs. One key. One threshold.">Tres señales. Una llave. Un umbral.</p>
+    <div class="header-intro">
+      <span data-es="No todo el que llega entra." data-en="Not everyone who arrives may enter.">No todo el que llega entra.</span>
+      <span data-es="No todo el que mira ve." data-en="Not everyone who looks can see.">No todo el que mira ve.</span>
+      <span data-es="No todo el que responde entiende." data-en="Not everyone who answers understands.">No todo el que responde entiende.</span>
+    </div>
+    <div class="header-intro-sub">
+      <div style="margin:20px 0;text-align:center;">
+        <iframe width="100%" height="315"
+          src="https://www.youtube-nocookie.com/embed/SRw9lmGa3dA?rel=0"
+          style="border-radius:14px;border:1px solid rgba(201,168,76,.2);max-width:560px;display:block;margin:0 auto;"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+    <button class="cross-threshold" id="cross-threshold" type="button" data-es="Atravesar el umbral" data-en="Cross the threshold">Atravesar el umbral</button>
+  </header>
+
+  <!-- PROGRESS -->
+  <div class="pips">
+    <div class="pip" id="pip-0"></div>
+    <div class="pip" id="pip-1"></div>
+    <div class="pip" id="pip-2"></div>
+  </div>
+
+  <!-- ══ DESAFÍO I ══ -->
+  <div class="card" id="ch-0">
+    <div class="evigila-glyph" aria-hidden="true"></div>
+    <div class="ch-num" data-es="Desafío I" data-en="Challenge I">Desafío I</div>
+    <div class="ch-word" style="background:linear-gradient(135deg,#e8d5a3,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-es="El Reflejo <span class='badge' id='badge-0' style='-webkit-text-fill-color:#C9A84C;color:#C9A84C;border-color:rgba(201,168,76,.4);'>✓</span>" data-en="The Reflection <span class='badge' id='badge-0' style='-webkit-text-fill-color:#C9A84C;color:#C9A84C;border-color:rgba(201,168,76,.4);'>✓</span>">El Reflejo <span class="badge" id="badge-0" style="-webkit-text-fill-color:#C9A84C;color:#C9A84C;border-color:rgba(201,168,76,.4);">✓</span></div>
+    <div class="ch-subtitle" data-es="La primera cámara no pregunta quién sos. Pregunta qué sos capaz de ver." data-en="The first chamber does not ask who you are. It asks what you are capable of seeing.">La primera cámara no pregunta quién sos. Pregunta qué sos capaz de ver.</div>
+    <div class="evigila-path" aria-label="Recorrido de la primera cámara"><div class="evigila-step active" data-ritual-step="1"><span>Escuchar</span></div><div class="evigila-step" data-ritual-step="2"><span>Mirar</span></div><div class="evigila-step" data-ritual-step="3"><span>Nombrar</span></div></div>
+    <div class="ch-body">
+      <!-- AUDIO — reemplazá src con tu archivo en Vercel, ej: /audio-espejo.mp3 -->
+      <div style="margin-bottom:28px;">
+        <p class="ritual-audio-label" style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Cerrá los ojos. El eco conoce el camino.</p>
+        <audio controls style="width:100%;filter:invert(1) hue-rotate(200deg) brightness(.8);">
+          <source src="/mpa-reto/audio-espejo.mp3" type="audio/mpeg">
+          <source src="/mpa-reto/audio-espejo.ogg" type="audio/ogg">
+        </audio>
+      </div>
+
+      <p>El espejo no guarda secretos.<br>
+      Los devuelve torcidos, pulidos o disfrazados.<br>
+      Depende de quién se atreva a mirar.</p>
+      <br>
+      <div class="mirror-vision" style="text-align:center;margin:28px 0;">
+        <img src="https://i.ibb.co/1GpC6jqT/l-OGO-Y-ELEMENTOS-CLAVES-1.gif" alt="El espejo"
+          style="max-width:100%;width:100%;border:1px solid rgba(150,123,69,.2);border-radius:3px;" />
+      </div>
+      <p>No busques una imagen perfecta.<br>
+      Eso es decoración de un ego fragmentado.<br>
+      Buscá la señal que quedó ahí, esperando que dejaras de actuar.</p>
+      <br>
+      <p style="font-size:13px;color:var(--text-dim);font-style:italic;">Hay algo que el reflejo dice una sola vez.<br>
+      Y si parpadeás desde la costumbre, se te escapa.</p>
+    </div>
+    <span class="hint-tog" onclick="mostrarPista()" data-es="→ una pista" data-en="→ a hint">→ una pista</span>
+
+    <!-- PISTA 1: papiro -->
+    <div id="pista-1" style="display:none; margin-top:12px;">
+      <div style="text-align:center;">
+        <img src="https://i.ibb.co/zHbGQkKj/Copy-of-D-1080-x-1350-px-Instagram-Post-45-Instagram-Post-6-edited.png"
+             alt="El pergamino"
+             style="max-width:100%;border-radius:3px;border:1px solid rgba(150,123,69,.2);" />
+      </div>
+      <div style="text-align:center;margin-top:16px;">
+        <span class="hint-tog" onclick="mostrarPista2()" data-es="→ seguir necesitando ayuda" data-en="→ I still need help">→ seguir necesitando ayuda</span>
+      </div>
+    </div>
+
+    <!-- PISTA 2: texto -->
+    <div id="pista-2" style="display:none; margin-top:16px; background:rgba(61,26,110,.2); border:1px solid rgba(227,54,195,.15); border-radius:3px; padding:16px 20px; font-size:13px; color:var(--text-dim); line-height:1.9;">
+      Las palabras de este universo no siempre hablan en los idiomas que conocés.<br>
+      Pero el espejo no miente — aunque hable en otro registro.<br><br>
+      Mirá de nuevo. Hay un instante, entre todo el ruido visual, donde algo aparece.<br>
+      Un segundo basta para despertar.<br>
+      Siempre bastó.
+      <div style="text-align:center;margin-top:16px;">
+        <span class="hint-tog" onclick="mostrarPista3()" data-es="→ una última pista" data-en="→ one last hint">→ una última pista</span>
+      </div>
+    </div>
+
+    <!-- PISTA 3: múltiple choice -->
+    <div id="pista-3" style="display:none; margin-top:16px;">
+      <div style="background:rgba(61,26,110,.2); border:1px solid rgba(227,54,195,.15); border-radius:3px; padding:16px 20px; font-size:13px; color:var(--text-dim); line-height:1.9; margin-bottom:16px;">
+        Todas suenan posibles en el universo MPA.<br>
+        Pero solo una significa despertar, estar consciente, estar atento.<br>
+        <span style="font-style:italic;">Elegí la que resuena. La que habla de abrir los ojos.</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="opcion-btn" onclick="elegirRespuesta(this, false)">✦ POTENTIA</button>
+        <button class="opcion-btn" onclick="elegirRespuesta(this, true)">✦ EVIGILA</button>
+        <button class="opcion-btn" onclick="elegirRespuesta(this, false)">✦ LUMINIS</button>
+      </div>
+      <div id="fb-eleccion" style="font-size:12px;margin-top:10px;min-height:18px;"></div>
+    </div>
+    <div class="input-row">
+      <input class="answer-input" id="inp-0" type="text" placeholder="lo que viste cuando dejaste de mirarte..." autocomplete="off" spellcheck="false" style="border-color:rgba(201,168,76,.4);color:#C9A84C;" />
+      <button class="btn-go" onclick="check(0)" style="border-color:rgba(201,168,76,.4);color:#C9A84C;">→</button>
+    </div>
+    <div class="fb" id="fb-0"></div>
+    <div class="rev" id="rev-0">
+      <div class="rev-word" data-es="EVIGILA — MANTENTE DESPIERTO." data-en="EVIGILA — STAY AWAKE.">EVIGILA — MANTENTE DESPIERTO.</div>
+      <p data-es="Del latín <em>vigilare</em>: estar despierto, estar alerta, ser consciente.<br><br>En este mundo, nada es casualidad.<br>Evigila no es solo un nombre. Es una llave, una revelación.<br>Los antiguos sabían que la realidad no se trata solo de ver,<br>sino de aprender a observar. No solo de escuchar,<br>sino de entender el mensaje oculto.<br><br>Sin darte cuenta, ya empezaste a despertar." data-en="From the Latin <em>vigilare</em>: to stay awake, alert and aware.<br><br>In this world, nothing is accidental.<br>Evigila is not merely a name. It is a key, a revelation.<br>The ancients knew that reality is not only about seeing,<br>but about learning to observe. Not only listening,<br>but understanding the hidden message.<br><br>Without realizing it, you have already begun to awaken.">Del latín <em>vigilare</em>: estar despierto, estar alerta, ser consciente.<br><br>
+      En este mundo, nada es casualidad.<br>
+      Evigila no es solo un nombre. Es una llave, una revelación.<br>
+      Los antiguos sabían que la realidad no se trata solo de ver,<br>
+      sino de aprender a observar. No solo de escuchar,<br>
+      sino de entender el mensaje oculto.<br><br>
+      Sin darte cuenta, ya empezaste a despertar.</p>
+
+      <div style="margin-top:28px;text-align:center;">
+        <iframe width="100%" height="315"
+          src="https://www.youtube-nocookie.com/embed/JkAMO3Xfe3A?rel=0"
+          style="border-radius:14px;border:1px solid rgba(201,168,76,.2);max-width:560px;display:block;margin:0 auto;"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+
+      <div style="margin-top:24px;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);border-radius:14px;padding:20px 24px;">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(201,168,76,.45);margin-bottom:12px;" data-es="✦ Los dos reinos · audio" data-en="✦ The two realms · audio">✦ Los dos reinos · audio</div>
+        <audio controls style="width:100%;accent-color:#967B45;">
+          <source src="/mpa-reto/REINOS.MP3" type="audio/mpeg">
+        </audio>
+      </div>
+      <button type="button" class="accept-mark" id="accept-evigila" data-es="Cruzar a la segunda cámara" data-en="Enter the second chamber">Cruzar a la segunda cámara</button>
+    </div>
+  </div>
+
+  <!-- ══ DESAFÍO II — LOCKED ══ -->
+  <div class="locked" id="wrap-1">
+    <div class="unlock-banner">
+      <div class="unlock-eye">Primera marca activada</div>
+      <div class="unlock-title">EVIGILA — MANTENTE DESPIERTO.</div>
+      <div class="unlock-sub">La primera cámara permanece abierta.<br>La siguiente exige aprender a jugar.</div>
+    </div>
+
+    <div class="card" id="ch-1">
+      <button type="button" class="chamber-back" id="back-to-evigila" data-es="Volver a la primera cámara" data-en="Back to the first chamber">Volver a la primera cámara</button>
+      <div class="ch-num" data-es="Desafío II" data-en="Challenge II">Desafío II</div>
+      <div class="ch-word" style="background:linear-gradient(135deg,#c49a6c,#8B6340);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-es="La Pieza Ausente <span class='badge' id='badge-1' style='-webkit-text-fill-color:#8B6340;color:#8B6340;border-color:rgba(139,99,64,.4);'>✓</span>" data-en="The Missing Piece <span class='badge' id='badge-1' style='-webkit-text-fill-color:#8B6340;color:#8B6340;border-color:rgba(139,99,64,.4);'>✓</span>">La Pieza Ausente <span class="badge" id="badge-1" style="-webkit-text-fill-color:#8B6340;color:#8B6340;border-color:rgba(139,99,64,.4);">✓</span></div>
+      <div class="lude-subtitle" data-es="Acá no alcanza con comprender. Para encontrar la segunda palabra, tenés que mover algo." data-en="Understanding is not enough here. To find the second word, you must move something.">Acá no alcanza con comprender. Para encontrar la segunda palabra, tenés que mover algo.</div>
+      <div class="lude-mechanism"><i class="lude-piece" aria-hidden="true"></i><i class="lude-piece" aria-hidden="true"></i><i class="lude-piece" aria-hidden="true"></i><i class="lude-piece" aria-hidden="true"></i><i class="lude-piece" aria-hidden="true"></i><button class="lude-core" id="lude-core" type="button">Jugar</button></div>
+      <div class="ch-body">
+
+        <div id="poem-wrap">
+          <div style="margin-bottom:24px;text-align:center;">
+            <iframe width="100%" height="315"
+              src="https://www.youtube-nocookie.com/embed/kfbya1DPTSA?rel=0"
+              style="border-radius:14px;border:1px solid rgba(139,99,64,.25);max-width:560px;display:block;margin:0 auto;"
+              frameborder="0"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="sep"><span data-es="✦ la segunda señal ✦" data-en="✦ the second sign ✦">✦ la segunda señal ✦</span></div>
+
+          <p style="font-size:15px;color:var(--text);line-height:1.95;margin-bottom:20px;" data-es="La segunda palabra de poder está oculta en lo que estás a punto de ver.<br><br>Prestá atención. No todo lo que se dice está en las palabras.<br><strong style='color:var(--gold-light)'>Algunos mensajes se leen entre líneas.</strong>" data-en="The second word of power is hidden in what you are about to see.<br><br>Pay attention. Not everything said lives in the words.<br><strong style='color:var(--gold-light)'>Some messages are read between the lines.</strong>">
+            La segunda palabra de poder está oculta en lo que estás a punto de ver.<br><br>
+            Prestá atención. No todo lo que se dice está en las palabras.<br>
+            <strong style="color:var(--gold-light)">Algunos mensajes se leen entre líneas.</strong>
+          </p>
+
+          <div class="sep"><span>✦ escucha bien ✦</span></div>
+
+          <p style="font-size:14px;color:var(--text-dim);font-style:italic;line-height:1.9;margin-bottom:20px;">
+            Hay un enigma oculto en estas palabras.<br>
+            En cada letra, una pista.<br>
+            Si prestás atención, el camino se revelará.
+          </p>
+
+          <div class="poem-block">
+            <div class="poem-line">En la primera letra está el inicio del secreto.</div>
+            <div class="poem-line">En la segunda, la pista de lo que has perdido.</div>
+            <div class="poem-line">En la tercera, la clave de lo que solías hacer sin miedos.</div>
+            <div class="poem-line">Y en la última, la puerta para recuperarlo.</div>
+          </div>
+
+          <div style="margin:24px 0;padding:22px 24px;background:rgba(139,99,64,.08);border:1px solid rgba(139,99,64,.25);border-radius:14px;">
+            <p style="font-size:15px;color:var(--text);line-height:2.2;font-style:italic;">
+              Luz y sombra, un eco en tu andar, un secreto que siempre supiste usar.<br>
+              Un instante, un recuerdo, una llave que siempre supo girar.<br>
+              Donde eras libre sin miedo a fallar, dejaste atrás lo que solías amar.<br>
+              Escucha tu corazón, vuelve a brillar, elige tu verdad y déjala volar.
+            </p>
+          </div>
+
+          <div class="sep"><span>✦ ¿cuál es la segunda palabra de poder? ✦</span></div>
+
+          <div class="input-row">
+            <input class="answer-input" id="inp-1" type="text"
+              placeholder="el concepto que encontraste..."
+              autocomplete="off" spellcheck="false"
+              style="border-color:rgba(139,99,64,.5);color:#967B45;"/>
+            <button class="btn-go" onclick="check(1)" style="border-color:rgba(139,99,64,.5);color:#967B45;">→</button>
+          </div>
+          <div class="fb" id="fb-1"></div>
+
+          <span class="hint-tog" id="tog-h1a" onclick="showNextHint('h1a', 'tog-h1b')" style="margin-top:14px;" data-es="→ una pista" data-en="→ a hint">→ una pista</span>
+          <div class="hint-box" id="h1a">
+            Lo hacen los niños sin que nadie se los enseñe.<br>
+            Lo olvidan los adultos sin que nadie se los diga.<br>
+            No es serio. O sí lo es — depende de quién lo hace.
+          </div>
+          <span class="hint-tog" id="tog-h1b" onclick="showNextHint('h1b', 'tog-h1c')" style="margin-top:10px;display:none;" data-es="→ otra pista" data-en="→ another hint">→ otra pista</span>
+          <div class="hint-box" id="h1b">
+            El poema tiene cuatro líneas.<br>
+            Cada una empieza con algo.<br>
+            No lo leas. Miralo.
+          </div>
+          <span class="hint-tog" id="tog-h1c" onclick="showNextHint('h1c', null)" style="margin-top:10px;display:none;">→ no lo encuentro</span>
+          <div class="hint-box" id="h1c">
+            <p style="margin-bottom:12px;font-size:13px;">Elegí cuál creés que es:</p>
+            <div id="opciones-lude" style="display:flex;flex-direction:column;gap:10px;">
+              <button class="opcion-btn" onclick="elegirLude(this, false)">✦ ARCANA</button>
+              <button class="opcion-btn" onclick="elegirLude(this, true)">✦ LUDE</button>
+              <button class="opcion-btn" onclick="elegirLude(this, false)">✦ VIGIL</button>
+            </div>
+          </div>
+
+          <div class="rev" id="rev-1">
+            <div class="rev-word" data-es="LUDE — JUEGA." data-en="LUDE — PLAY.">LUDE — JUEGA.</div>
+            <p data-es="Del latín <em>ludere</em>: jugar, experimentar, atreverse sin miedo a fallar.<br><br>En MPA, el juego no es trivial.<br>Es el acto más serio que existe.<br>Porque quien juega de verdad<br>sabe que las reglas son una invitación, no una jaula.<br><br>Llegaste hasta acá jugando.<br>Y eso ya dice todo." data-en="From the Latin <em>ludere</em>: to play, experiment and dare without fear of failure.<br><br>In MPA, play is not trivial.<br>It is the most serious act there is.<br>Because those who truly play<br>know that rules are an invitation, not a cage.<br><br>You reached this point by playing.<br>And that already says everything.">Del latín <em>ludere</em>: jugar, experimentar, atreverse sin miedo a fallar.<br><br>
+            En MPA, el juego no es trivial.<br>
+            Es el acto más serio que existe.<br>
+            Porque quien juega de verdad<br>
+            sabe que las reglas son una invitación, no una jaula.<br><br>
+            Llegaste hasta acá jugando.<br>
+            Y eso ya dice todo.</p>
+            <button type="button" class="accept-mark" id="continue-lude" data-es="Cruzar a la tercera cámara" data-en="Enter the third chamber">Cruzar a la tercera cámara</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DESAFÍO III — LOCKED ══ -->
+  <div class="locked" id="wrap-2">
+    <div class="unlock-banner" style="margin-top:4px;">
+      <div class="unlock-eye">Segunda marca activada</div>
+      <div class="unlock-title">La arquitectura respondió.</div>
+      <div class="unlock-sub">
+        Viste lo que otros pasan por alto.<br>
+        Queda una última prueba.<br>
+        Esta vez, el portal no está aquí adentro.
+      </div>
+    </div>
+
+    <div class="card" id="ch-2">
+      <div class="ch-num" data-es="Desafío III" data-en="Challenge III">Desafío III</div>
+      <div class="ch-word" style="background:linear-gradient(135deg,#b07fe0,#7B2FBE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-es="Lo que Queda <span class='badge' id='badge-2' style='-webkit-text-fill-color:#7B2FBE;color:#7B2FBE;border-color:rgba(123,47,190,.4);'>✓</span>" data-en="What Remains <span class='badge' id='badge-2' style='-webkit-text-fill-color:#7B2FBE;color:#7B2FBE;border-color:rgba(123,47,190,.4);'>✓</span>">Lo que Queda <span class="badge" id="badge-2" style="-webkit-text-fill-color:#7B2FBE;color:#7B2FBE;border-color:rgba(123,47,190,.4);">✓</span></div>
+      <div class="ch-body">
+
+        <p data-es="Hay palabras que no se leen.<br>Se escuchan.<br>Y cuando las escuchás de verdad,<br>algo en vos ya sabe a dónde ir." data-en="Some words are not read.<br>They are heard.<br>And when you truly hear them,<br>something within you already knows where to go.">Hay palabras que no se leen.<br>
+        Se escuchan.<br>
+        Y cuando las escuchás de verdad,<br>
+        algo en vos ya sabe a dónde ir.</p>
+
+        <div class="sep"><span>✦ escuchá ✦</span></div>
+
+        <!-- SPOTIFY EMBED -->
+        <div style="margin:24px 0;">
+          <iframe style="border-radius:8px;border:1px solid rgba(150,123,69,.25);"
+            src="https://open.spotify.com/embed/track/5lS44cNadDa6vtGqGJ7FOt?utm_source=generator&theme=0"
+            width="100%" height="152" frameborder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"></iframe>
+        </div>
+
+        <p style="font-size:13px;color:var(--text-dim);font-style:italic;">
+          La canción es la llave.<br>
+          El video es la puerta.<br><br>
+          Cuando la hayas escuchado,<br>
+          algo en el título te va a llamar.<br>
+          Seguí ese llamado.
+        </p>
+
+        <div class="sep"><span>✦ ¿qué escuchaste? ✦</span></div>
+
+        <!-- 3 OPCIONES -->
+        <p style="font-size:13px;color:var(--text-dim);margin-bottom:20px;" data-es="Elegí lo que resonó en vos. Las tres puertas llevan al mismo canal.<br>Pero solo una nombra lo que buscás." data-en="Choose what resonated within you. The three doors lead to the same channel.<br>But only one names what you seek.">
+          Elegí lo que resonó en vos. Las tres puertas llevan al mismo canal.<br>
+          Pero solo una nombra lo que buscás.
+        </p>
+
+        <div id="opciones" style="display:flex;flex-direction:column;gap:12px;">
+          <button type="button" class="opcion-btn" onclick="elegida(this, true)" data-es="✦ Ojos Ancestrales" data-en="✦ Ancient Eyes">
+            ✦ Ojos Ancestrales
+          </button>
+          <button type="button" class="opcion-btn" onclick="elegida(this, false)" data-es="✦ El juego que transforma" data-en="✦ The game that transforms">
+            ✦ El juego que transforma
+          </button>
+          <button type="button" class="opcion-btn" onclick="elegida(this, false)" data-es="✦ La magia que ya estaba en mí" data-en="✦ The magic that was already within me">
+            ✦ La magia que ya estaba en mí
+          </button>
+        </div>
+        <div class="fb" id="fb-puertas" aria-live="polite"></div>
+
+        <!-- MENSAJE TRAS ELEGIR -->
+        <div id="post-eleccion" style="display:none;margin-top:24px;">
+          <p style="font-size:13px;color:var(--text-dim);font-style:italic;line-height:1.9;">
+            Bien.<br>
+            Ahora estás en el canal.<br>
+            Buscá el video <strong style="color:var(--gold-light)">Ancient Eyes</strong>.<br>
+            Mirá con atención lo que está fijado.<br>
+            Hay una palabra que sobrevive a todo el ruido.<br>
+            Esa es la que necesitás.
+          </p>
+        </div>
+
+        <div style="margin-top:32px;">
+          <span class="hint-tog" onclick="toggleHint('h2')" data-es="→ una pista" data-en="→ a hint">→ una pista</span>
+          <div class="hint-box" id="h2">
+            Lo que buscás no está en la imagen.<br>
+            Está en lo que alguien dejó<br>
+            cuando creyó que nadie miraba.
+          </div>
+          <span class="hint-tog" onclick="toggleHint('h2b')" style="margin-top:10px;" data-es="→ otra pista" data-en="→ another hint">→ otra pista</span>
+          <div class="hint-box" id="h2b">
+            En MPA nada desaparece del todo.<br>
+            Hay voces que anclan las cosas en su lugar.<br>
+            Buscá la que está fija.
+          </div>
+        </div>
+
+        <div class="input-row" style="margin-top:20px;">
+          <input class="answer-input" id="inp-2" type="text" placeholder="la palabra que sobrevivió..." autocomplete="off" spellcheck="false" style="border-color:rgba(123,47,190,.5);color:#7B2FBE;"/>
+          <button class="btn-go" onclick="check(2)" style="border-color:rgba(123,47,190,.5);color:#b07fe0;">→</button>
+        </div>
+        <div class="fb" id="fb-2"></div>
+
+        <div class="rev" id="rev-2">
+          <div class="rev-word" data-es="TRANSMUTA — TRANSFORMA." data-en="TRANSMUTA — TRANSFORM.">TRANSMUTA — TRANSFORMA.</div>
+          <p data-es="Del latín <em>transmutare</em>: cambiar de forma, de naturaleza, de esencia.<br><br>En alquimia, transmutar no es destruir.<br>Es reconocer el potencial oculto en lo que ya existe<br>y darle una nueva forma.<br><br>Llegaste hasta acá.<br>Eso no es casualidad.<br>Eso es transmutación en acto." data-en="From the Latin <em>transmutare</em>: to change form, nature or essence.<br><br>In alchemy, to transmute is not to destroy.<br>It is to recognize the hidden potential in what already exists<br>and give it a new form.<br><br>You made it this far.<br>That is not accidental.<br>That is transmutation in action.">Del latín <em>transmutare</em>: cambiar de forma, de naturaleza, de esencia.<br><br>
+          En alquimia, transmutar no es destruir.<br>
+          Es reconocer el potencial oculto en lo que ya existe<br>
+          y darle una nueva forma.<br><br>
+          Llegaste hasta acá.<br>
+          Eso no es casualidad.<br>
+          Eso es transmutación en acto.</p>
+          <button type="button" class="accept-mark" id="continue-transmuta" data-es="Completar el círculo" data-en="Complete the circle">Completar el círculo</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CIERRE ══ -->
+  <!-- ══ CIERRE — POTENTIA ══ -->
+  <div class="locked" id="wrap-arca">
+    <div class="unlock-banner" style="margin-top:4px;">
+      <div class="unlock-eye" data-es="✦ Tercera marca activada · Transmuta" data-en="✦ Third mark activated · Transmuta">✦ Tercera marca activada · Transmuta</div>
+      <div class="unlock-title" data-es="El círculo se completa." data-en="The circle is complete.">El círculo se completa.</div>
+      <div class="unlock-sub" data-es="Evigila. Lude. Transmuta.<br>Tres palabras. Un camino." data-en="Evigila. Lude. Transmuta.<br>Three words. One path.">Evigila. Lude. Transmuta.<br>Tres palabras. Un camino.</div>
+    </div>
+
+    <div class="card" style="text-align:center;margin-top:0;">
+      <div class="ch-num" style="color:var(--gold);" data-es="✦ El Sello" data-en="✦ The Seal">✦ El Sello</div>
+
+      <div style="margin:20px 0;">
+        <img src="/mpa-coin-potentia-v2-transparent.png" alt="Sello Potentia"
+             style="max-width:300px;width:100%;border-radius:14px;filter:drop-shadow(0 0 30px rgba(201,168,76,.4));animation:floatLogo 4s ease-in-out infinite;transition:transform .3s;"/>
+      </div>
+
+      <div style="font-family:'Cinzel',serif;font-size:clamp(18px,4vw,26px);background:linear-gradient(135deg,#d4a84b,#967B45);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:20px;">
+        Potentia
+      </div>
+
+      <p style="font-size:15px;color:var(--text-dim);line-height:1.95;max-width:500px;margin:0 auto 24px;font-style:italic;" data-es="En cada mundo de MPA existe un artefacto sellado.<br>No se encuentra por azar.<br><strong style='color:var(--text);font-style:normal;'>Te encuentra cuando estás preparado.</strong><br><br>Ya la atravesaste.<br>Ya sentiste su peso.<br>Ya sabés lo que guarda adentro." data-en="In every MPA world there is a sealed artifact.<br>It is not found by chance.<br><strong style='color:var(--text);font-style:normal;'>It finds you when you are ready.</strong><br><br>You have already crossed it.<br>You have already felt its weight.<br>You already know what it holds inside.">
+        En cada mundo de MPA existe un artefacto sellado.<br>
+        No se encuentra por azar.<br>
+        <strong style="color:var(--text);font-style:normal;">Te encuentra cuando estás preparado.</strong><br><br>
+        Ya la atravesaste.<br>
+        Ya sentiste su peso.<br>
+        Ya sabés lo que guarda adentro.
+      </p>
+
+      <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;" data-es="¿Cuál es su nombre?" data-en="What is its name?">
+        ¿Cuál es su nombre?
+      </div>
+      <p style="font-size:13px;color:var(--text-dim);font-style:italic;margin-bottom:20px;" data-es="Esta palabra será tu clave de acceso permanente.<br>Cada vez que quieras entrar al universo MPA,<br>ya no necesitás hacer el recorrido.<br><strong style='color:var(--text);font-style:normal;'>Solo nombrala.</strong>" data-en="This word will be your permanent access key.<br>Whenever you wish to enter the MPA universe,<br>you will not need to complete the journey again.<br><strong style='color:var(--text);font-style:normal;'>Just name it.</strong>">
+        Esta palabra será tu clave de acceso permanente.<br>
+        Cada vez que quieras entrar al universo MPA,<br>
+        ya no necesitás hacer el recorrido.<br>
+        <strong style="color:var(--text);font-style:normal;">Solo nombrala.</strong>
+      </p>
+
+      <div class="input-row" style="max-width:360px;margin:0 auto;">
+        <input class="answer-input" id="inp-arca" type="text"
+          placeholder="el nombre del sello..."
+          autocomplete="off" spellcheck="false"
+          style="border-color:rgba(150,123,69,.5);color:#967B45;text-align:center;letter-spacing:4px;"/>
+        <button class="btn-go" onclick="checkArca()" style="border-color:rgba(150,123,69,.5);color:#967B45;">→</button>
+      </div>
+      <div class="fb" id="fb-arca"></div>
+
+      <div class="rev" id="rev-arca" style="text-align:left;margin-top:20px;">
+        <div class="rev-word" style="text-align:center;" data-es="POTENTIA — Tu sello." data-en="POTENTIA — Your seal.">POTENTIA — Tu sello.</div>
+        <p style="text-align:center;" data-es="Esta es tu palabra.<br>La ganaste.<br><br><strong style='color:var(--gold-light)'>Guardala.</strong><br><br>Cada vez que veas la puerta de MPA,<br>ya sabés qué decir.<br><br><em>El resto… no se explica. Se accede.</em>" data-en="This is your word.<br>You earned it.<br><br><strong style='color:var(--gold-light)'>Keep it.</strong><br><br>Whenever you see the MPA gate,<br>you will know what to say.<br><br><em>The rest… is not explained. It is accessed.</em>">
+          Esta es tu palabra.<br>
+          La ganaste.<br><br>
+          <strong style="color:var(--gold-light)">Guardala.</strong><br><br>
+          Cada vez que veas la puerta de MPA,<br>
+          ya sabés qué decir.<br><br>
+          <em>El resto… no se explica. Se accede.</em>
+        </p>
+        <div style="text-align:center;margin-top:28px;">
+          <button type="button" class="btn-portal" onclick="revealLema()" data-es="Continuar →" data-en="Continue →">
+            Continuar →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="lema-section">
+    <div class="lema-label" data-es="Reto superado" data-en="Challenge completed">Reto superado</div>
+
+    <!-- LOGO con explosión -->
+    <div style="margin-bottom:32px;">
+      <img src="/mpa-universe-logo.png" alt="Magia para Atrevidos"
+           style="max-width:220px;width:65%;animation:floatLogo 3s ease-in-out infinite;opacity:0.95;" />
+    </div>
+
+    <div class="lema-words">
+      <span class="lema-word" id="lw-0">EVIGILA</span>
+      <span class="lema-sep">·</span>
+      <span class="lema-word" id="lw-1">LUDE</span>
+      <span class="lema-sep">·</span>
+      <span class="lema-word" id="lw-2">TRANSMUTA</span>
+    </div>
+    <p class="portal-msg" data-es="El umbral reconoce tu paso.<br><br>No porque hayas respondido.<br>Sino porque aprendiste a mirar distinto.<br><br>Atravesaste el Reflejo.<br>Leíste la Forma.<br>Encontraste lo que Queda.<br><br>La iniciación no te da poder.<br>Te recuerda que ya estabas jugando,<br>aunque no supieras las reglas.<br><br><span style='font-family:Cinzel Decorative,serif;font-size:11px;letter-spacing:3px;color:var(--fucsia);'>Bienvenido al punto de no retorno.</span><br><span style='font-size:13px;color:var(--text);font-family:Cinzel,serif;line-height:2;'>No todo el mundo llega hasta acá.<br>Vos sí.<br>Eso no es suerte —<br>es lo que hace la magia con los verdaderos atrevidos.</span>" data-en="The threshold recognizes your passage.<br><br>Not because you answered.<br>But because you learned to see differently.<br><br>You crossed the Reflection.<br>You read the Form.<br>You found What Remains.<br><br>Initiation does not give you power.<br>It reminds you that you were already playing,<br>even when you did not know the rules.<br><br><span style='font-family:Cinzel Decorative,serif;font-size:11px;letter-spacing:3px;color:var(--fucsia);'>Welcome to the point of no return.</span><br><span style='font-size:13px;color:var(--text);font-family:Cinzel,serif;line-height:2;'>Not everyone makes it this far.<br>You did.<br>That is not luck —<br>it is what magic does with those who truly dare.</span>">
+      El umbral reconoce tu paso.<br><br>
+      No porque hayas respondido.<br>
+      Sino porque aprendiste a mirar distinto.<br><br>
+      Atravesaste el Reflejo.<br>
+      Leíste la Forma.<br>
+      Encontraste lo que Queda.<br><br>
+      La iniciación no te da poder.<br>
+      Te recuerda que ya estabas jugando,<br>
+      aunque no supieras las reglas.<br><br>
+      <span style="font-family:'Cinzel Decorative',serif;font-size:11px;letter-spacing:3px;color:var(--fucsia);">Bienvenido al punto de no retorno.</span><br>
+      <span style="font-size:13px;color:var(--text);font-family:'Cinzel',serif;line-height:2;">No todo el mundo llega hasta acá.<br>Vos sí.<br>Eso no es suerte —<br>es lo que hace la magia con los verdaderos atrevidos.</span>
+    </p>
+
+    <!-- MÚSICA FINAL — autoplay on first interaction -->
+    <div style="margin:32px 0 40px;">
+      <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;" data-es="✦ Esto es para vos" data-en="✦ This is for you">✦ Esto es para vos</p>
+      <iframe id="spotify-final" style="border-radius:8px;border:1px solid rgba(123,47,190,.4);"
+        src="https://open.spotify.com/embed/track/5Otw3CJ2Hd4cA3aFVK1S7n?utm_source=generator&theme=0&autoplay=1"
+        width="100%" height="152" frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"></iframe>
+    </div>
+
+    <a href="/mpa/portal?initiation=potentia" class="btn-portal" id="portal-link" target="_top" data-es="Ingresar al Universo MPA →" data-en="Enter the MPA Universe →">
+      Ingresar al Universo MPA →
+    </a>
+  </div>
+
+</div>
+
+<script src="/site-language.js"></script>
+<script>
+// AUTOPLAY ON FIRST INTERACTION
+let audioUnlocked = false;
+document.addEventListener('click', ()=>{
+  if(audioUnlocked) return;
+  audioUnlocked = true;
+  // si el lema ya fue revelado, arranca la música
+  const iframe = document.getElementById('spotify-final');
+  if(iframe && document.getElementById('lema-section').classList.contains('revealed')){
+    iframe.src = iframe.src; // reload fuerza autoplay
+  }
+}, {once: false});
+
+// COSMOS
+const canvas=document.getElementById('cosmos'),ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+function rand(a,b){return Math.random()*(b-a)+a;}
+
+// bgPhase definido PRIMERO para que las clases lo usen
+let bgPhase=0;
+
+// ─── FONDO ACUMULATIVO ───────────────────────────────────────────
+// Capas de luz que se van sumando y QUEDAN
+const bgLayers = [
+  // EVIGILA — dorado abajo izquierda
+  { color:'201,168,76', x:0.1,  y:1.2, r:1.2, alpha:0, targetAlpha:0 },
+  // EVIGILA — dorado abajo derecha
+  { color:'220,180,60', x:0.9,  y:1.2, r:1.0, alpha:0, targetAlpha:0 },
+  // LUDE — bronce abajo centro
+  { color:'160,110,50', x:0.5,  y:1.1, r:1.3, alpha:0, targetAlpha:0 },
+  // LUDE — bronce lateral izquierda
+  { color:'139,99,64',  x:0.05, y:0.6, r:0.9, alpha:0, targetAlpha:0 },
+  // TRANSMUTA — violeta centro arriba
+  { color:'123,47,190', x:0.5,  y:0.2, r:1.4, alpha:0, targetAlpha:0 },
+  // TRANSMUTA — violeta lateral derecha
+  { color:'160,60,240', x:0.95, y:0.5, r:0.9, alpha:0, targetAlpha:0 },
+  // violeta sutil SIEMPRE — el Arca siempre destella
+  { color:'100,30,160', x:0.5,  y:0.0, r:0.8, alpha:0.06, targetAlpha:0.06 },
+  // fucsia siempre
+  { color:'227,54,195', x:0.95, y:0.05, r:0.6, alpha:0.05, targetAlpha:0.05 },
+];
+
+function drawBgLayers(){
+  bgLayers.forEach(l=>{
+    if(Math.abs(l.alpha - l.targetAlpha) > 0.0005){
+      l.alpha += (l.targetAlpha - l.alpha) * 0.025; // más rápido
+    }
+    if(l.alpha < 0.002) return;
+    const gx = l.x * W, gy = l.y * H, gr = l.r * Math.max(W,H);
+    const g = ctx.createRadialGradient(gx,gy,0,gx,gy,gr);
+    g.addColorStop(0,   `rgba(${l.color},${l.alpha})`);
+    g.addColorStop(0.4, `rgba(${l.color},${l.alpha*0.5})`);
+    g.addColorStop(1,   `rgba(${l.color},0)`);
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+  });
+}
+
+// Niebla
+class Niebla {
+  constructor(){this.reset();}
+  reset(){
+    this.x=rand(-200,W+200);
+    this.y=rand(H*.3,H);
+    this.w=rand(300,700);
+    this.h=rand(60,180);
+    this.alpha=rand(.02,.08);
+    this.vx=rand(-.3,.3);
+    this.vy=rand(-.08,.08);
+    this.life=0;
+    this.maxLife=rand(400,900);
+  }
+  update(){this.x+=this.vx;this.y+=this.vy;this.life++;if(this.life>this.maxLife)this.reset();}
+  draw(){
+    const a=this.alpha*Math.sin(Math.PI*this.life/this.maxLife);
+    const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.w*.5);
+    // color de niebla cambia con la fase
+    const col = bgPhase===0 ? `rgba(13,6,24,${a*2})` :
+                bgPhase===1 ? `rgba(61,26,110,${a})` :
+                bgPhase===2 ? `rgba(100,70,20,${a*.7})` :
+                              `rgba(80,20,80,${a*.8})`;
+    g.addColorStop(0,col);
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.save();
+    ctx.fillStyle=g;
+    ctx.beginPath();
+    ctx.ellipse(this.x,this.y,this.w*.5,this.h*.5,0,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+// Partículas
+class Particula {
+  constructor(){this.reset(true);}
+  reset(init){
+    this.x=rand(0,W);
+    this.y=init?rand(0,H):H+10;
+    this.vx=rand(-.15,.15);
+    this.vy=rand(-.5,-.1);
+    this.sz=rand(.5,2.5);
+    this.alpha=rand(.1,.6);
+    this.life=0;
+    this.maxLife=rand(180,550);
+    // color según fase
+    const r=Math.random();
+    if(bgPhase===0) this.c=r>.7?'#967B45':'#3d1a6e';
+    else if(bgPhase===1) this.c=r>.5?'#E336C3':'#967B45';
+    else if(bgPhase===2) this.c=r>.4?'#e8d5a3':'#E336C3';
+    else this.c=r>.3?'#E336C3':r>.6?'#967B45':'#e8d5a3';
+  }
+  update(){this.x+=this.vx;this.y+=this.vy;this.life++;if(this.life>this.maxLife||this.y<-10)this.reset(false);}
+  draw(){
+    ctx.save();
+    ctx.globalAlpha=this.alpha*Math.sin(Math.PI*this.life/this.maxLife);
+    ctx.fillStyle=this.c;
+    ctx.beginPath();ctx.arc(this.x,this.y,this.sz,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+}
+
+// Destellos esporádicos
+class Destello {
+  constructor(){this.reset();}
+  reset(){
+    this.x=rand(0,W);this.y=rand(0,H*.7);
+    this.alpha=0;this.maxAlpha=rand(.15,.5);
+    this.growing=true;this.speed=rand(.01,.04);
+    this.size=rand(1,4);
+    this.c=Math.random()>.5?'#967B45':'#E336C3';
+    this.wait=rand(60,300);this.waited=0;
+  }
+  update(){
+    if(this.waited<this.wait){this.waited++;return;}
+    if(this.growing){this.alpha+=this.speed;if(this.alpha>=this.maxAlpha)this.growing=false;}
+    else{this.alpha-=this.speed*.5;if(this.alpha<=0)this.reset();}
+  }
+  draw(){
+    if(this.waited<this.wait)return;
+    ctx.save();ctx.globalAlpha=this.alpha;ctx.fillStyle=this.c;
+    ctx.shadowBlur=12;ctx.shadowColor=this.c;
+    ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+}
+
+// ─── RAYOS VIOLETAS — desde el inicio, se intensifican ───────────
+const rayosVioleta=[];
+class RayoVioleta {
+  constructor(init){this.reset(init);}
+  reset(init){
+    // salen desde abajo — como el Arca pulsando
+    this.x=rand(W*.2,W*.8);
+    this.y=H+rand(0,50);
+    this.w=rand(1,3);
+    this.h=rand(H*.4,H*.9);
+    this.alpha=0;
+    this.maxAlpha=rand(.03,.09);
+    this.speed=rand(.002,.006);
+    this.growing=true;
+    this.delay=rand(0,init?300:80);
+    this.waited=0;
+    this.intensidad=1; // se multiplica con cada fase
+  }
+  update(){
+    if(this.waited<this.delay){this.waited++;return;}
+    const spd=this.speed*this.intensidad;
+    if(this.growing){this.alpha+=spd;if(this.alpha>=this.maxAlpha*this.intensidad)this.growing=false;}
+    else{this.alpha-=spd*.25;if(this.alpha<=0)this.reset(false);}
+  }
+  draw(){
+    if(this.waited<this.delay)return;
+    ctx.save();
+    ctx.globalAlpha=Math.min(this.alpha,0.9);
+    const g=ctx.createLinearGradient(this.x,this.y,this.x,this.y-this.h);
+    g.addColorStop(0,'rgba(123,47,190,0)');
+    g.addColorStop(0.2,`rgba(160,60,240,${this.alpha*6})`);
+    g.addColorStop(0.6,`rgba(200,120,255,${this.alpha*4})`);
+    g.addColorStop(1,'rgba(123,47,190,0)');
+    ctx.fillStyle=g;
+    ctx.shadowBlur=20;ctx.shadowColor='rgba(160,60,240,0.6)';
+    ctx.fillRect(this.x-this.w/2,this.y-this.h,this.w,this.h);
+    ctx.restore();
+  }
+}
+// activos desde el inicio — pocos, sutiles
+for(let i=0;i<8;i++) rayosVioleta.push(new RayoVioleta(true));
+
+// ─── RAYOS DE LUZ — EVIGILA ──────────────────────────────────────
+const rayos=[];
+let rayosActivos=false;
+class Rayo {
+  constructor(){this.reset();}
+  reset(){
+    this.x=rand(0,W);
+    this.y=-50;
+    this.w=rand(1,4);
+    this.h=rand(H*.3,H*.8);
+    this.alpha=0;
+    this.maxAlpha=rand(.04,.12);
+    this.speed=rand(.003,.008);
+    this.growing=true;
+    this.delay=rand(0,200);
+    this.waited=0;
+  }
+  update(){
+    if(this.waited<this.delay){this.waited++;return;}
+    if(this.growing){this.alpha+=this.speed;if(this.alpha>=this.maxAlpha)this.growing=false;}
+    else{this.alpha-=this.speed*.3;if(this.alpha<=0)this.reset();}
+  }
+  draw(){
+    if(this.waited<this.delay)return;
+    ctx.save();
+    ctx.globalAlpha=this.alpha;
+    const g=ctx.createLinearGradient(this.x,this.y,this.x,this.y+this.h);
+    g.addColorStop(0,'rgba(201,168,76,0)');
+    g.addColorStop(0.3,`rgba(230,200,100,${this.alpha*8})`);
+    g.addColorStop(1,'rgba(201,168,76,0)');
+    ctx.fillStyle=g;
+    ctx.fillRect(this.x-this.w/2,this.y,this.w,this.h);
+    ctx.restore();
+  }
+}
+for(let i=0;i<18;i++) rayos.push(new Rayo());
+
+// ─── SÍMBOLOS FLOTANTES — LUDE ────────────────────────────────────
+const simbolos=[];
+let simbolosActivos=false;
+// símbolos de juego: dados, cartas, runas, fichas, estrellas
+const GLYPHS=[
+  '⚄','⚅','⚂','⚃','⚁','⚀',   // dados
+  '♠','♣','♥','♦',              // cartas
+  'ᚱ','ᚦ','ᚷ','ᚹ','ᚾ','ᛁ',    // runas
+  '⬡','◎','△','✧','⟡','✺',    // símbolos mágicos
+  '🎲','🃏','⚡','🌀',           // extras
+];
+class Simbolo {
+  constructor(){this.reset(true);}
+  reset(init){
+    this.x=rand(-40,W+40);
+    this.y=init?rand(0,H):rand(H+20,H+120);
+    this.glyph=GLYPHS[Math.floor(rand(0,GLYPHS.length))];
+    this.size=rand(16,38);
+    this.vx=rand(-.5,.5);
+    this.vy=rand(-.7,-.2);
+    this.rot=rand(0,Math.PI*2);
+    this.rotSpeed=rand(-.025,.025);
+    this.alpha=rand(.25,.7);
+    this.life=0;
+    this.maxLife=rand(250,700);
+    const r=Math.random();
+    this.c=r>.6?'#8B6340':r>.3?'#C9A84C':'#c49a6c';
+  }
+  update(){
+    this.x+=this.vx;this.y+=this.vy;
+    this.rot+=this.rotSpeed;
+    this.life++;
+    if(this.life>this.maxLife||this.y<-60)this.reset(false);
+  }
+  draw(){
+    const a=this.alpha*Math.sin(Math.PI*this.life/this.maxLife);
+    ctx.save();
+    ctx.globalAlpha=a;
+    ctx.fillStyle=this.c;
+    ctx.shadowBlur=14;ctx.shadowColor=this.c;
+    ctx.font=`${this.size}px serif`;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.translate(this.x,this.y);
+    ctx.rotate(this.rot);
+    ctx.fillText(this.glyph,0,0);
+    ctx.restore();
+  }
+}
+for(let i=0;i<70;i++) simbolos.push(new Simbolo());
+
+// ─── APERTURA CÓSMICA — TRANSMUTA ────────────────────────────────
+let portaActivo=false;
+let portaAlpha=0;
+let portaTargetAlpha=0;
+let portaR=0;
+let portaMaxR=0;
+
+function drawPortal(){
+  if(portaAlpha<0.002) return;
+  portaR+=(portaMaxR-portaR)*0.015;
+  portaAlpha+=(portaTargetAlpha-portaAlpha)*0.008;
+
+  const cx=W/2, cy=H/2;
+  ctx.save();
+
+  // anillo exterior giratorio
+  for(let ring=0;ring<3;ring++){
+    const r=portaR*(0.5+ring*0.3);
+    const g=ctx.createRadialGradient(cx,cy,r*.85,cx,cy,r);
+    g.addColorStop(0,'rgba(123,47,190,0)');
+    g.addColorStop(0.7,`rgba(160,60,240,${portaAlpha*(0.4-ring*.1)})`);
+    g.addColorStop(1,'rgba(123,47,190,0)');
+    ctx.fillStyle=g;
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+  }
+
+  // destello central
+  const gCenter=ctx.createRadialGradient(cx,cy,0,cx,cy,portaR*.4);
+  gCenter.addColorStop(0,`rgba(255,240,200,${portaAlpha*.6})`);
+  gCenter.addColorStop(0.4,`rgba(180,80,255,${portaAlpha*.3})`);
+  gCenter.addColorStop(1,'rgba(123,47,190,0)');
+  ctx.fillStyle=gCenter;
+  ctx.beginPath();ctx.arc(cx,cy,portaR*.4,0,Math.PI*2);ctx.fill();
+
+  ctx.restore();
+}
+
+// Líneas de constelación
+const lns=[];
+for(let i=0;i<12;i++) lns.push({x1:rand(0,W),y1:rand(0,H),x2:rand(0,W),y2:rand(0,H),vx1:rand(-.05,.05),vy1:rand(-.04,.04),vx2:rand(-.05,.05),vy2:rand(-.04,.04),a:rand(.015,.05)});
+
+const nieblas=[]; for(let i=0;i<12;i++) nieblas.push(new Niebla());
+const pts=[]; for(let i=0;i<100;i++) pts.push(new Particula());
+const destellos=[]; for(let i=0;i<25;i++) destellos.push(new Destello());
+
+// Colores de transición por fase
+const bgColors=[
+  {r:13,g:6,b:24},
+  {r:18,g:8,b:35},
+  {r:20,g:10,b:28},
+  {r:22,g:8,b:30},
+];
+let currentBgColor={...bgColors[0]};
+let targetBgColor={...bgColors[0]};
+let bgT=1;
+
+function anim(){
+  ctx.fillStyle=`rgb(13,6,24)`;
+  ctx.fillRect(0,0,W,H);
+
+  drawBgLayers();
+
+  // portal cósmico — TRANSMUTA
+  drawPortal();
+
+  const vg=ctx.createRadialGradient(W/2,H/2,H*.05,W/2,H/2,H*.95);
+  vg.addColorStop(0,'rgba(0,0,0,0)');
+  vg.addColorStop(1,'rgba(5,0,12,.75)');
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+
+  // niebla
+  nieblas.forEach(n=>{n.update();n.draw();});
+
+  // rayos violeta — SIEMPRE, desde el inicio
+  rayosVioleta.forEach(r=>{r.update();r.draw();});
+
+  // rayos de luz — EVIGILA
+  if(rayosActivos) rayos.forEach(r=>{r.update();r.draw();});
+
+  // líneas
+  lns.forEach(l=>{
+    l.x1+=l.vx1;l.y1+=l.vy1;l.x2+=l.vx2;l.y2+=l.vy2;
+    if(l.x1<0||l.x1>W)l.vx1*=-1;if(l.y1<0||l.y1>H)l.vy1*=-1;
+    if(l.x2<0||l.x2>W)l.vx2*=-1;if(l.y2<0||l.y2>H)l.vy2*=-1;
+    ctx.save();ctx.globalAlpha=l.a;ctx.strokeStyle='#967B45';ctx.lineWidth=.4;
+    ctx.beginPath();ctx.moveTo(l.x1,l.y1);ctx.lineTo(l.x2,l.y2);ctx.stroke();ctx.restore();
+  });
+
+  // símbolos flotantes — LUDE
+  if(simbolosActivos) simbolos.forEach(s=>{s.update();s.draw();});
+
+  // destellos
+  destellos.forEach(d=>{d.update();d.draw();});
+
+  // partículas
+  pts.forEach(p=>{p.update();p.draw();});
+
+  requestAnimationFrame(anim);
+}
+anim();
+
+// ─── RIPPLE CANVAS ───────────────────────────────────────────────
+const rc=document.getElementById('ripple-canvas'),rctx=rc.getContext('2d');
+rc.width=window.innerWidth;rc.height=window.innerHeight;
+window.addEventListener('resize',()=>{rc.width=window.innerWidth;rc.height=window.innerHeight;});
+
+const ripples=[];
+function addRipple(color, intensity=1){
+  const cx=window.innerWidth/2, cy=window.innerHeight/2;
+  for(let i=0;i<3;i++){
+    ripples.push({
+      x:cx,y:cy,r:0,
+      maxR:Math.hypot(cx,cy)*1.6,
+      color,
+      alpha:0.35*intensity,
+      speed:6+i*4,
+      delay:i*18
+    });
+  }
+}
+function animRipple(){
+  rctx.clearRect(0,0,rc.width,rc.height);
+  ripples.forEach((r,i)=>{
+    if(r.delay>0){r.delay--;return;}
+    r.r+=r.speed;
+    r.alpha*=0.97;
+    if(r.alpha<0.003){ripples.splice(i,1);return;}
+    rctx.save();
+    rctx.strokeStyle=r.color;
+    rctx.lineWidth=3;
+    rctx.globalAlpha=r.alpha;
+    rctx.shadowBlur=20;
+    rctx.shadowColor=r.color;
+    rctx.beginPath();
+    rctx.arc(r.x,r.y,r.r,0,Math.PI*2);
+    rctx.stroke();
+    rctx.restore();
+  });
+  requestAnimationFrame(animRipple);
+}
+animRipple();
+
+// ─── TRANSICIÓN DRAMÁTICA ─────────────────────────────────────────
+const overlay=document.getElementById('transition-overlay');
+const phaseColors=['#C9A84C','#8B6340','#7B2FBE','#E336C3'];
+const phaseBg=[
+  'radial-gradient(circle at 30% 100%, rgba(201,168,76,.15) 0%, transparent 60%)',
+  'radial-gradient(circle at 70% 100%, rgba(139,99,64,.2) 0%, transparent 60%), radial-gradient(circle at 30% 100%, rgba(201,168,76,.1) 0%, transparent 50%)',
+  'radial-gradient(circle at center, rgba(123,47,190,.2) 0%, transparent 60%), radial-gradient(circle at 70% 100%, rgba(139,99,64,.15) 0%, transparent 50%)',
+  'radial-gradient(circle at center, rgba(227,54,195,.3) 0%, rgba(123,47,190,.2) 40%, transparent 70%)',
+];
+
+function avanzarFondo(fase){
+  bgPhase=fase;
+  const col=phaseColors[fase-1];
+
+  if(fase===1){
+    bgLayers[0].targetAlpha=0.55;
+    bgLayers[1].targetAlpha=0.45;
+    rayosActivos=true;
+    rayos.forEach(r=>r.reset());
+    // violeta un poco más fuerte
+    rayosVioleta.forEach(r=>r.intensidad=1.8);
+  }
+  if(fase===2){
+    bgLayers[0].targetAlpha=0.35;
+    bgLayers[1].targetAlpha=0.30;
+    bgLayers[2].targetAlpha=0.55;
+    bgLayers[3].targetAlpha=0.40;
+    simbolosActivos=true;
+    simbolos.forEach(s=>s.reset(false));
+    // violeta más intenso + más rayos
+    rayosVioleta.forEach(r=>r.intensidad=3);
+    for(let i=0;i<8;i++) rayosVioleta.push(new RayoVioleta(false));
+  }
+  if(fase===3){
+    bgLayers[0].targetAlpha=0.20;
+    bgLayers[1].targetAlpha=0.18;
+    bgLayers[2].targetAlpha=0.30;
+    bgLayers[3].targetAlpha=0.25;
+    bgLayers[4].targetAlpha=0.60;
+    bgLayers[5].targetAlpha=0.50;
+    bgLayers[6].targetAlpha=0.30;
+    bgLayers[7].targetAlpha=0.18;
+    // violeta explota — muchos más rayos
+    rayosVioleta.forEach(r=>r.intensidad=5);
+    for(let i=0;i<16;i++) rayosVioleta.push(new RayoVioleta(false));
+    portaActivo=true;
+    portaTargetAlpha=0.7;
+    portaMaxR=Math.min(W,H)*0.45;
+    portaR=20;
+  }
+
+  // ondas — más cantidad, más intensidad
+  addRipple(col, 2.0);
+  addRipple(col, 1.5);
+
+  // flash overlay — entra fuerte y se va despacio
+  overlay.style.background=`radial-gradient(circle at center, ${col} 0%, rgba(13,6,24,0.95) 60%)`;
+  overlay.style.transition='opacity 0.08s ease';
+  overlay.style.opacity='0.75';
+  setTimeout(()=>{
+    overlay.style.transition='opacity 2.5s ease';
+    overlay.style.opacity='0';
+  },80);
+
+  // partículas se renuevan con más energía
+  pts.forEach(p=>p.reset(false));
+}
+
+function salirAlUniverso(e, overrideUrl){
+  e.preventDefault();
+  const url=overrideUrl||e.currentTarget.href;
+
+  // Transición épica de salida
+  addRipple('#E336C3', 2);
+  addRipple('#C9A84C', 1.5);
+  addRipple('#7B2FBE', 1.8);
+
+  overlay.style.background='radial-gradient(circle at center, #e8d5a3 0%, #E336C3 30%, #7B2FBE 60%, #0d0618 100%)';
+  overlay.style.transition='opacity 0.1s ease';
+  overlay.style.opacity='0.1';
+
+  setTimeout(()=>{
+    overlay.style.transition='opacity 1.5s ease';
+    overlay.style.opacity='1';
+  },50);
+
+  setTimeout(()=>{
+    window.location.href=url;
+  },1700);
+}
+
+// ANSWERS
+const ANSWERS=['EVIGILA','LUDE','TRANSMUTA'];
+
+  function checkArca() {
+    const inp = document.getElementById('inp-arca');
+    const fb  = document.getElementById('fb-arca');
+    const rev = document.getElementById('rev-arca');
+    const val = inp.value.trim().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Z0-9]/g,'');
+    if (val === 'POTENTIA') {
+      playSealChime();
+      window.localStorage.setItem('mpa-initiation-key','potentia');
+      rev.classList.add('show');
+      inp.classList.add('correct');
+      inp.disabled = true;
+      fb.textContent = '';
+    } else {
+      fb.textContent = '✦ Esa no es. Ya la conociste — está en el Arca.';
+      fb.className = 'fb err';
+      inp.classList.add('wrong');
+      setTimeout(() => { inp.classList.remove('wrong'); fb.textContent = ''; }, 2500);
+    }
+  }
+
+  function playSealChime(){
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtx)return;
+    const ctx=new AudioCtx();
+    const master=ctx.createGain();
+    master.gain.setValueAtTime(.0001,ctx.currentTime);
+    master.gain.exponentialRampToValueAtTime(.075,ctx.currentTime+.06);
+    master.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+2.4);
+    master.connect(ctx.destination);
+    [392,587.33,783.99].forEach((frequency,index)=>{
+      const osc=ctx.createOscillator();
+      const gain=ctx.createGain();
+      osc.type=index===0?'sine':'triangle';
+      osc.frequency.value=frequency;
+      gain.gain.setValueAtTime(.0001,ctx.currentTime+index*.12);
+      gain.gain.exponentialRampToValueAtTime(.28/(index+1),ctx.currentTime+.1+index*.12);
+      gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+1.7+index*.18);
+      osc.connect(gain);gain.connect(master);osc.start(ctx.currentTime+index*.12);osc.stop(ctx.currentTime+2.2);
+    });
+    setTimeout(()=>ctx.close(),2600);
+  }
+
+  function elegirLude(btn, correcto) {
+    // Deshabilitar todos los botones
+    document.querySelectorAll('#opciones-lude .opcion-btn').forEach(b => {
+      b.disabled = true;
+      b.style.opacity = '.5';
+    });
+    const fb = document.getElementById('fb-1');
+    if (correcto) {
+      btn.style.opacity = '1';
+      btn.classList.add('elegida');
+      const inp1 = document.getElementById('inp-1');
+      if (inp1) { inp1.disabled = false; inp1.value='LUDE'; }
+      check(1);
+    } else {
+      btn.style.opacity = '1';
+      btn.style.borderColor = 'rgba(232,112,160,0.6)';
+      fb.textContent = '✦ Esa no es la palabra. Escuchá de nuevo las pistas.';
+      fb.className = 'fb err';
+      // Re-enable after 2.5s
+      setTimeout(() => {
+        document.querySelectorAll('#opciones-lude .opcion-btn').forEach(b => {
+          b.disabled = false;
+          b.style.opacity = '1';
+          b.style.borderColor = '';
+        });
+        fb.textContent = '';
+      }, 2500);
+    }
+  }
+const solved=[false,false,false];
+let arcaDone=false;
+
+document.querySelectorAll('.answer-input').forEach((el,i)=>{
+  el.addEventListener('keydown',e=>{if(e.key==='Enter')check(i);});
+});
+
+function check(i){
+  const inp=document.getElementById('inp-'+i);
+  const fb=document.getElementById('fb-'+i);
+  const val=inp.value.trim().toUpperCase();
+  const err=['El espejo no aplaude intentos. Mirá otra vez.','La palabra no está en el poema. Está en su esqueleto.','Eso hizo ruido. Pero no quedó.'];
+  const ok=['✦ El reflejo cedió. Primera marca activada.','✦ La arquitectura respondió. Segunda marca activada.','✦ La palabra quedó. Tercera marca activada.'];
+  if(val===ANSWERS[i]){
+    if(i===0){document.body.classList.add('phase-evigila');setEvigilaPath(4);playSceneShift();}
+    if(i===1){document.body.classList.remove('phase-evigila');document.body.classList.add('phase-lude');}
+    if(i===2){document.body.classList.remove('phase-lude');document.body.classList.add('phase-transmuta');}
+    inp.classList.remove('wrong');inp.classList.add('correct');inp.disabled=true;
+    fb.textContent=ok[i];fb.className='fb ok';
+    solved[i]=true;
+    document.getElementById('ch-'+i).classList.add('solved');
+    document.getElementById('badge-'+i).style.display='inline-block';
+    document.getElementById('pip-'+i).classList.add('done');
+    const revelation=document.getElementById('rev-'+i);
+    revelation.classList.add('show');
+    if(i===0||i===1||i===2){
+      document.body.classList.add('revelation-open');
+      revelation.scrollTop=0;
+    }
+  } else {
+    document.body.classList.remove('pulse-wrong');
+    void document.body.offsetWidth;
+    document.body.classList.add('pulse-wrong');
+    inp.classList.remove('correct');inp.classList.add('wrong');
+    fb.textContent='✦ '+err[i];fb.className='fb err';
+    setTimeout(()=>inp.classList.remove('wrong'),500);
+  }
+}
+
+// El umbral y la primera cámara funcionan como escenas, no como una página apilada.
+const thresholdButton=document.getElementById('cross-threshold');
+const firstChamber=document.getElementById('ch-0');
+const evigilaRevelation=document.getElementById('rev-0');
+document.body.appendChild(evigilaRevelation);
+const ludeRevelation=document.getElementById('rev-1');
+document.body.appendChild(ludeRevelation);
+const transmutaRevelation=document.getElementById('rev-2');
+document.body.appendChild(transmutaRevelation);
+const acceptEvigila=document.getElementById('accept-evigila');
+const backToEvigila=document.getElementById('back-to-evigila');
+let evigilaAccepted=false;
+firstChamber.classList.add('ritual-step-1');
+thresholdButton.addEventListener('click',()=>{
+  if(!ambientToggle.classList.contains('active')){
+    ambientToggle.classList.add('active');
+    ambientToggle.setAttribute('aria-pressed','true');
+    ambientToggle.querySelector('.ambient-label').textContent='Sonido activo';
+    startAmbience();
+  }
+  document.body.classList.add('entered');
+  setTimeout(()=>firstChamber.scrollIntoView({behavior:'smooth',block:'start'}),720);
+});
+acceptEvigila.addEventListener('click',()=>{
+  const revelation=document.getElementById('rev-0');
+  revelation.animate([{opacity:1,filter:'blur(0)'},{opacity:0,filter:'blur(15px)'}],{duration:700,easing:'ease',fill:'forwards'});
+  setTimeout(()=>{
+    revelation.classList.remove('show');
+    document.body.classList.remove('revelation-open');
+    if(!evigilaAccepted){
+      evigilaAccepted=true;
+      unlockNext(0);
+    }
+  },680);
+});
+backToEvigila.addEventListener('click',()=>{
+  const revelation=document.getElementById('rev-0');
+  revelation.getAnimations().forEach(animation=>animation.cancel());
+  acceptEvigila.textContent=document.documentElement.lang==='en'?'Back to the second chamber':'Volver a la segunda cámara';
+  revelation.classList.add('show');
+  revelation.scrollTop=0;
+  document.body.classList.add('revelation-open');
+});
+const continueLude=document.getElementById('continue-lude');
+continueLude.addEventListener('click',()=>{
+  const revelation=document.getElementById('rev-1');
+  revelation.animate([{opacity:1,filter:'blur(0)'},{opacity:0,filter:'blur(14px)'}],{duration:650,easing:'ease',fill:'forwards'});
+  setTimeout(()=>{
+    revelation.classList.remove('show');
+    document.body.classList.remove('revelation-open');
+    unlockNext(1);
+  },620);
+});
+const continueTransmuta=document.getElementById('continue-transmuta');
+continueTransmuta.addEventListener('click',()=>{
+  const revelation=document.getElementById('rev-2');
+  revelation.animate([{opacity:1,filter:'blur(0)'},{opacity:0,filter:'blur(14px)'}],{duration:650,easing:'ease',fill:'forwards'});
+  setTimeout(()=>{
+    revelation.classList.remove('show');
+    document.body.classList.remove('revelation-open');
+    unlockNext(2);
+  },620);
+});
+
+// Atmósfera generativa: aire, pulso grave y destellos irregulares.
+// Se activa sólo por decisión del visitante para respetar las reglas del navegador.
+const ambientToggle=document.getElementById('ambient-toggle');
+let ambientContext=null,ambientMaster=null,ambientTimer=null,ambientNodes=[];
+function startAmbience(){
+  if(!ambientContext){
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    ambientContext=new AudioCtx();
+    ambientMaster=ambientContext.createGain();
+    ambientMaster.gain.setValueAtTime(.0001,ambientContext.currentTime);
+    ambientMaster.gain.exponentialRampToValueAtTime(.045,ambientContext.currentTime+2.4);
+    ambientMaster.connect(ambientContext.destination);
+  }
+  ambientContext.resume();
+  ambientMaster.gain.cancelScheduledValues(ambientContext.currentTime);
+  ambientMaster.gain.setTargetAtTime(.045,ambientContext.currentTime,.8);
+
+  const crystal=(frequency,delay=0,duration=2.8,level=.04)=>{
+    const start=ambientContext.currentTime+delay;
+    const osc=ambientContext.createOscillator();const gain=ambientContext.createGain();
+    osc.type='sine';osc.frequency.setValueAtTime(frequency,start);
+    gain.gain.setValueAtTime(.0001,start);
+    gain.gain.exponentialRampToValueAtTime(level,start+.035);
+    gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+    osc.connect(gain);gain.connect(ambientMaster);osc.start(start);osc.stop(start+duration+.1);
+  };
+  // Dos destellos breves confirman la atmósfera, sin crear una nota sostenida.
+  crystal(659.25,0,.9,.032);crystal(987.77,.18,1.7,.018);
+
+  const atmosphereEvent=()=>{
+    if(!ambientToggle.classList.contains('active')||!ambientContext)return;
+    const notes=[523.25,659.25,783.99,987.77,1046.5];
+    crystal(notes[Math.floor(Math.random()*notes.length)],0,2.2+Math.random()*2,.014+Math.random()*.012);
+    if(Math.random()>.58)crystal(notes[Math.floor(Math.random()*notes.length)],.22,1.8,.01);
+    ambientTimer=setTimeout(atmosphereEvent,9000+Math.random()*13000);
+  };
+  clearTimeout(ambientTimer);ambientTimer=setTimeout(atmosphereEvent,5200);
+}
+function stopAmbience(){
+  clearTimeout(ambientTimer);
+  if(ambientMaster&&ambientContext){ambientMaster.gain.cancelScheduledValues(ambientContext.currentTime);ambientMaster.gain.setTargetAtTime(.0001,ambientContext.currentTime,.55)}
+}
+ambientToggle.addEventListener('click',()=>{
+  const active=!ambientToggle.classList.contains('active');
+  ambientToggle.classList.toggle('active',active);ambientToggle.setAttribute('aria-pressed',String(active));
+  ambientToggle.querySelector('.ambient-label').textContent=active?'Sonido activo':'Sonido';
+  if(active)startAmbience();else stopAmbience();
+});
+
+const ritualNext=document.createElement('button');
+ritualNext.type='button';
+ritualNext.className='ritual-next';
+ritualNext.textContent='Acercarme al reflejo';
+firstChamber.appendChild(ritualNext);
+ritualNext.addEventListener('click',()=>{
+  if(firstChamber.classList.contains('ritual-step-1')){
+    setEvigilaPath(2);playSceneShift();
+    firstChamber.classList.remove('ritual-step-1');
+    firstChamber.classList.add('ritual-step-2');
+    ritualNext.textContent='Nombrar lo que vi';
+    firstChamber.querySelector('.gif-block, .ch-body div:nth-of-type(2)')?.scrollIntoView({behavior:'smooth',block:'center'});
+  }else{
+    setEvigilaPath(3);playSceneShift();
+    firstChamber.classList.remove('ritual-step-2');
+    firstChamber.classList.add('ritual-step-3');
+    ritualNext.remove();
+    firstChamber.querySelector('.input-row')?.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+});
+
+function setEvigilaPath(current){
+  document.querySelectorAll('.evigila-step').forEach((step,index)=>{
+    const number=index+1;
+    step.classList.toggle('done',number<current||current>3);
+    step.classList.toggle('active',number===current);
+  });
+}
+function playSceneShift(){
+  const shift=document.getElementById('scene-shift');
+  shift.classList.remove('play');void shift.offsetWidth;shift.classList.add('play');
+}
+
+let targetPX=0,targetPY=0,currentPX=0,currentPY=0;
+window.addEventListener('pointermove',e=>{targetPX=e.clientX/innerWidth-.5;targetPY=e.clientY/innerHeight-.5},{passive:true});
+function moveDepth(){
+  currentPX+=(targetPX-currentPX)*.045;currentPY+=(targetPY-currentPY)*.045;
+  document.querySelectorAll('.depth-plane').forEach((plane,index)=>{
+    const force=(index+1)*10;
+    plane.style.transform=`translate3d(${currentPX*force}px,${currentPY*force}px,0)`;
+  });
+  requestAnimationFrame(moveDepth);
+}
+moveDepth();
+
+// Polvo luminoso: una capa cercana hace visible la profundidad de la cámara.
+for(let i=0;i<26;i++){
+  const mote=document.createElement('i');
+  mote.className='mote';
+  mote.style.left=(Math.random()*100)+'vw';
+  mote.style.top=(95+Math.random()*25)+'vh';
+  mote.style.setProperty('--duration',(12+Math.random()*17)+'s');
+  mote.style.setProperty('--delay',(-Math.random()*24)+'s');
+  mote.style.setProperty('--drift',((Math.random()-.5)*180)+'px');
+  mote.style.setProperty('--alpha',(.18+Math.random()*.48).toFixed(2));
+  document.body.appendChild(mote);
+}
+
+// El primer audio se transforma en una reliquia, sin perder el archivo original.
+const firstAudio=firstChamber.querySelector('audio');
+if(firstAudio){
+  firstAudio.classList.add('ritual-native-audio');
+  const relic=document.createElement('button');
+  relic.type='button';
+  relic.className='sound-relic';
+  relic.innerHTML='<span>Escuchar<br>el eco</span>';
+  firstAudio.parentElement.insertBefore(relic,firstAudio);
+  relic.addEventListener('click',()=>{
+    if(firstAudio.paused){firstAudio.play();relic.classList.add('playing');relic.querySelector('span').innerHTML='El eco<br>está hablando';}
+    else{firstAudio.pause();relic.classList.remove('playing');relic.querySelector('span').innerHTML='Continuar<br>el eco';}
+  });
+  firstAudio.addEventListener('ended',()=>{relic.classList.remove('playing');relic.querySelector('span').innerHTML='Escuchar<br>otra vez';});
+}
+
+function unlockNext(i){
+  if(i===0){
+    avanzarFondo(1);
+    document.body.classList.add('approaching-lude');
+    document.body.classList.add('scene-two');
+    const w=document.getElementById('wrap-1');
+    w.classList.add('open');
+    setTimeout(()=>w.scrollIntoView({behavior:'smooth',block:'start'}),200);
+  }
+  if(i===1){
+    avanzarFondo(2);
+    document.body.classList.remove('scene-two');
+    document.body.classList.add('scene-three');
+    const w=document.getElementById('wrap-2');
+    w.classList.add('open');
+    setTimeout(()=>w.scrollIntoView({behavior:'smooth',block:'start'}),200);
+  }
+  if(i===2){
+    avanzarFondo(3);
+    document.body.classList.remove('scene-three');
+    document.body.classList.add('scene-final');
+    const wa=document.getElementById('wrap-arca');
+    wa.classList.add('open');
+    setTimeout(()=>wa.scrollIntoView({behavior:'smooth',block:'start'}),200);
+  }
+}
+
+// La segunda cámara abre directamente su contenido; el mecanismo queda como sello visual.
+const ludeChamber=document.getElementById('ch-1');
+ludeChamber.classList.add('lude-open');
+const ludeCore=document.getElementById('lude-core');
+ludeCore.setAttribute('aria-hidden','true');
+ludeCore.tabIndex=-1;
+
+function foundArca(){
+  if(arcaDone)return;
+  arcaDone=true;
+  document.getElementById('arca-zone').style.pointerEvents='none';
+
+  // calcular centro del Arca en pantalla
+  const img=document.querySelector('.wally-wrap img');
+  const rect=img.getBoundingClientRect();
+  const ax=rect.left + rect.width*0.14;
+  const ay=rect.top  + rect.height*0.70;
+
+  // ondas desde el Arca
+  for(let i=0;i<6;i++){
+    ripples.push({
+      x:ax, y:ay, r:0,
+      maxR:Math.max(window.innerWidth,window.innerHeight)*1.5,
+      color: i<3 ? '#b07fe0' : '#E336C3',
+      alpha:0.5-i*0.05, speed:5+i*3, delay:i*20
+    });
+  }
+
+  // flash overlay desde el Arca
+  const px=Math.round(ax/window.innerWidth*100);
+  const py=Math.round(ay/window.innerHeight*100);
+  overlay.style.background=`radial-gradient(circle at ${px}% ${py}%, #b07fe0 0%, rgba(13,6,24,0.95) 55%)`;
+  overlay.style.transition='opacity 0.06s ease';
+  overlay.style.opacity='0.65';
+  setTimeout(()=>{ overlay.style.transition='opacity 2.5s ease'; overlay.style.opacity='0'; },60);
+
+  // rayos violeta se intensifican
+  rayosVioleta.forEach(r=>r.intensidad=3);
+  for(let i=0;i<8;i++) rayosVioleta.push(new RayoVioleta(false));
+
+  // mostrar Arca encendida y poema
+  document.getElementById('arca-msg').classList.add('show');
+  setTimeout(()=>{
+    const pw=document.getElementById('poem-wrap');
+    pw.style.display='block';
+    pw.style.animation='fadeUp .9s ease forwards';
+    setTimeout(()=>pw.scrollIntoView({behavior:'smooth',block:'start'}),300);
+  },1400);
+}
+
+function mostrarPista(){
+  document.getElementById('pista-1').style.display='block';
+  document.getElementById('pista-1').style.animation='fadeUp .6s ease forwards';
+}
+function mostrarPista2(){
+  document.getElementById('pista-2').style.display='block';
+  document.getElementById('pista-2').style.animation='fadeUp .6s ease forwards';
+  setTimeout(()=>document.getElementById('pista-2').scrollIntoView({behavior:'smooth',block:'start'}),200);
+}
+function mostrarPista3(){
+  document.getElementById('pista-3').style.display='block';
+  document.getElementById('pista-3').style.animation='fadeUp .6s ease forwards';
+  setTimeout(()=>document.getElementById('pista-3').scrollIntoView({behavior:'smooth',block:'start'}),200);
+}
+function elegirRespuesta(el, correcta){
+  document.querySelectorAll('#pista-3 .opcion-btn').forEach(b=>b.classList.remove('elegida'));
+  el.classList.add('elegida');
+  const fb = document.getElementById('fb-eleccion');
+  if(correcta){
+    fb.textContent='✦ Esa es. Confirmando...';
+    fb.style.color='#4caf89';
+    // pequeña pausa dramática antes de resolver
+    setTimeout(()=>{
+      const inp = document.getElementById('inp-0');
+      inp.value='EVIGILA';
+      inp.disabled=false;
+      check(0);
+    }, 600);
+  } else {
+    fb.textContent='✦ Esa no es. Escuchá lo que dice el universo.';
+    fb.style.color='#e57373';
+    el.style.opacity='.4';
+    el.style.pointerEvents='none';
+  }
+}
+
+function elegida(el,correcta){
+  document.querySelectorAll('#opciones .opcion-btn').forEach(b=>b.classList.remove('elegida'));
+  el.classList.add('elegida');
+  const post=document.getElementById('post-eleccion');
+  const fb=document.getElementById('fb-puertas');
+  const english=document.documentElement.lang==='en';
+  if(!correcta){
+    post.style.display='none';
+    fb.textContent=english?'✦ The sign resonates, but this is not the right door.':'✦ La señal resuena, pero esta no es la puerta correcta.';
+    fb.className='fb err';
+    el.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:380});
+    return;
+  }
+  fb.textContent=english?'✦ This is the door. The threshold opens.':'✦ Esta es la puerta. El umbral se abre.';
+  fb.className='fb ok';
+  post.style.display='block';
+  post.style.animation='fadeUp .6s ease forwards';
+  setTimeout(()=>window.open('https://www.youtube.com/watch?v=K2f8YM0W1G0&list=PLjc_aaH4omffD-q0tJW1DSyFJHA-JECRv&index=2','_blank','noopener'),650);
+}
+
+function showNextHint(boxId, nextTogId) {
+  const box = document.getElementById(boxId);
+  box.classList.toggle('open');
+  if (box.classList.contains('open') && nextTogId) {
+    const nextTog = document.getElementById(nextTogId);
+    if (nextTog) nextTog.style.display = 'inline-block';
+  }
+}
+
+function toggleHint(id){document.getElementById(id).classList.toggle('open');}
+
+function revealLema(){
+  const s=document.getElementById('lema-section');
+  if(s.classList.contains('revealed')) return;
+  addRipple('#E336C3',1.5);
+  addRipple('#C9A84C',1);
+  s.classList.add('revealed');
+  s.scrollTop=0;
+  ['lw-0','lw-1','lw-2'].forEach((id,i)=>{
+    setTimeout(()=>document.getElementById(id).classList.add('show'),i*350);
+  });
+  // arrancar música — funciona si el usuario ya interactuó con la página
+  setTimeout(()=>{
+    const iframe=document.getElementById('spotify-final');
+    if(iframe){
+      iframe.src='https://open.spotify.com/embed/track/5Otw3CJ2Hd4cA3aFVK1S7n?utm_source=generator&theme=0&autoplay=1';
+    }
+  }, 1200);
+}
+</script>
+</body>
+</html>

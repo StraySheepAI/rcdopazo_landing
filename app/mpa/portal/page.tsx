@@ -115,36 +115,55 @@ export default function MpaPortalPage() {
         </div>
       </section>
 
-      <section className="mpa-potentia" aria-labelledby="potentia-title">
-        <div className="mpa-potentia-orbit" aria-hidden="true" />
-        <p className="mpa-potentia-overline">Has atravesado el umbral</p>
-        <p className="mpa-potentia-intro">Observaste lo que permanecía oculto. Aceptaste entrar en juego. Permitiste que algo cambiara de forma.</p>
-
-        <div className="mpa-three-marks" aria-label="Las tres marcas del reto">
-          <span>Evigila</span><i aria-hidden="true">✦</i><span>Lude</span><i aria-hidden="true">✦</i><span>Transmuta</span>
-        </div>
-
-        <div className="mpa-potentia-seal" aria-hidden="true">
-          <Image
-            src="/mpa-coin-potentia-v2-transparent.png"
-            alt=""
-            width={1254}
-            height={1254}
-            sizes="(max-width: 560px) 240px, 320px"
-          />
-          <span className="mpa-potentia-correct-label">Evigila · Lude · Transmuta</span>
-        </div>
-
-        <p className="mpa-potentia-recognition">El Universo reconoce tus tres marcas.</p>
-        <h2 id="potentia-title">Tu primera llave de iniciado</h2>
-        <p className="mpa-potentia-copy">Este sello no contiene un poder que te haya sido concedido. Reconoce la potencia que despertaste al atravesar el reto.</p>
-        <p className="mpa-potentia-return">Guardalo. Cuando regreses, la puerta sabrá desde dónde llamás.</p>
-      </section>
-
       <section className="mpa-portal-threshold">
-        <p>El mundo que comienza detrás de esta puerta todavía está tomando forma.</p>
-        <h2>Todo sello posee dos caras.</h2>
-        <span>Próximamente abriremos el primer territorio.</span>
+        <div className="mpa-threshold-cosmos" aria-hidden="true">
+          <i className="mpa-cosmos-object mpa-cosmos-die">⚄</i>
+          <i className="mpa-cosmos-object mpa-cosmos-card">♠</i>
+          <i className="mpa-cosmos-object mpa-cosmos-eye">◉</i>
+          <i className="mpa-cosmos-object mpa-cosmos-triangle">△</i>
+          <i className="mpa-cosmos-object mpa-cosmos-diamond">◇</i>
+          <i className="mpa-cosmos-object mpa-cosmos-orbit">✦</i>
+          <span className="mpa-cosmos-rise mpa-rise-1">◆</span>
+          <span className="mpa-cosmos-rise mpa-rise-2">◌</span>
+          <span className="mpa-cosmos-rise mpa-rise-3">△</span>
+          <span className="mpa-cosmos-rise mpa-rise-4">✦</span>
+          <span className="mpa-cosmos-rise mpa-rise-5">▣</span>
+          <span className="mpa-cosmos-rise mpa-rise-6">♠</span>
+          <span className="mpa-cosmos-rise mpa-rise-7">◇</span>
+          <span className="mpa-cosmos-rise mpa-rise-8">◉</span>
+          <span className="mpa-cosmos-rise mpa-rise-9">✧</span>
+          <span className="mpa-cosmos-rise mpa-rise-10">□</span>
+          <span className="mpa-cosmos-rise mpa-rise-11">△</span>
+          <span className="mpa-cosmos-rise mpa-rise-12">✦</span>
+          <span className="mpa-cosmos-rise mpa-rise-13">◈</span>
+          <span className="mpa-cosmos-rise mpa-rise-14">○</span>
+          {Array.from({ length: 72 }, (_, index) => {
+            const glyphs = ["◇", "✦", "△", "◌", "◆", "□", "♠", "◉"];
+            const colors = ["rgba(211,166,87,.64)", "rgba(215,73,166,.59)", "rgba(157,101,220,.61)"];
+            return (
+              <span
+                className="mpa-cosmos-rise mpa-cosmos-rise-extra"
+                key={`rising-symbol-${index}`}
+                style={{
+                  left: `${2 + ((index * 17) % 96)}%`,
+                  animationDelay: `${-(index * 1.37) % 15}s`,
+                  animationDuration: `${8 + (index % 8)}s`,
+                  fontSize: `${0.9 + (index % 8) * 0.42}rem`,
+                  color: colors[index % colors.length],
+                }}
+              >
+                {glyphs[index % glyphs.length]}
+              </span>
+            );
+          })}
+        </div>
+        <div className="mpa-threshold-copy">
+          <p>El mundo que comienza detrás de esta puerta todavía está tomando forma.</p>
+          <h2>Todo sello posee dos caras.</h2>
+          <strong>Una puede encontrarse en el mundo visible.</strong>
+          <em>La otra solo se revela a quien se atreve a cruzar.</em>
+          <span>Próximamente abriremos el primer territorio.</span>
+        </div>
       </section>
     </main>
   );

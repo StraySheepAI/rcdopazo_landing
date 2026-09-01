@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useLanguage } from "../lib/i18n/LanguageContext";
 import { LanguageToggle } from "./LanguageToggle";
 
@@ -23,7 +23,7 @@ export function SiteHeader() {
         { href: "/mpa/que-es-mpa", label: t.nav.queEsMpa },
         { href: "/mpa/universe", label: t.nav.mpaUniverse },
         { href: "/mpa/transmuta", label: t.nav.mpaTransmuta },
-        { href: "/mpa/flow", label: t.nav.mpaFlow },
+        { href: "https://mpaflow.com", label: t.nav.mpaFlow },
         { href: "/mpa/publishing-house", label: t.nav.mpaPublishingHouse },
       ],
     },
@@ -54,10 +54,13 @@ export function SiteHeader() {
         </Link>
 
         <nav className="nav-links">
-          {NAV_LINKS.map((link) =>
-            link.children ? (
-              <div className="nav-item" key={link.href}>
-                <Link href={link.href}>{link.label}</Link>
+          {NAV_LINKS.map((link, index) => (
+            <Fragment key={link.href}>
+            {link.children ? (
+              <div className="nav-item">
+                <button className="nav-mpa-trigger" type="button" aria-label={link.label}>
+                  <Image src="/mpa-general-logo.png" alt="" width={64} height={64} />
+                </button>
                 <div className="nav-dropdown">
                   {link.children.map((child) => (
                     <Link key={child.href} href={child.href}>
@@ -67,11 +70,18 @@ export function SiteHeader() {
                 </div>
               </div>
             ) : (
-              <Link key={link.href} href={link.href}>
+              <Link href={link.href}>
                 {link.label}
               </Link>
-            )
-          )}
+            )}
+            {index === 1 && (
+              <a className="nav-stray-sheep" href="/stray-sheep" aria-label="Stray Sheep" title="Stray Sheep">
+                <Image src="/stray-sheep-glasses.png" alt="" width={120} height={44} />
+                <span role="tooltip">Stray Sheep</span>
+              </a>
+            )}
+            </Fragment>
+          ))}
           <LanguageToggle variant="desktop" />
         </nav>
 
@@ -94,9 +104,10 @@ export function SiteHeader() {
         {NAV_LINKS.flatMap((link) =>
           link.children
             ? [
-                <Link className="mobile-parent" key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>
-                  {link.label}
-                </Link>,
+                <div className="mobile-parent mobile-mpa-parent" key={link.href}>
+                  <Image src="/mpa-general-logo.png" alt="" width={58} height={58} />
+                  <span>{link.label}</span>
+                </div>,
                 ...link.children.map((child) => (
                   <Link className="mobile-child" key={child.href} href={child.href} onClick={() => setMenuOpen(false)}>
                     {child.label}
@@ -109,6 +120,10 @@ export function SiteHeader() {
                 </Link>,
               ]
         )}
+        <a className="mobile-stray-sheep" href="/stray-sheep" onClick={() => setMenuOpen(false)}>
+          <Image src="/stray-sheep-glasses.png" alt="" width={90} height={34} />
+          <span>Stray Sheep</span>
+        </a>
       </div>
     </header>
   );

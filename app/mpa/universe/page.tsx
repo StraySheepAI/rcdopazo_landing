@@ -9,7 +9,7 @@ import { SiteFooter } from "../../components/SiteFooter";
 import { useLanguage } from "../../lib/i18n/LanguageContext";
 
 const UNIVERSE_DESTINATION = "/mpa/portal";
-const INITIATION_CHALLENGE = "https://reto.magiaparaatrevidos.com/";
+const INITIATION_CHALLENGE = "/reto";
 
 export default function MpaUniversePage() {
   const { t } = useLanguage();
@@ -44,7 +44,7 @@ export default function MpaUniversePage() {
 
   function enterUniverse(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const first = key.trim().toLowerCase();
+    const first = key.trim().toLowerCase().replace(/\s+/g, " ");
     const second = territoryKey.trim().toLowerCase();
     const third = ordoKey.trim().toLowerCase();
 
