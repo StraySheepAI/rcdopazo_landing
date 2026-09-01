@@ -127,11 +127,12 @@ main,footer{position:relative;z-index:1}
   .mobile-nav-group.expanded .mobile-parent-chevron{transform:rotate(180deg)}
   .mobile-children{max-height:0;overflow:hidden;opacity:0;transition:max-height .35s ease,opacity .25s ease}
   .mobile-nav-group.expanded .mobile-children{max-height:480px;opacity:1}
-  .mobile-menu a.mobile-child{padding:14px 32px 14px 50px;font-size:.7rem;letter-spacing:.12em;color:var(--text-dim);border-top:1px solid rgba(165,113,60,.1);position:relative}
+  .mobile-menu a.mobile-child{display:block;width:100%;padding:14px 32px 14px 50px;font-size:.7rem;letter-spacing:.12em;color:var(--text-dim);border-top:1px solid rgba(165,113,60,.1);position:relative}
   .mobile-menu a.mobile-child::before{content:"";position:absolute;left:32px;top:0;bottom:0;width:1px;background:rgba(165,113,60,.18)}
   .mobile-menu a.mobile-child:hover,.mobile-menu a.mobile-child:focus-visible{color:var(--gold-bright)}
   .mobile-mpa-parent img{width:40px;height:40px;object-fit:contain}
-  .mobile-menu a.mobile-stray-sheep{display:flex;align-items:center;gap:15px;color:var(--text-dim)}
+  .mobile-menu a.mobile-stray-sheep{display:flex;align-items:center;gap:15px;color:var(--gold)}
+  .mobile-stray-sheep span{background:var(--gold-metallic);-webkit-background-clip:text;background-clip:text;color:transparent}
   .mobile-stray-sheep img{width:54px;height:auto;object-fit:contain;filter:saturate(.82) brightness(.86)}
 }
 
