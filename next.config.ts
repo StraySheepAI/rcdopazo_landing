@@ -1,7 +1,39 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: "/",
+          has: [{ type: "host", value: "mpa.rociodopazo.com" }],
+          destination: "/mpa",
+        },
+        {
+          source: "/",
+          has: [
+            {
+              type: "host",
+              value: "publishinghouse.magiaparaatrevidos.com",
+            },
+          ],
+          destination: "/mpa/publishing-house",
+        },
+        {
+          source: "/",
+          has: [
+            {
+              type: "host",
+              value: "straysheep.magiaparaatrevidos.com",
+            },
+          ],
+          destination: "/stray-sheep",
+        },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
 };
 
 export default nextConfig;
