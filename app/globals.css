@@ -47,6 +47,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fuchsia);outline-of
 @keyframes cosmicBreath{0%{transform:scale(1.04) translate3d(0,0,0);opacity:.13}100%{transform:scale(1.09) translate3d(-1.4%,1%,0);opacity:.19}}
 @keyframes cosmicEmbers{0%{transform:translate3d(-1%,1%,0) scale(.98)}100%{transform:translate3d(2%,-2%,0) scale(1.05)}}
 @keyframes starDrift{0%{transform:translate3d(0,0,0)}100%{transform:translate3d(1.5%,-1%,0)}}
+.cosmic-flow{position:absolute;inset:-35%;z-index:1;opacity:.42;filter:blur(52px);mix-blend-mode:screen;transform:rotate(-12deg);background:
+  radial-gradient(ellipse 34% 9% at 8% 56%,rgba(202,111,48,.24),transparent 72%),
+  radial-gradient(ellipse 42% 11% at 48% 48%,rgba(126,69,194,.22),transparent 72%),
+  radial-gradient(ellipse 34% 8% at 86% 43%,rgba(214,73,155,.2),transparent 72%);
+  animation:cosmicFlow 15s ease-in-out infinite alternate}
+.cosmic-flow::after{content:"";position:absolute;inset:12% -8%;background:linear-gradient(105deg,transparent 20%,rgba(198,119,55,.08) 37%,rgba(124,68,191,.12) 51%,rgba(214,73,155,.08) 64%,transparent 79%);filter:blur(24px);animation:cosmicFlowPulse 7s ease-in-out infinite alternate}
+@keyframes cosmicFlow{0%{transform:translate3d(-13%,-5%,0) rotate(-12deg) scale(.96)}50%{transform:translate3d(1%,3%,0) rotate(-8deg) scale(1.04)}100%{transform:translate3d(13%,-2%,0) rotate(-4deg) scale(1)}}
+@keyframes cosmicFlowPulse{0%{opacity:.38;transform:translateY(-3%) scaleY(.82)}100%{opacity:.85;transform:translateY(4%) scaleY(1.18)}}
 
 /* decorative ring arcs + glowing particles — gives the flat cosmos backdrop
    the layered depth the portfolio site has (thin circle fragments + accent
@@ -312,6 +320,7 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
   *{transition:none!important;animation:none!important}
   .ticker-track{transform:none}
   .reveal{opacity:1!important;transform:none!important}
+  .cosmic-flow{opacity:.22}
 }
 
 @media(max-width:900px){
