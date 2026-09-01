@@ -166,6 +166,13 @@ export default function Home() {
               </div>
               <div className="about-photo reveal">
                 <Image src="/rc-bio-photo.jpg" alt="R.C. Dopazo" width={1000} height={1333} />
+                <Image
+                  className="about-signature"
+                  src="/rc-dopazo-signature.png"
+                  alt="Firma de R.C. Dopazo"
+                  width={688}
+                  height={688}
+                />
               </div>
             </div>
           </div>

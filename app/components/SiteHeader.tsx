@@ -51,6 +51,7 @@ export function SiteHeader() {
             height={512}
             priority
           />
+          <span className="brand-name">R.C. Dopazo</span>
         </Link>
 
         <nav className="nav-links">
