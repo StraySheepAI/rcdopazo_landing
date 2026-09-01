@@ -53,7 +53,7 @@ export default function Home() {
         <section className="hero" id="universo">
           <div className="hero-photo">
             <Image
-              src="/hero-bg.jpg"
+              src="/hero-cosmic-bg.jpg"
               alt=""
               fill
               priority

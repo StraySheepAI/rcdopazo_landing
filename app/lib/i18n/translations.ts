@@ -10,7 +10,7 @@ export const translations = {
     nav: {
       inicio: "Inicio",
       mpa: "MPA",
-      queEsMpa: "Qué es MPA",
+      queEsMpa: "¿Qué es MPA?",
       mpaUniverse: "MPA Universe",
       mpaTransmuta: "MPA Transmuta",
       mpaFlow: "MPA Flow",
@@ -116,7 +116,7 @@ export const translations = {
     nav: {
       inicio: "Home",
       mpa: "MPA",
-      queEsMpa: "What is MPA",
+      queEsMpa: "What is MPA?",
       mpaUniverse: "MPA Universe",
       mpaTransmuta: "MPA Transmuta",
       mpaFlow: "MPA Flow",
