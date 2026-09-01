@@ -15,7 +15,7 @@ export function ObraCard({
   const image = variant === "featured" ? obra.images.featured ?? obra.images.cover : obra.images.cover;
 
   return (
-    <div className={`book-card${variant === "featured" ? " reveal" : ""}`}>
+    <div className="book-card">
       <span className="dot-deco gold" style={{ top: 20, right: 64 }} />
       <span className="dot-deco fuchsia" style={{ top: 68, right: 26 }} />
       <div className="book-layout">
