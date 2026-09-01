@@ -29,6 +29,16 @@ const nextConfig: NextConfig = {
           ],
           destination: "/stray-sheep",
         },
+        {
+          source: "/",
+          has: [
+            {
+              type: "host",
+              value: "dima.magiaparaatrevidos.com",
+            },
+          ],
+          destination: "/dima",
+        },
       ],
       afterFiles: [],
       fallback: [],
