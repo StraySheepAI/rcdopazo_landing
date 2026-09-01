@@ -8,7 +8,6 @@ export function Cosmos() {
       <div className="ring-deco ring-b" />
       <div className="ring-deco ring-c" />
       <div className="ring-deco ring-d" />
-      <div className="cosmic-flow" />
       <div className="stars" />
       <span className="dot-deco gold" style={{ top: "12%", left: "8%" }} />
       <span className="dot-deco fuchsia" style={{ top: "22%", left: "88%" }} />

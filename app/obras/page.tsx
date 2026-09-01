@@ -6,6 +6,7 @@ import { Cosmos } from "../components/Cosmos";
 import { SiteHeader } from "../components/SiteHeader";
 import { SiteFooter } from "../components/SiteFooter";
 import { ObraCard } from "../components/ObraCard";
+import { CosmicMotion } from "../components/CosmicMotion";
 import { useLanguage } from "../lib/i18n/LanguageContext";
 import {
   OBRA_CATEGORIES,
@@ -57,6 +58,7 @@ export default function ObrasPage() {
   return (
     <>
       <Cosmos />
+      <CosmicMotion />
       <SiteHeader />
 
       <main>
@@ -100,7 +102,7 @@ export default function ObrasPage() {
             {obras.length > 0 ? (
               <div className="obras-catalog">
                 {obras.map((obra) => (
-                  <ObraCard key={obra.id} obra={obra} variant="catalog" />
+                  <ObraCard key={obra.id} obra={obra} variant={filter === "destacadas" ? "featured" : "catalog"} />
                 ))}
               </div>
             ) : (

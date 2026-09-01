@@ -9,6 +9,7 @@ import { SiteFooter } from "./components/SiteFooter";
 import { ArchitectureField } from "./components/ArchitectureField";
 import { ObraCard } from "./components/ObraCard";
 import { ContactForm } from "./components/ContactForm";
+import { CosmicMotion } from "./components/CosmicMotion";
 import { useLanguage } from "./lib/i18n/LanguageContext";
 import { getFeaturedObras } from "./lib/obras";
 import { getVisibleContactChannels } from "./lib/contact";
@@ -43,7 +44,7 @@ export default function Home() {
   return (
     <>
       <Cosmos />
-      <div className="cosmic-motion-overlay" aria-hidden="true" />
+      <CosmicMotion />
       <SiteHeader />
 
       <main id="top" ref={mainRef}>
