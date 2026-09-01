@@ -55,12 +55,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fuchsia);outline-of
 
 /* Nav */
 .nav-shell{position:fixed;top:0;left:0;right:0;z-index:20;background:rgba(10,7,18,.8);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);box-shadow:0 12px 34px -18px rgba(0,0,0,.7)}
-.nav-inner{width:min(1180px,calc(100% - 64px));height:82px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.nav-inner{width:min(1440px,calc(100% - 64px));height:82px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px}
 .brand{display:flex;align-items:center;gap:13px;text-decoration:none;flex:0 0 auto}
 .brand-mark{width:52px;height:52px;object-fit:contain;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));transition:transform .3s}
-.brand-name{color:var(--gold-bright);font:500 1rem 'Cormorant Garamond',serif;letter-spacing:.13em;text-transform:uppercase;white-space:nowrap}
+.brand-name{font:600 1rem 'Cormorant Garamond',serif;letter-spacing:.13em;text-transform:uppercase;white-space:nowrap;background:linear-gradient(180deg,#e0b84e 0%,#b68124 47%,#765117 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 14px rgba(211,159,48,.08)}
 .brand:hover .brand-mark{transform:scale(1.05)}
-.brand:hover .brand-name{color:#c09a7f}
+.brand:hover .brand-name{filter:brightness(1.12)}
 .nav-links{display:flex;gap:28px;margin-left:auto;align-items:center}
 .nav-links > a,.nav-item > a{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-decoration:none}
 .nav-links > a,.nav-item > a,.hero-tagline,.about-copy .about-statement{
