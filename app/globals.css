@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
 :root{
-  --bg:#0a0712;
-  --bg-soft:#140d20;
+  --bg:#10021A;
+  --bg-soft:#1a0826;
   --card:#1c1330;
   --border:rgba(132,96,72,.24);
   --border-bright:rgba(224,70,158,.34);
-  --gold:#8f6c54;
-  --gold-bright:#af8971;
-  --gold-dim:#4b372d;
+  --gold:#967B45;
+  --gold-bright:#c5aa69;
+  --gold-dim:#54431f;
   --fuchsia:#e0469e;
   --fuchsia-soft:#f0a0cf;
   --fuchsia-dim:#7a2f57;
@@ -58,13 +58,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fuchsia);outline-of
 .nav-inner{width:min(1440px,calc(100% - 64px));height:82px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px}
 .brand{display:flex;align-items:center;gap:13px;text-decoration:none;flex:0 0 auto}
 .brand-mark{width:52px;height:52px;object-fit:contain;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.55));transition:transform .3s}
-.brand-name{font:600 1rem 'Cormorant Garamond',serif;letter-spacing:.13em;text-transform:uppercase;white-space:nowrap;background:linear-gradient(180deg,#e0b84e 0%,#b68124 47%,#765117 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 14px rgba(211,159,48,.08)}
+.brand-name{font:600 1rem 'Cormorant Garamond',serif;letter-spacing:.13em;text-transform:uppercase;white-space:nowrap;background:linear-gradient(180deg,#d8c58f 0%,#967B45 45%,#5b4823 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 14px rgba(150,123,69,.16)}
 .brand:hover .brand-mark{transform:scale(1.05)}
 .brand:hover .brand-name{filter:brightness(1.12)}
 .nav-links{display:flex;gap:28px;margin-left:auto;align-items:center}
 .nav-links > a,.nav-item > a{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-decoration:none}
 .nav-links > a,.nav-item > a,.hero-tagline,.about-copy .about-statement{
-  background:linear-gradient(180deg,#9d7861 0%,#76513f 52%,#4c3128 100%);
+  background:linear-gradient(180deg,#d2c18f 0%,#967B45 52%,#5b4823 100%);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
@@ -407,7 +407,7 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
 @media(prefers-reduced-motion:reduce){.architecture-field:before{animation:none}}
 
 .hero .container{position:relative;width:min(1440px,calc(100% - 64px))}
-.hero h1{color:var(--text-dim);font-size:clamp(2.75rem,5.15vw,4.18rem);line-height:1.04;text-shadow:0 2px 26px rgba(213,205,207,.035)}
+.hero h1{font-size:clamp(2.75rem,5.15vw,4.18rem);line-height:1.04;background:linear-gradient(180deg,#d9ca9e 0%,#b39a61 28%,#967B45 58%,#604c25 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 1px 0 rgba(255,244,202,.08),0 7px 24px rgba(150,123,69,.12)}
 /* El campo visual ocupa más territorio que el copy: funciona como la otra
    mitad conceptual del hero y no como una ilustración secundaria. */
 .hero-grid{display:grid;grid-template-columns:minmax(0,.96fr) minmax(0,1.04fr);align-items:center;gap:clamp(18px,2vw,34px)}
@@ -484,10 +484,10 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
   .fragment-toggle{width:100%;justify-content:space-between}
 }
 
-/* El efecto bronce se repite acá para prevalecer sobre los colores base
+/* El efecto dorado metálico se repite acá para prevalecer sobre los colores base
    declarados antes en los acentos editoriales. */
 .hero-tagline,.about-copy .about-statement{
-  background:linear-gradient(180deg,#9d7861 0%,#76513f 52%,#4c3128 100%);
+  background:linear-gradient(180deg,#d2c18f 0%,#967B45 52%,#5b4823 100%);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
