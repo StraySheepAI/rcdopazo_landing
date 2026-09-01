@@ -36,13 +36,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fuchsia);outline-of
 /* Cosmos backdrop */
 .cosmos{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:var(--bg)}
 main,footer{position:relative;z-index:1}
-.cosmic-motion-overlay{position:fixed;inset:0;z-index:2;overflow:hidden;pointer-events:none;mix-blend-mode:screen}
-.cosmic-motion-overlay i{position:absolute;display:block;width:72vw;height:2px;left:-78vw;top:25%;background:linear-gradient(90deg,transparent 0%,rgba(150,123,69,.08) 20%,rgba(221,190,112,.8) 58%,rgba(255,231,160,.95) 60%,rgba(214,90,159,.48) 72%,transparent 100%);box-shadow:0 0 6px rgba(220,180,92,.7),0 0 20px rgba(150,97,202,.32);transform:rotate(-17deg);animation:lightRayCross 8s linear infinite}
-.cosmic-motion-overlay i::after{content:"";position:absolute;right:24%;top:50%;width:8px;height:8px;border-radius:50%;background:#f8d889;box-shadow:0 0 8px #f8d889,0 0 22px 7px rgba(214,90,159,.42);transform:translateY(-50%)}
-.cosmic-motion-overlay i:nth-child(2){width:56vw;top:58%;animation-duration:11s;animation-delay:-5s;transform:rotate(13deg);background:linear-gradient(90deg,transparent,rgba(126,69,194,.18) 25%,rgba(170,121,237,.72) 58%,rgba(218,90,159,.68) 72%,transparent)}
-.cosmic-motion-overlay i:nth-child(2)::after{background:#cda7ff;box-shadow:0 0 8px #cda7ff,0 0 20px 6px rgba(126,69,194,.5)}
-.cosmic-motion-overlay i:nth-child(3){width:42vw;top:82%;animation-duration:13s;animation-delay:-9s;transform:rotate(-8deg);opacity:.72}
-@keyframes lightRayCross{0%{translate:0 -12vh;opacity:0}8%{opacity:.85}82%{opacity:.85}100%{translate:190vw 18vh;opacity:0}}
+.cosmic-motion-overlay{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;overflow:visible;mix-blend-mode:screen}
+.light-branch{fill:none;stroke-width:.7;stroke-linecap:round;stroke-linejoin:round;opacity:.42;transform-box:fill-box;transform-origin:center}
+.light-branch path{stroke:currentColor;filter:drop-shadow(0 0 3px currentColor)}
+.light-branch circle{fill:currentColor;stroke:none;filter:drop-shadow(0 0 5px currentColor);animation:branchNodePulse 2.8s ease-in-out infinite alternate}
+.light-branch circle:nth-of-type(2){animation-delay:-1.1s}.light-branch circle:nth-of-type(3){animation-delay:-2s}
+.branch-gold{color:#d8b96e;animation:branchDriftA 16s ease-in-out infinite alternate}
+.branch-violet{color:#9a6ae0;animation:branchDriftB 19s ease-in-out -5s infinite alternate}
+.branch-pink{color:#d65a9f;animation:branchDriftA 21s ease-in-out -9s infinite alternate-reverse}
+@keyframes branchDriftA{0%{transform:translate3d(-18px,10px,0) rotate(-1deg);opacity:.25}50%{opacity:.58}100%{transform:translate3d(34px,-18px,0) rotate(1.5deg);opacity:.38}}
+@keyframes branchDriftB{0%{transform:translate3d(28px,-12px,0) rotate(1deg);opacity:.24}55%{opacity:.62}100%{transform:translate3d(-38px,22px,0) rotate(-1.2deg);opacity:.4}}
+@keyframes branchNodePulse{0%{r:2;opacity:.45}100%{r:4.5;opacity:1}}
 .cosmos::before{content:"";position:absolute;inset:-4%;background:url('/hero-cosmic-bg.jpg') 66% 47%/cover no-repeat;opacity:.16;filter:brightness(.7) saturate(.92);transform:scale(1.04);animation:cosmicBreath 22s ease-in-out infinite alternate}
 .cosmos::after{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 72% 38%,rgba(221,121,51,.12),transparent 20%),radial-gradient(circle at 58% 64%,rgba(119,62,190,.13),transparent 25%),radial-gradient(circle at 84% 72%,rgba(214,67,154,.1),transparent 19%);filter:blur(42px);animation:cosmicEmbers 28s ease-in-out infinite alternate}
 .nebula{position:absolute;border-radius:50%;filter:blur(110px);opacity:.45;animation:nebulaDrift 24s ease-in-out infinite}
@@ -88,6 +92,7 @@ main,footer{position:relative;z-index:1}
 }
 .nav-links > a:hover,.nav-item > a:hover{color:var(--gold-bright)}
 .nav-item{position:relative}
+.nav-text-trigger{border:0;background:none;padding:0;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);cursor:pointer}
 .nav-mpa-trigger{display:grid;place-items:center;width:46px;height:46px;padding:0;border:0;background:transparent;cursor:pointer}
 .nav-mpa-trigger img{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 0 9px rgba(208,156,57,.16));transition:transform .3s ease,filter .3s ease}
 .nav-item:hover .nav-mpa-trigger img,.nav-mpa-trigger:focus-visible img{transform:scale(1.09);filter:drop-shadow(0 0 13px rgba(208,156,57,.3))}

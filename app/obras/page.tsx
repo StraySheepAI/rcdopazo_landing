@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Cosmos } from "../components/Cosmos";
 import { SiteHeader } from "../components/SiteHeader";
@@ -33,6 +33,12 @@ interface FilterOption {
 export default function ObrasPage() {
   const { t } = useLanguage();
   const [filter, setFilter] = useState<FilterId>("destacadas");
+
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("filtro");
+    const allowed = ["destacadas", "todas", ...OBRA_CATEGORIES.map((category) => category.id)];
+    if (requested && allowed.includes(requested)) setFilter(requested);
+  }, []);
 
   const filters = useMemo<FilterOption[]>(
     () => [

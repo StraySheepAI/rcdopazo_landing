@@ -27,7 +27,19 @@ export function SiteHeader() {
         { href: "/mpa/publishing-house", label: t.nav.mpaPublishingHouse },
       ],
     },
-    { href: "/obras", label: t.nav.obras },
+    {
+      href: "/obras",
+      label: t.nav.obras,
+      kind: "text",
+      children: [
+        { href: "/obras?filtro=destacadas", label: t.nav.obrasDestacadas },
+        { href: "/obras?filtro=todas", label: t.nav.obrasTodas },
+        { href: "/obras?filtro=libros", label: t.nav.obrasLibros },
+        { href: "/obras?filtro=musica", label: t.nav.obrasMusica },
+        { href: "/obras?filtro=juegos", label: t.nav.obrasJuegos },
+        { href: "/obras?filtro=apps-experiencias", label: t.nav.obrasApps },
+      ],
+    },
     { href: "/#sobre", label: t.nav.sobreRC },
     { href: "/#contacto", label: t.nav.contacto },
   ];
@@ -59,14 +71,18 @@ export function SiteHeader() {
             <Fragment key={link.href}>
             {link.children ? (
               <div className="nav-item">
-                <button className="nav-mpa-trigger" type="button" aria-label={link.label}>
-                  <Image src="/mpa-general-logo.png" alt="" width={64} height={64} />
-                </button>
+                {link.kind === "text" ? (
+                  <button className="nav-text-trigger" type="button">{link.label}</button>
+                ) : (
+                  <button className="nav-mpa-trigger" type="button" aria-label={link.label}>
+                    <Image src="/mpa-general-logo.png" alt="" width={64} height={64} />
+                  </button>
+                )}
                 <div className="nav-dropdown">
                   {link.children.map((child) => (
-                    <Link key={child.href} href={child.href}>
+                    <a key={child.href} href={child.href}>
                       {child.label}
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -105,14 +121,14 @@ export function SiteHeader() {
         {NAV_LINKS.flatMap((link) =>
           link.children
             ? [
-                <div className="mobile-parent mobile-mpa-parent" key={link.href}>
-                  <Image src="/mpa-general-logo.png" alt="" width={58} height={58} />
+                <div className={`mobile-parent${link.kind === "text" ? "" : " mobile-mpa-parent"}`} key={link.href}>
+                  {link.kind !== "text" && <Image src="/mpa-general-logo.png" alt="" width={58} height={58} />}
                   <span>{link.label}</span>
                 </div>,
                 ...link.children.map((child) => (
-                  <Link className="mobile-child" key={child.href} href={child.href} onClick={() => setMenuOpen(false)}>
+                  <a className="mobile-child" key={child.href} href={child.href} onClick={() => setMenuOpen(false)}>
                     {child.label}
-                  </Link>
+                  </a>
                 )),
               ]
             : [
