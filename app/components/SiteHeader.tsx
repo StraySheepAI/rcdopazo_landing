@@ -8,6 +8,7 @@ import { LanguageToggle } from "./LanguageToggle";
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileSection, setMobileSection] = useState<string | null>(null);
   const { t } = useLanguage();
 
   // Navegación principal: HOME | MPA | OBRAS | SOBRE R.C. | CONTACTO.
@@ -50,6 +51,11 @@ export function SiteHeader() {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  const closeMobileMenu = () => {
+    setMenuOpen(false);
+    setMobileSection(null);
+  };
 
   return (
     <header className="nav-shell">
@@ -108,7 +114,10 @@ export function SiteHeader() {
             className={`menu-toggle${menuOpen ? " active" : ""}`}
             aria-label={menuOpen ? t.nav.cerrarMenu : t.nav.abrirMenu}
             aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
+            onClick={() => {
+              if (menuOpen) setMobileSection(null);
+              setMenuOpen((v) => !v);
+            }}
           >
             <span />
             <span />
@@ -118,29 +127,44 @@ export function SiteHeader() {
       </div>
 
       <div id="mobile-menu" className={`mobile-menu${menuOpen ? " open" : ""}`}>
-        {NAV_LINKS.flatMap((link) =>
-          link.children
-            ? [
-                <div className={`mobile-parent${link.kind === "text" ? "" : " mobile-mpa-parent"}`} key={link.href}>
+        {NAV_LINKS.map((link, index) => (
+          <Fragment key={link.href}>
+          {link.children ? (
+            <div className={`mobile-nav-group${mobileSection === link.href ? " expanded" : ""}`}>
+              <button
+                className={`mobile-parent${link.kind === "text" ? "" : " mobile-mpa-parent"}`}
+                type="button"
+                aria-expanded={mobileSection === link.href}
+                onClick={() => setMobileSection((current) => current === link.href ? null : link.href)}
+              >
+                <span className="mobile-parent-label">
                   {link.kind !== "text" && <Image src="/mpa-general-logo.png" alt="" width={58} height={58} />}
                   <span>{link.label}</span>
-                </div>,
-                ...link.children.map((child) => (
-                  <a className="mobile-child" key={child.href} href={child.href} onClick={() => setMenuOpen(false)}>
+                </span>
+                <span className="mobile-parent-chevron" aria-hidden="true">⌄</span>
+              </button>
+              <div className="mobile-children">
+                {link.children.map((child) => (
+                  <a className="mobile-child" key={child.href} href={child.href} onClick={closeMobileMenu}>
                     {child.label}
                   </a>
-                )),
-              ]
-            : [
-                <Link key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>
-                  {link.label}
-                </Link>,
-              ]
-        )}
-        <a className="mobile-stray-sheep" href="/stray-sheep" onClick={() => setMenuOpen(false)}>
-          <Image src="/stray-sheep-glasses.png" alt="" width={90} height={34} />
-          <span>Stray Sheep</span>
-        </a>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <Link href={link.href} onClick={closeMobileMenu}>
+              {link.label}
+            </Link>
+          )
+          }
+          {index === 1 && (
+            <a className="mobile-stray-sheep" href="/stray-sheep" onClick={closeMobileMenu}>
+              <Image src="/stray-sheep-glasses.png" alt="" width={90} height={34} />
+              <span>Stray Sheep</span>
+            </a>
+          )}
+          </Fragment>
+        ))}
       </div>
     </header>
   );
