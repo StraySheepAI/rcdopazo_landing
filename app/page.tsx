@@ -8,6 +8,7 @@ import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
 import { ArchitectureField } from "./components/ArchitectureField";
 import { ObraCard } from "./components/ObraCard";
+import { ContactForm } from "./components/ContactForm";
 import { useLanguage } from "./lib/i18n/LanguageContext";
 import { getFeaturedObras } from "./lib/obras";
 import { getVisibleContactChannels } from "./lib/contact";
@@ -42,6 +43,7 @@ export default function Home() {
   return (
     <>
       <Cosmos />
+      <div className="cosmic-motion-overlay" aria-hidden="true" />
       <SiteHeader />
 
       <main id="top" ref={mainRef}>
@@ -228,20 +230,23 @@ export default function Home() {
             <div className="gradient-rule" />
             <p className="contact-intro">{t.contacto.intro}</p>
 
-            <div className="contact-cards">
-              {contactChannels.map((channel) =>
-                channel.href ? (
-                  <a className="contact-card reveal" href={channel.href} key={channel.id}>
-                    <span>{channel.label === "Email" ? t.contacto.email : channel.label}</span>
-                    <strong>{channel.value}</strong>
-                  </a>
-                ) : (
-                  <div className="contact-card reveal" style={{ opacity: 0.6 }} key={channel.id}>
-                    <span>{channel.label === "Redes" ? t.contacto.redes : channel.label}</span>
-                    <strong>{channel.value === "Próximamente" ? t.contacto.proximamente : channel.value}</strong>
-                  </div>
-                )
-              )}
+            <div className="contact-layout">
+              <ContactForm copy={t.contacto.form} />
+              <div className="contact-cards">
+                {contactChannels.map((channel) =>
+                  channel.href ? (
+                    <a className="contact-card reveal" href={channel.href} key={channel.id}>
+                      <span>{channel.label === "Email" ? t.contacto.email : channel.label}</span>
+                      <strong>{channel.value}</strong>
+                    </a>
+                  ) : (
+                    <div className="contact-card reveal" style={{ opacity: 0.6 }} key={channel.id}>
+                      <span>{channel.label === "Redes" ? t.contacto.redes : channel.label}</span>
+                      <strong>{channel.value === "Próximamente" ? t.contacto.proximamente : channel.value}</strong>
+                    </div>
+                  )
+                )}
+              </div>
             </div>
           </div>
         </section>

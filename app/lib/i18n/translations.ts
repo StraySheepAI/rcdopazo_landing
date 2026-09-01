@@ -57,6 +57,21 @@ export const translations = {
       email: "Email",
       redes: "Redes",
       proximamente: "Próximamente",
+      form: {
+        heading: "¿Querés hablar?",
+        subheading: "Escribime. Te respondo pronto.",
+        name: "Nombre",
+        namePlaceholder: "¿Cómo te llamás?",
+        email: "Mail",
+        emailPlaceholder: "Tu email",
+        message: "Mensaje",
+        messagePlaceholder: "¿Qué querés contarme?",
+        send: "Enviar",
+        sending: "Enviando…",
+        success: "Recibido.",
+        successDetail: "Te escribo pronto.",
+        error: "No pudo enviarse. Probá nuevamente.",
+      },
     },
     obrasPage: {
       title: "Obras",
@@ -163,6 +178,21 @@ export const translations = {
       email: "Email",
       redes: "Social",
       proximamente: "Coming soon",
+      form: {
+        heading: "Want to talk?",
+        subheading: "Write to me. I'll get back to you soon.",
+        name: "Name",
+        namePlaceholder: "What's your name?",
+        email: "Email",
+        emailPlaceholder: "Your email",
+        message: "Message",
+        messagePlaceholder: "What would you like to tell me?",
+        send: "Send",
+        sending: "Sending…",
+        success: "Received.",
+        successDetail: "I'll write back soon.",
+        error: "It couldn't be sent. Please try again.",
+      },
     },
     obrasPage: {
       title: "Works",
@@ -220,8 +250,8 @@ export const translations = {
   },
 } as const;
 
-export type TranslationShape = {
-  [Section in keyof typeof translations.es]: {
-    [Key in keyof typeof translations.es[Section]]: string;
-  };
+type DeepStringShape<T> = {
+  [Key in keyof T]: T[Key] extends string ? string : DeepStringShape<T[Key]>;
 };
+
+export type TranslationShape = DeepStringShape<typeof translations.es>;

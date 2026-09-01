@@ -36,6 +36,11 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fuchsia);outline-of
 /* Cosmos backdrop */
 .cosmos{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:var(--bg)}
 main,footer{position:relative;z-index:1}
+.cosmic-motion-overlay{position:fixed;inset:0;z-index:2;overflow:hidden;pointer-events:none;mix-blend-mode:screen}
+.cosmic-motion-overlay::before{content:"";position:absolute;width:145vw;height:34vh;left:-42vw;top:22vh;border-radius:50%;background:linear-gradient(100deg,transparent 3%,rgba(226,126,56,.2) 28%,rgba(131,72,202,.28) 53%,rgba(218,76,158,.2) 76%,transparent 96%);filter:blur(42px);opacity:.72;transform:rotate(-13deg);animation:visibleCosmicCurrent 12s ease-in-out infinite alternate}
+.cosmic-motion-overlay::after{content:"";position:absolute;width:105vw;height:22vh;right:-42vw;bottom:10vh;border-radius:50%;background:linear-gradient(92deg,transparent,rgba(214,74,157,.17),rgba(151,91,214,.22),rgba(219,140,64,.17),transparent);filter:blur(34px);opacity:.65;transform:rotate(10deg);animation:visibleCosmicReturn 9s ease-in-out -3s infinite alternate}
+@keyframes visibleCosmicCurrent{0%{transform:translate3d(-16vw,-8vh,0) rotate(-13deg) scaleY(.7);opacity:.36}50%{opacity:.82}100%{transform:translate3d(30vw,30vh,0) rotate(-5deg) scaleY(1.25);opacity:.58}}
+@keyframes visibleCosmicReturn{0%{transform:translate3d(20vw,8vh,0) rotate(10deg) scaleY(.72);opacity:.3}100%{transform:translate3d(-46vw,-26vh,0) rotate(2deg) scaleY(1.15);opacity:.7}}
 .cosmos::before{content:"";position:absolute;inset:-4%;background:url('/hero-cosmic-bg.jpg') 66% 47%/cover no-repeat;opacity:.16;filter:brightness(.7) saturate(.92);transform:scale(1.04);animation:cosmicBreath 22s ease-in-out infinite alternate}
 .cosmos::after{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 72% 38%,rgba(221,121,51,.12),transparent 20%),radial-gradient(circle at 58% 64%,rgba(119,62,190,.13),transparent 25%),radial-gradient(circle at 84% 72%,rgba(214,67,154,.1),transparent 19%);filter:blur(42px);animation:cosmicEmbers 28s ease-in-out infinite alternate}
 .nebula{position:absolute;border-radius:50%;filter:blur(110px);opacity:.45;animation:nebulaDrift 24s ease-in-out infinite}
@@ -306,11 +311,31 @@ main,footer{position:relative;z-index:1}
 
 /* Contact */
 .contact-intro{font-size:1.12rem;line-height:1.8;margin-bottom:48px;max-width:640px}
+.contact-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:28px;align-items:start;max-width:980px}
 .contact-cards{display:grid;gap:20px;max-width:440px}
 .contact-card{min-height:130px;border:1px solid var(--border-bright);border-radius:26px;background:linear-gradient(135deg,rgba(28,19,48,.8),rgba(10,7,18,.92));display:flex;flex-direction:column;justify-content:center;padding:32px 38px;text-decoration:none;box-shadow:var(--shadow-card);transition:border-color .25s,transform .25s,box-shadow .25s}
 .contact-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:var(--shadow-card),0 0 40px -16px rgba(165,113,60,.4)}
 .contact-card span{color:var(--gold);text-transform:uppercase;letter-spacing:.24em;font-size:.7rem}
 .contact-card strong{font:400 1.5rem 'Cormorant Garamond',serif;color:var(--text);margin-top:12px}
+.contact-form-shell{position:relative;overflow:hidden;padding:clamp(30px,4vw,48px);border:1px solid var(--border-bright);border-radius:30px;background:radial-gradient(circle at 12% 0,rgba(126,69,194,.16),transparent 38%),linear-gradient(145deg,rgba(28,10,39,.88),rgba(10,4,18,.94));box-shadow:var(--shadow-card)}
+.contact-form-shell::after{content:"";position:absolute;width:250px;height:250px;right:-110px;top:-120px;border:1px solid rgba(150,123,69,.16);border-radius:50%;pointer-events:none}
+.contact-form-mark{margin:0 0 12px;color:var(--fuchsia);font-size:.65rem;letter-spacing:.28em;text-transform:uppercase}
+.contact-form-shell h3{margin:0;background:var(--gold-metallic);-webkit-background-clip:text;background-clip:text;color:transparent;font:700 clamp(2rem,4vw,2.8rem) 'Cormorant Garamond',serif}
+.contact-form-subtitle{margin:6px 0 30px;color:#9a6ae0;font:italic 500 1.12rem 'Cormorant Garamond',serif}
+.contact-form{display:grid;gap:17px}
+.contact-form label{display:grid;gap:7px}
+.contact-form label>span{color:var(--gold);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase}
+.contact-form input,.contact-form textarea{width:100%;border:1px solid rgba(150,123,69,.28);border-radius:13px;background:rgba(255,255,255,.028);padding:13px 16px;color:#c5bec4;font:400 1rem 'Rajdhani',sans-serif;outline:none;transition:border-color .25s,box-shadow .25s,background .25s}
+.contact-form textarea{min-height:130px;resize:vertical}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:#5f5963}
+.contact-form input:focus,.contact-form textarea:focus{border-color:rgba(214,90,159,.7);background:rgba(214,90,159,.035);box-shadow:0 0 22px rgba(126,69,194,.12)}
+.contact-form button{justify-self:start;margin-top:5px;border:1px solid var(--gold-dim);border-radius:999px;background:linear-gradient(135deg,var(--gold-dim),var(--gold-bright));padding:13px 30px;color:#160d06;font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+.contact-form button:disabled{cursor:wait;opacity:.65}
+.contact-form-success{display:grid;gap:8px;min-height:240px;place-content:center;text-align:center}
+.contact-form-success strong{background:var(--gold-metallic);-webkit-background-clip:text;background-clip:text;color:transparent;font:700 2.4rem 'Cormorant Garamond',serif}
+.contact-form-success span{color:#9a6ae0;font:italic 1.1rem 'Cormorant Garamond',serif}
+.contact-form-error{margin:0;color:var(--fuchsia);font-size:.85rem}
+@media(max-width:780px){.contact-layout{grid-template-columns:1fr}.contact-cards{max-width:none}}
 
 footer{text-align:center;padding:38px;color:var(--text-dim);border-top:1px solid var(--border)}
 footer .tagline{letter-spacing:.3em;font-size:.7rem;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px}
@@ -322,6 +347,7 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
   .ticker-track{transform:none}
   .reveal{opacity:1!important;transform:none!important}
   .cosmic-flow{opacity:.22}
+  .cosmic-motion-overlay{display:none}
 }
 
 @media(max-width:900px){
