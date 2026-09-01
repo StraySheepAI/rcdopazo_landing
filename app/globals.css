@@ -36,7 +36,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--fuchsia);outline-of
 /* Cosmos backdrop */
 .cosmos{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:var(--bg)}
 main,footer{position:relative;z-index:1}
-.cosmic-motion-overlay{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;overflow:visible;mix-blend-mode:screen}
+.cosmic-motion-overlay{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible;mix-blend-mode:screen}
 .light-branch{fill:none;stroke-width:.7;stroke-linecap:round;stroke-linejoin:round;opacity:.42;transform-box:fill-box;transform-origin:center}
 .light-branch path{stroke:currentColor;filter:drop-shadow(0 0 3px currentColor)}
 .light-branch circle{fill:currentColor;stroke:none;filter:drop-shadow(0 0 5px currentColor);animation:branchNodePulse 2.8s ease-in-out infinite alternate}
@@ -469,7 +469,7 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
    propia (glifo + label + microdescripción), no controles administrativos
    genéricos. */
 .obras-filters{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0 8px}
-.filter-chip{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border-bright);border-radius:999px;padding:11px 20px 11px 16px;background:linear-gradient(135deg,rgba(28,19,48,.6),rgba(10,7,18,.85));color:var(--text-dim);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem;cursor:pointer;transition:border-color .25s,color .25s,box-shadow .25s,transform .25s}
+.filter-chip{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border-bright);border-radius:999px;padding:11px 20px 11px 16px;background:linear-gradient(135deg,rgba(28,19,48,.86),rgba(10,7,18,.95));backdrop-filter:blur(10px) saturate(1.08);color:var(--text-dim);text-transform:uppercase;letter-spacing:.14em;font-size:.7rem;cursor:pointer;transition:border-color .25s,color .25s,box-shadow .25s,transform .25s}
 .filter-chip:hover{border-color:var(--gold);color:var(--gold-bright);transform:translateY(-1px)}
 .filter-chip.active{border-color:var(--gold);color:#160d06;background:linear-gradient(135deg,var(--gold-dim),var(--gold-bright));box-shadow:var(--shadow-glow-gold)}
 .filter-glyph{font:italic 500 .8rem 'Cormorant Garamond',serif;opacity:.85}
