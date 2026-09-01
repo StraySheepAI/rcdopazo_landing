@@ -39,7 +39,7 @@ main,footer{position:relative;z-index:1}
 .cosmic-motion-overlay{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible;mix-blend-mode:screen}
 .light-speck{transform-box:fill-box;transform-origin:center;opacity:.28;animation:speckFloat 12s ease-in-out infinite alternate;filter:blur(.35px) drop-shadow(0 0 4px currentColor) drop-shadow(0 0 11px currentColor)}
 .gold-speck{fill:#d8b96e;color:#d8b96e}.violet-speck{fill:#9a6ae0;color:#9a6ae0}.pink-speck{fill:#d65a9f;color:#d65a9f}
-.s2{animation-duration:16s;animation-delay:-5s}.s3{animation-duration:14s;animation-delay:-9s}.s4{animation-duration:18s;animation-delay:-3s}.s5{animation-duration:15s;animation-delay:-11s}.s6{animation-duration:20s;animation-delay:-7s}.s7{animation-duration:17s;animation-delay:-13s}.s8{animation-duration:19s;animation-delay:-4s}
+.s2{animation-duration:16s;animation-delay:-5s}.s3{animation-duration:14s;animation-delay:-9s}.s4{animation-duration:18s;animation-delay:-3s}.s5{animation-duration:15s;animation-delay:-11s}.s6{animation-duration:20s;animation-delay:-7s}.s7{animation-duration:17s;animation-delay:-13s}.s8{animation-duration:19s;animation-delay:-4s}.s9{animation-duration:21s;animation-delay:-12s}.s10{animation-duration:15s;animation-delay:-6s}.s11{animation-duration:18s;animation-delay:-14s}.s12{animation-duration:22s;animation-delay:-8s}
 @keyframes speckFloat{0%{transform:translate3d(-10px,12px,0) scale(.72);opacity:.18}48%{opacity:.62}100%{transform:translate3d(22px,-18px,0) scale(1.35);opacity:.34}}
 .cosmos::before{content:"";position:absolute;inset:-4%;background:url('/hero-cosmic-bg.jpg') 66% 47%/cover no-repeat;opacity:.16;filter:brightness(.7) saturate(.92);transform:scale(1.04);animation:cosmicBreath 22s ease-in-out infinite alternate}
 .cosmos::after{content:"";position:absolute;inset:-20%;background:radial-gradient(circle at 72% 38%,rgba(221,121,51,.12),transparent 20%),radial-gradient(circle at 58% 64%,rgba(119,62,190,.13),transparent 25%),radial-gradient(circle at 84% 72%,rgba(214,67,154,.1),transparent 19%);filter:blur(42px);animation:cosmicEmbers 28s ease-in-out infinite alternate}
@@ -212,7 +212,7 @@ main,footer{position:relative;z-index:1}
 .reveal.in-view{opacity:1;transform:none}
 
 /* Phrase ticker */
-.phrase-ticker{position:relative;overflow:hidden;border-block:1px solid var(--border);background:rgba(28,19,48,.6);box-shadow:inset 0 14px 24px -18px rgba(0,0,0,.7),inset 0 -14px 24px -18px rgba(0,0,0,.7);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.phrase-ticker{position:relative;overflow:hidden;border-block:1px solid rgba(150,123,69,.2);background:radial-gradient(ellipse at 72% 50%,rgba(214,90,159,.055),transparent 34%),linear-gradient(90deg,rgba(16,2,26,.92),rgba(22,5,29,.82),rgba(16,2,26,.92));backdrop-filter:blur(10px);box-shadow:inset 0 14px 24px -18px rgba(0,0,0,.72),inset 0 -14px 24px -18px rgba(0,0,0,.72);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .ticker-track{display:flex;width:max-content;animation:tickerMove 32s linear infinite}
 .ticker-set{display:flex;align-items:center;flex-shrink:0}
 .ticker-item{padding:22px 34px;color:var(--text-dim);font:italic 400 1.05rem 'Cormorant Garamond',serif;white-space:nowrap}
