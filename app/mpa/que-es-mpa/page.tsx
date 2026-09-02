@@ -10,10 +10,9 @@ import { useLanguage } from "../../lib/i18n/LanguageContext";
 export default function QueEsMpaPage() {
   const { t } = useLanguage();
   const territories = [
-    { href: "/mpa/universe", label: t.nav.mpaUniverse, symbol: "/mpa-universe-logo.png" },
-    { href: "/mpa/transmuta", label: t.nav.mpaTransmuta, symbol: "/mpa-coin-transmuta.png" },
-    { href: "https://mpaflow.com", label: t.nav.mpaFlow, symbol: "/mpa-flow-logo.png" },
-    { href: "/mpa/publishing-house", label: t.nav.mpaPublishingHouse, symbol: "/mpa-publishing-house-logo.png" },
+    { href: "/mpa/universe", label: "Evigila", symbol: "/mpa-coin-evigila.png" },
+    { href: "/mpa/portal", label: "Lude", symbol: "/mpa-coin-lude.png" },
+    { href: "/mpa/transmuta", label: "Transmuta", symbol: "/mpa-coin-transmuta.png" },
   ];
   return (
     <>
@@ -39,6 +38,7 @@ export default function QueEsMpaPage() {
 
         <section className="page-body">
           <div className="container">
+            <blockquote className="mpa-manifesto-line">{t.mpa.mantra}</blockquote>
             <p>{t.mpa.queEsMpaBody1}</p>
             <p>{t.mpa.queEsMpaBody2}</p>
             <p>{t.mpa.queEsMpaBody3}</p>
@@ -50,6 +50,11 @@ export default function QueEsMpaPage() {
                 </Link>
               ))}
             </nav>
+            <div className="mpa-related-out">
+              <span>{t.mpa.relatedTitle}</span>
+              <Link href="/mpa/publishing-house">{t.nav.mpaPublishingHouse} <b>→</b></Link>
+              <a href="https://mpaflow.com">{t.nav.mpaFlow} <b>↗</b></a>
+            </div>
           </div>
         </section>
       </main>
