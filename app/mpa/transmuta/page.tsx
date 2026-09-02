@@ -40,31 +40,36 @@ export default function MpaTransmutaPage() {
               <Image src="/mpa-coin-transmuta.png" alt="Sello MPA Transmuta" width={1024} height={1024} priority />
             </div>
 
-            <section className="transmuta-school">
-              <span className="section-kicker">Territorio de formación</span>
-              <h2>{t.mpa.schoolTitle}</h2>
-              <p>{t.mpa.schoolBody}</p>
-              <div className="transmuta-school-path"><span>Vigilia</span><i>→</i><span>Distinción</span><i>→</i><span>Agencia</span><i>→</i><span>Transmutación</span></div>
-            </section>
+            <section className="transmuta-branches" aria-label={t.mpa.transmutaPathsTitle}>
+              <p className="section-kicker">{t.mpa.transmutaPathsTitle}</p>
+              <div className="transmuta-branch-grid">
+                <article className="transmuta-branch transmuta-services">
+                  <span>01 · {t.mpa.servicesKicker}</span>
+                  <h2>{t.mpa.servicesTitle}</h2>
+                  <p>{t.mpa.servicesBody}</p>
+                  <div className="transmuta-service-list">
+                    <div><b>{t.mpa.interventionTitle}</b><p>{t.mpa.interventionBody}</p></div>
+                    <div><b>{t.mpa.redirectionTitle}</b><p>{t.mpa.redirectionBody}</p></div>
+                  </div>
+                  <div className="atrs-cycle">
+                    <article><span>ATS</span><h3>{t.mpa.atsTitle}</h3><p>{t.mpa.atsBody}</p></article>
+                    <b aria-hidden="true">⇄</b>
+                    <article><span>ARS</span><h3>{t.mpa.arsTitle}</h3><p>{t.mpa.arsBody}</p></article>
+                  </div>
+                </article>
 
-            <section className="atrs-section">
-              <div className="atrs-heading"><span className="section-kicker">Arquitectura metodológica</span><h2>{t.mpa.atrsTitle}</h2><p>{t.mpa.atrsBody}</p></div>
-              <div className="atrs-cycle">
-                <article><span>01</span><h3>{t.mpa.atsTitle}</h3><p>{t.mpa.atsBody}</p></article>
-                <b aria-hidden="true">⇄</b>
-                <article><span>02</span><h3>{t.mpa.arsTitle}</h3><p>{t.mpa.arsBody}</p></article>
+                <article className="transmuta-branch transmuta-formation">
+                  <span>02 · {t.mpa.formationKicker}</span>
+                  <h2>{t.mpa.schoolTitle}</h2>
+                  <p>{t.mpa.schoolBody}</p>
+                  <div className="transmuta-school-path"><span>Pasajes</span><i>→</i><span>Ludus</span><i>→</i><span>Pulsus</span><i>→</i><span>Vigilia</span></div>
+                  <div className="transmuta-formation-entry">
+                    <Image src="/pulsus-fractum-shield.png" alt="" width={280} height={420} />
+                    <div><b>{t.mpa.pulsusTitle}</b><p>{t.mpa.pulsusBody}</p><Link href="/mpa/transmuta/pulsus-fractum">{t.mpa.pulsusCta} <span aria-hidden="true">→</span></Link></div>
+                  </div>
+                </article>
               </div>
             </section>
-
-            <div className="transmuta-school-gate">
-              <div className="transmuta-school-gate-copy">
-                <span>Cámara avanzada de la Escuela</span>
-                <h2>{t.mpa.pulsusTitle}</h2>
-                <p>{t.mpa.pulsusBody}</p>
-                <Link href="/mpa/transmuta/pulsus-fractum">{t.mpa.pulsusCta} <b aria-hidden="true">→</b></Link>
-              </div>
-              <Image className="transmuta-school-gate-shield" src="/pulsus-fractum-shield.png" alt="Escudo de Pulsus Fractum" width={1024} height={1536} sizes="(max-width: 760px) 180px, 240px" />
-            </div>
           </div>
         </section>
       </main>

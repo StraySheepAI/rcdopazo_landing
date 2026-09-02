@@ -10,10 +10,13 @@ import { useLanguage } from "../lib/i18n/LanguageContext";
 export default function MpaPage() {
   const { t } = useLanguage();
 
-  const DOORS = [
-    { href: "/mpa/universe", label: "Evigila", body: t.mpa.evigilaBody, symbol: "/mpa-coin-evigila.png" },
-    { href: "/mpa/portal", label: "Lude", body: t.mpa.ludeBody, symbol: "/mpa-coin-lude.png" },
-    { href: "/mpa/transmuta", label: "Transmuta", body: t.mpa.transmutaDoorBody, symbol: "/mpa-coin-transmuta.png" },
+  const BRANDS = [
+    { href: "/mpa/que-es-mpa", label: t.nav.queEsMpa, symbol: "/mpa-general-logo.png" },
+    { href: "/mpa/universe", label: t.nav.mpaUniverse, symbol: "/mpa-universe-logo.png" },
+    { href: "/mpa/transmuta", label: t.nav.mpaTransmuta, symbol: "/mpa-coin-transmuta.png" },
+    { href: "/mpa/portal", label: "Ego SUM", symbol: "/mpa-coin-ego-sum-v2-transparent.png" },
+    { href: "https://mpaflow.com", label: t.nav.mpaFlow, symbol: "/mpa-flow-logo.png" },
+    { href: "/mpa/publishing-house", label: t.nav.mpaPublishingHouse, symbol: "/mpa-publishing-house-logo.png" },
   ];
 
   return (
@@ -39,13 +42,13 @@ export default function MpaPage() {
             <p>{t.mpa.introIndex}</p>
             <Link className="home-section-link" href="/mpa/que-es-mpa">{t.mpa.introCta} <span aria-hidden="true">→</span></Link>
 
-            <p className="mpa-capabilities-label">Evigila · Lude · Transmuta</p>
-            <div className="pillar-links mpa-door-grid">
-              {DOORS.map((child, i) => (
-                <Link className="pillar-link-card mpa-door-card" href={child.href} key={child.href}>
+            <p className="mpa-capabilities-label">{t.mpa.brandsTitle}</p>
+            <div className="pillar-links mpa-brand-grid">
+              {BRANDS.map((child, i) => (
+                <Link className="pillar-link-card" href={child.href} key={child.href}>
                   <b>{String(i + 1).padStart(2, "0")}</b>
                   <Image className="pillar-link-symbol" src={child.symbol} alt="" width={240} height={240} sizes="(max-width: 700px) 100px, 130px" />
-                  <div className="pillar-link-copy"><h3>{child.label}</h3><p>{child.body}</p><small>Entrar al territorio</small></div>
+                  <div className="pillar-link-copy"><h3>{child.label}</h3><small>{t.mpa.enterTerritory}</small></div>
                   <span className="arrow" aria-hidden="true">
                     →
                   </span>
@@ -53,13 +56,6 @@ export default function MpaPage() {
               ))}
             </div>
 
-            <section className="mpa-related-territories">
-              <p className="section-kicker">{t.mpa.relatedTitle}</p>
-              <div>
-                <Link href="/mpa/publishing-house"><Image src="/mpa-publishing-house-logo.png" alt="" width={90} height={90} /><span><b>{t.nav.mpaPublishingHouse}</b><small>{t.mpa.publishingShort}</small></span></Link>
-                <a href="https://mpaflow.com"><Image src="/mpa-flow-logo.png" alt="" width={90} height={90} /><span><b>{t.nav.mpaFlow}</b><small>{t.mpa.flowShort}</small></span></a>
-              </div>
-            </section>
           </div>
         </section>
       </main>
