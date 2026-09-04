@@ -40,6 +40,17 @@ export default function MpaTransmutaPage() {
               <Image src="/mpa-coin-transmuta.png" alt="Sello MPA Transmuta" width={1024} height={1024} priority />
             </div>
 
+            <section className="transmuta-mantra" aria-labelledby="transmuta-mantra-title">
+              <p className="transmuta-mantra-source">DIMA · Fragmento estructural · Isaías 41:10</p>
+              <h2 id="transmuta-mantra-title" lang="he" dir="rtl">עִמְּךָ־אָנִי</h2>
+              <p className="transmuta-mantra-translation">Contigo, yo.</p>
+              <div className="transmuta-mantra-turn">
+                <p>Una traducción aprendida puede volver invisible una arquitectura.</p>
+                <strong>¿Y si la frase con la que te nombrás también fuera una traducción aprendida?</strong>
+                <Link href="/mpa/ego-sum">Entrar a Ego SUM · Laboratorio del Yo <span aria-hidden="true">→</span></Link>
+              </div>
+            </section>
+
             <section className="transmuta-branches" aria-label={t.mpa.transmutaPathsTitle}>
               <p className="section-kicker">{t.mpa.transmutaPathsTitle}</p>
               <div className="transmuta-branch-grid">

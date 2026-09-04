@@ -8,7 +8,7 @@ const seals = [
   { src: "/mpa-coin-evigila.png", label: "Evigila" },
   { src: "/mpa-coin-lude.png", label: "Lude" },
   { src: "/mpa-coin-transmuta.png", label: "Transmuta", href: "/mpa/transmuta" },
-  { src: "/mpa-coin-ego-sum-v3-antique.png", label: "Ego SUM" },
+  { src: "/mpa-coin-ego-sum-v3-antique.png", label: "Ego SUM", href: "/mpa/ego-sum" },
   { src: "/mpa-coin-stray-sheep-v1.png", label: "Stray Sheep" },
 ];
 
@@ -162,7 +162,10 @@ export default function MpaPortalPage() {
           <h2>Todo sello posee dos caras.</h2>
           <strong>Una puede encontrarse en el mundo visible.</strong>
           <em>La otra solo se revela a quien se atreve a cruzar.</em>
-          <span>Próximamente abriremos el primer territorio.</span>
+          <Link className="mpa-threshold-mission-link" href="/mpa/ego-sum">
+            Entrar al Laboratorio del Yo <b>→</b>
+          </Link>
+          <small className="mpa-threshold-mission-note">Ego SUM · Primer Destello de Vigilia</small>
         </div>
       </section>
     </main>
