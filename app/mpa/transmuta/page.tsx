@@ -43,8 +43,18 @@ export default function MpaTransmutaPage() {
             <section className="transmuta-branches" aria-label={t.mpa.transmutaPathsTitle}>
               <p className="section-kicker">{t.mpa.transmutaPathsTitle}</p>
               <div className="transmuta-branch-grid">
+                <article className="transmuta-branch transmuta-foundations">
+                  <span>01 · {t.mpa.foundationsKicker}</span>
+                  <h2>{t.mpa.foundationsTitle}</h2>
+                  <p>{t.mpa.foundationsBody}</p>
+                  <div className="transmuta-foundation-map">
+                    <span>Vigilia</span><span>Correspondencia</span><span>Agencia</span><span>Configuración</span><span>Potencia</span><span>Transmutación</span>
+                  </div>
+                  <p className="transmuta-branch-note">{t.mpa.foundationsNote}</p>
+                </article>
+
                 <article className="transmuta-branch transmuta-services">
-                  <span>01 · {t.mpa.servicesKicker}</span>
+                  <span>02 · {t.mpa.servicesKicker}</span>
                   <h2>{t.mpa.servicesTitle}</h2>
                   <p>{t.mpa.servicesBody}</p>
                   <div className="transmuta-service-list">
@@ -59,7 +69,7 @@ export default function MpaTransmutaPage() {
                 </article>
 
                 <article className="transmuta-branch transmuta-formation">
-                  <span>02 · {t.mpa.formationKicker}</span>
+                  <span>03 · {t.mpa.formationKicker}</span>
                   <h2>{t.mpa.schoolTitle}</h2>
                   <p>{t.mpa.schoolBody}</p>
                   <div className="transmuta-school-path"><span>Pasajes</span><i>→</i><span>Ludus</span><i>→</i><span>Pulsus</span><i>→</i><span>Vigilia</span></div>

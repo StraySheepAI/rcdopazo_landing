@@ -123,8 +123,12 @@ export const translations = {
       transmutaBody2:
         "La Metalkimia es la práctica desarrollada dentro de Transmuta. No pretende controlar la realidad ni imponer una verdad: aumenta la capacidad de discernir relaciones, reconocer el propio dominio de intervención y participar con mayor conciencia en los procesos de transformación.",
       transmutaBody3:
-        "Transmuta articula dos recorridos complementarios: intervenciones y servicios para leer y reconfigurar sistemas; y formación para desarrollar esas capacidades mediante práctica.",
-      transmutaPathsTitle: "Dos formas de entrar a Transmuta",
+        "Transmuta articula tres recorridos relacionados: los fundamentos que sostienen la Metalkimia, su aplicación en servicios e intervenciones y la formación para desarrollar esas capacidades mediante práctica.",
+      transmutaPathsTitle: "Tres puertas de Transmuta",
+      foundationsKicker: "Teoría y bases",
+      foundationsTitle: "Fundamentos de Metalkimia",
+      foundationsBody: "El cuerpo conceptual que permite observar sistemas, distinguir relaciones y dependencias, comprender configuraciones y reconocer dónde existe agencia efectiva.",
+      foundationsNote: "Aquí viven los principios, la arquitectura conceptual, la investigación y los desarrollos metodológicos que sostienen la práctica.",
       servicesKicker: "Servicios e intervenciones",
       servicesTitle: "Metalkimia aplicada",
       servicesBody: "Intervenciones metodológicas para hacer visible una configuración, recuperar claridad y ensayar una reconfiguración con mayor agencia.",
@@ -280,8 +284,12 @@ export const translations = {
       transmutaBody2:
         "Metalkimia is the practice developed within Transmuta. It doesn't seek to control reality or impose a truth: it increases the capacity to discern relationships, recognize one's domain of intervention and participate more consciously in transformation processes.",
       transmutaBody3:
-        "Transmuta articulates two complementary paths: interventions and services for reading and reconfiguring systems, and training to develop those capacities through practice.",
-      transmutaPathsTitle: "Two ways into Transmuta",
+        "Transmuta articulates three related paths: the foundations that sustain Metalkimia, its application in services and interventions, and training that develops those capacities through practice.",
+      transmutaPathsTitle: "Three doors into Transmuta",
+      foundationsKicker: "Theory and foundations",
+      foundationsTitle: "Foundations of Metalkimia",
+      foundationsBody: "The conceptual body for observing systems, distinguishing relationships and dependencies, understanding configurations and recognizing where effective agency exists.",
+      foundationsNote: "This is where the principles, conceptual architecture, research and methodological developments that sustain the practice live.",
       servicesKicker: "Services and interventions",
       servicesTitle: "Applied Metalkimia",
       servicesBody: "Methodological interventions that make a configuration visible, restore clarity and test a reconfiguration with greater agency.",
