@@ -8,7 +8,22 @@ import { SiteFooter } from "../../components/SiteFooter";
 import { useLanguage } from "../../lib/i18n/LanguageContext";
 
 export default function MpaTransmutaPage() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const mantra = locale === "es" ? {
+    source: "DIMA · Fragmento estructural · Isaías 41:10", translation: "Contigo, yo.",
+    premise: "Una traducción aprendida puede volver invisible una arquitectura.",
+    question: "¿Y si la frase con la que te nombrás también fuera una traducción aprendida?",
+    cta: "Entrar a Ego SUM · Laboratorio del Yo",
+    foundations: ["Vigilia", "Correspondencia", "Agencia", "Configuración", "Potencia", "Transmutación"],
+    passages: ["Pasajes", "Ludus", "Pulsus", "Vigilia"],
+  } : {
+    source: "DIMA · Structural fragment · Isaiah 41:10", translation: "With you, I.",
+    premise: "A learned translation can render an architecture invisible.",
+    question: "What if the phrase you use to name yourself were also a learned translation?",
+    cta: "Enter Ego SUM · Laboratory of the Self",
+    foundations: ["Vigilia", "Correspondence", "Agency", "Configuration", "Potency", "Transmutation"],
+    passages: ["Passages", "Ludus", "Pulsus", "Vigilia"],
+  };
   return (
     <>
       <Cosmos />
@@ -41,13 +56,13 @@ export default function MpaTransmutaPage() {
             </div>
 
             <section className="transmuta-mantra" aria-labelledby="transmuta-mantra-title">
-              <p className="transmuta-mantra-source">DIMA · Fragmento estructural · Isaías 41:10</p>
+              <p className="transmuta-mantra-source">{mantra.source}</p>
               <h2 id="transmuta-mantra-title" lang="he" dir="rtl">עִמְּךָ־אָנִי</h2>
-              <p className="transmuta-mantra-translation">Contigo, yo.</p>
+              <p className="transmuta-mantra-translation">{mantra.translation}</p>
               <div className="transmuta-mantra-turn">
-                <p>Una traducción aprendida puede volver invisible una arquitectura.</p>
-                <strong>¿Y si la frase con la que te nombrás también fuera una traducción aprendida?</strong>
-                <Link href="/mpa/ego-sum">Entrar a Ego SUM · Laboratorio del Yo <span aria-hidden="true">→</span></Link>
+                <p>{mantra.premise}</p>
+                <strong>{mantra.question}</strong>
+                <Link href="/mpa/ego-sum">{mantra.cta} <span aria-hidden="true">→</span></Link>
               </div>
             </section>
 
@@ -59,7 +74,7 @@ export default function MpaTransmutaPage() {
                   <h2>{t.mpa.foundationsTitle}</h2>
                   <p>{t.mpa.foundationsBody}</p>
                   <div className="transmuta-foundation-map">
-                    <span>Vigilia</span><span>Correspondencia</span><span>Agencia</span><span>Configuración</span><span>Potencia</span><span>Transmutación</span>
+                    {mantra.foundations.map((item) => <span key={item}>{item}</span>)}
                   </div>
                   <p className="transmuta-branch-note">{t.mpa.foundationsNote}</p>
                 </article>
@@ -83,7 +98,7 @@ export default function MpaTransmutaPage() {
                   <span>03 · {t.mpa.formationKicker}</span>
                   <h2>{t.mpa.schoolTitle}</h2>
                   <p>{t.mpa.schoolBody}</p>
-                  <div className="transmuta-school-path"><span>Pasajes</span><i>→</i><span>Ludus</span><i>→</i><span>Pulsus</span><i>→</i><span>Vigilia</span></div>
+                  <div className="transmuta-school-path">{mantra.passages.map((item, index) => <span key={item}>{index > 0 && <i>→</i>}{item}</span>)}</div>
                   <div className="transmuta-formation-entry">
                     <Image src="/pulsus-fractum-shield.png" alt="" width={280} height={420} />
                     <div><b>{t.mpa.pulsusTitle}</b><p>{t.mpa.pulsusBody}</p><Link href="/mpa/transmuta/pulsus-fractum">{t.mpa.pulsusCta} <span aria-hidden="true">→</span></Link></div>
