@@ -66,6 +66,13 @@ export default function MpaTransmutaPage() {
               </div>
             </section>
 
+            <section className="transmuta-elgt-entry">
+              <p className="section-kicker">{locale === "es" ? "Laboratorio de experiencia" : "Experience laboratory"}</p>
+              <h2>E ↔ L → G → T</h2>
+              <p>{locale === "es" ? "No te pregunta cómo creés que funcionás. Te propone nueve escenas y observa qué configuración aparece en tus decisiones." : "It does not ask how you think you operate. It presents nine scenes and observes which configuration emerges through your decisions."}</p>
+              <Link href="/mpa/transmuta/elgt">{locale === "es" ? "Probar el simulador" : "Try the simulator"} <span>→</span></Link>
+            </section>
+
             <section className="transmuta-branches" aria-label={t.mpa.transmutaPathsTitle}>
               <p className="section-kicker">{t.mpa.transmutaPathsTitle}</p>
               <div className="transmuta-branch-grid">

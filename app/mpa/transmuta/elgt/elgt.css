@@ -1,0 +1,54 @@
+.elgt-opening h1,.elgt-opening h2,.elgt-game h2,.elgt-result h1,.elgt-briefing>h1,.elgt-briefing article h2,.elgt-calculator h2{color:#9b7950}.elgt-vessel{position:relative;display:flex;align-items:center;justify-content:center;width:112px;height:150px;margin:auto;overflow:hidden;border:1px solid rgba(169,122,64,.65);border-radius:56px 56px 22px 22px;background:rgba(5,3,9,.75);box-shadow:inset 0 0 25px rgba(0,0,0,.65)}.elgt-vessel>i{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(210,73,157,.72),rgba(102,48,132,.82) 48%,rgba(151,91,44,.8));box-shadow:0 -8px 20px rgba(211,75,158,.25);transition:height .65s cubic-bezier(.2,.8,.2,1);animation:elgtLiquid 3s ease-in-out infinite}.elgt-vessel>strong{position:relative;z-index:1;color:#e06aae;font-size:1.8rem;text-shadow:0 0 16px #d34e9d}.elgt-moves button:disabled{opacity:.25;cursor:not-allowed}.elgt-pick-count{margin:17px 0;color:#c5579d;font-size:.7rem;letter-spacing:.15em;text-transform:uppercase}.elgt-calc-inputs{display:flex;align-items:end;justify-content:center;gap:24px;margin:42px auto 24px}.elgt-calc-inputs label{display:flex;flex-direction:column;gap:10px;color:#b68e55;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase}.elgt-calc-inputs input{width:170px;padding:20px;border:1px solid rgba(174,128,67,.45);border-radius:18px;background:rgba(18,8,22,.88);color:#b29167;font:500 2rem 'Cormorant Garamond',serif;text-align:center;outline:0}.elgt-calc-inputs input:focus{border-color:#cf559d}.elgt-calc-inputs>b{padding-bottom:20px;color:#bd5597;font-size:1.7rem}.elgt-calculate{padding:15px 25px;border:1px solid #9b7443;border-radius:999px;background:#382039;color:#d8bdca;font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}@keyframes elgtLiquid{50%{filter:hue-rotate(12deg) brightness(1.12)}}@media(max-width:520px){.elgt-calc-inputs{gap:10px}.elgt-calc-inputs input{width:125px}.elgt-vessel{height:120px}}
+
+.elgt-briefing article figure{width:138px;height:138px;margin:0 auto 22px;overflow:hidden;border:1px solid rgba(190,145,87,.38);border-radius:50%;background:#100909;box-shadow:0 12px 38px rgba(0,0,0,.42),0 0 24px rgba(178,111,46,.12)}
+.elgt-briefing article figure img{display:block;width:100%;height:100%;object-fit:cover}
+.elgt-briefing article>small{display:block;margin:6px 0 2px;color:#bd70a7;font-size:.59rem;letter-spacing:.19em;text-transform:uppercase}
+@media(max-width:760px){.elgt-briefing article figure{width:112px;height:112px}}
+
+.elgt-falling-coin{position:absolute!important;z-index:4!important;top:-42px!important;left:50%!important;display:grid!important;place-items:center!important;width:38px!important;height:38px!important;margin:0!important;border:2px solid #bd8c4c!important;border-radius:50%!important;background:radial-gradient(circle at 38% 34%,#d4aa67,#79511f 62%,#2d1909)!important;color:#2c1709!important;font:700 1rem serif!important;box-shadow:0 4px 13px rgba(0,0,0,.65),inset 0 0 0 3px rgba(55,29,8,.45)!important;transform:translateX(-50%);animation:elgtCoinDrop .72s cubic-bezier(.35,.02,.75,.55) forwards}
+.elgt-vessel.depositing{overflow:hidden}
+.elgt-vessel.depositing>i{overflow:hidden}
+.elgt-vessel.depositing::after{content:"";position:absolute;z-index:3;left:12%;right:12%;bottom:3px;height:18px;border-radius:50%;background:rgba(224,101,174,.28);animation:elgtSplash .72s ease-out}
+.elgt-coordinates span img{display:block;width:82px;height:82px;margin:0 auto 14px;border-radius:50%;object-fit:cover;filter:saturate(.78);box-shadow:0 8px 22px rgba(0,0,0,.38)}
+.elgt-formula>img{display:block;width:108px;height:108px;margin:0 auto 22px;border-radius:50%;object-fit:cover;filter:saturate(.78);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+@keyframes elgtCoinDrop{0%{opacity:0;transform:translate(-50%,-24px) rotateY(0) rotateZ(-8deg)}18%{opacity:1}82%{opacity:1;transform:translate(-50%,132px) rotateY(630deg) rotateZ(10deg)}100%{opacity:0;transform:translate(-50%,142px) rotateY(720deg) rotateZ(0)}}
+@keyframes elgtSplash{0%,72%{opacity:0;transform:scaleX(.4)}82%{opacity:1;transform:scaleX(1.18)}100%{opacity:0;transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.elgt-falling-coin{animation-duration:.01ms}.elgt-vessel.depositing::after{animation:none}}
+
+/* Depósito de jugadas: tubo transparente con monedas vistas de canto. */
+.elgt-vessel{width:150px;height:270px;border-radius:76px 76px 30px 30px;background:linear-gradient(90deg,rgba(255,255,255,.025),rgba(117,57,125,.09) 42%,rgba(255,255,255,.035) 50%,rgba(8,3,12,.2) 62%),rgba(5,3,9,.55);box-shadow:inset 13px 0 20px rgba(255,255,255,.025),inset -15px 0 28px rgba(0,0,0,.5),0 20px 38px rgba(0,0,0,.22)}
+.elgt-vessel>strong{display:none}
+.elgt-vessel>i{left:14px;right:14px;bottom:12px;width:auto!important;margin:0!important;border:0!important;border-radius:0 0 20px 20px!important;background:repeating-linear-gradient(to top,#664021 0 3px,#c49a58 4px 8px,#7d5428 9px 11px,#d2aa66 12px 15px,#4d2e17 16px 18px)!important;box-shadow:0 -3px 10px rgba(209,164,92,.25),inset 10px 0 12px rgba(255,223,157,.08),inset -12px 0 15px rgba(24,10,3,.36)!important;clip-path:ellipse(52% 100% at 50% 100%);transition:height .68s cubic-bezier(.2,.8,.2,1)}
+.elgt-vessel.depositing::after{left:18%;right:18%;bottom:12px;height:9px;background:#d2a85f;box-shadow:0 2px 0 #553216;transform:scaleX(1);animation:elgtCoinLand .72s ease-out}
+.elgt-falling-coin{top:8px!important;width:66px!important;height:66px!important;background:radial-gradient(circle at 38% 34%,#d0a35d,#79501f 64%,#2c1808)!important;transform-style:preserve-3d;animation:elgtCoinIntoTube .72s cubic-bezier(.32,.03,.7,.58) forwards}
+.elgt-briefing article figure,.elgt-coordinates span img,.elgt-formula>img{perspective:900px;cursor:pointer}
+.elgt-briefing article figure:hover img,.elgt-briefing article figure:active img,.elgt-coordinates span:hover img,.elgt-formula:hover>img{animation:elgtMedalTurn 1.15s cubic-bezier(.3,.05,.2,1)}
+@keyframes elgtCoinIntoTube{0%{opacity:0;transform:translate(-50%,-72px) rotateY(0deg) rotateX(0deg)}12%{opacity:1}72%{opacity:1;transform:translate(-50%,165px) rotateY(700deg) rotateX(12deg)}100%{opacity:0;transform:translate(-50%,205px) rotateY(820deg) rotateX(78deg) scaleY(.22)}}
+@keyframes elgtCoinLand{0%,76%{opacity:0;transform:translateY(-8px) scaleX(.35)}84%{opacity:1;transform:translateY(0) scaleX(1.12)}100%{opacity:0;transform:translateY(0) scaleX(1)}}
+@keyframes elgtMedalTurn{0%{transform:rotateY(0)}45%{transform:rotateY(92deg) scale(.96)}100%{transform:rotateY(360deg)}}
+@media(max-width:760px){.elgt-vessel{width:138px;height:250px}}
+
+/* Cada franja es una moneda acostada; una decisión agrega aproximadamente una pieza. */
+.elgt-vessel{width:170px;height:390px}
+.elgt-vessel>i{left:12px;right:12px;bottom:14px;border-radius:0!important;background-image:radial-gradient(ellipse 74% 82% at 50% 44%,#c69a53 0 38%,#e0b76b 43%,#93602a 50%,#563316 62%,#281509 72%,transparent 75%)!important;background-color:transparent!important;background-repeat:repeat-y!important;background-position:center bottom!important;background-size:100% 42px!important;box-shadow:none!important;clip-path:none!important;filter:saturate(.7) drop-shadow(0 4px 3px rgba(0,0,0,.62))}
+@media(max-width:760px){.elgt-vessel{width:154px;height:330px}.elgt-vessel>i{background-size:100% 36px!important}}
+
+.elgt-reading-guide{display:none;padding:clamp(70px,9vw,120px) clamp(22px,7vw,100px);border-top:1px solid rgba(181,132,65,.2);background:#09040e;text-align:center}
+.elgt-calculator:has(.elgt-grade)+.elgt-reading-guide{display:block}
+.elgt-reading-guide>p{color:#c6539a;font-size:.64rem;letter-spacing:.22em;text-transform:uppercase}
+.elgt-reading-guide>h2{max-width:850px;margin:14px auto 40px;color:#a88968;font:500 clamp(2.5rem,5vw,4.8rem)/1 'Cormorant Garamond',serif}
+.elgt-reading-guide>div{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1100px;margin:auto}
+.elgt-reading-guide article{padding:30px;border:1px solid rgba(181,132,65,.24);border-radius:25px;background:rgba(25,10,29,.72);text-align:left}
+.elgt-reading-guide article>b{color:#c85b9d;font-size:.68rem;letter-spacing:.14em}
+.elgt-reading-guide article h3{margin:12px 0;color:#a98c6e;font:500 2rem 'Cormorant Garamond',serif}
+.elgt-reading-guide article p{color:#a89ca4;line-height:1.65}
+.elgt-reading-guide>small{display:block;max-width:850px;margin:28px auto 0;color:#776d75;line-height:1.6}
+@media(max-width:760px){.elgt-reading-guide>div{grid-template-columns:1fr}}
+
+.elgt-grade-reading{padding:20px 24px 110px;background:#09040e;text-align:center}
+.elgt-grade-reading>p:first-child{color:#c6539a;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase}
+.elgt-grade-reading h2{max-width:850px;margin:13px auto 8px;color:#b09273;font:500 clamp(2.8rem,6vw,5.4rem)/1 'Cormorant Garamond',serif}
+.elgt-grade-reading>b{display:block;margin:12px auto 25px;color:#ca5b9f;font-size:.76rem;letter-spacing:.18em}
+.elgt-grade-reading>p:not(:first-child){max-width:760px;margin:0 auto;color:#b2a5ad;font-size:1rem;line-height:1.75}
+.elgt-grade-reading blockquote{max-width:780px;margin:30px auto 0;padding:24px;border-left:1px solid #a17d55;color:#927f8d;font:italic 1.25rem/1.55 'Cormorant Garamond',serif}
+.elgt-grade-reading.conditioned h2,.elgt-grade-reading.restricted h2{color:#a97b68}
