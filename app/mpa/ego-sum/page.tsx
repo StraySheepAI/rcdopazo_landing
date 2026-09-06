@@ -82,6 +82,13 @@ export default function PrimerDestelloPage() {
           </section>
 
           <section className="ego-sum-sequence">
+            <Image
+              className="ego-sum-sequence-medal"
+              src="/mpa-coin-ego-sum-v3-antique.png"
+              alt="Medalla Ego SUM"
+              width={1254}
+              height={1254}
+            />
             <p className="ego-sum-overline">{tx("El movimiento del laboratorio", "The laboratory movement")}</p>
             <h2>Fragmentum · Amatur · Integratuum</h2>
             <div className="ego-sum-sequence-grid">

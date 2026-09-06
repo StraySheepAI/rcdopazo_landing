@@ -39,35 +39,38 @@ export default function MpaTransmutaPage() {
               <span className="sep">/</span>
               <span className="current">{t.nav.mpaTransmuta}</span>
             </nav>
-            <h1>{t.nav.mpaTransmuta}</h1>
+            <div className="transmuta-title-lockup">
+              <h1>{t.nav.mpaTransmuta}</h1>
+            </div>
           </div>
         </section>
 
         <section className="page-body transmuta-body">
           <div className="container">
-            <div className="transmuta-intro">
-              <div>
-                <p className="section-kicker">{t.mpa.transmutaKicker}</p>
-                <p className="transmuta-lead">{t.mpa.transmutaBody1}</p>
-                <p>{t.mpa.transmutaBody2}</p>
-                <p>{t.mpa.transmutaBody3}</p>
+            <div className="transmuta-presentation">
+              <div className="transmuta-intro">
+                <div>
+                  <p className="section-kicker">{t.mpa.transmutaKicker}</p>
+                  <p className="transmuta-lead">{t.mpa.transmutaBody1}</p>
+                  <p>{t.mpa.transmutaBody2}</p>
+                  <p>{t.mpa.transmutaBody3}</p>
+                </div>
               </div>
-              <Image src="/mpa-coin-transmuta.png" alt="Sello MPA Transmuta" width={1024} height={1024} priority />
+
+              <section className="transmuta-mantra" aria-labelledby="transmuta-mantra-title">
+                <Image className="transmuta-mantra-seal" src="/mpa-coin-transmuta.png" alt="Sello MPA Transmuta" width={1024} height={1024} priority />
+                <p className="transmuta-mantra-source">{mantra.source}</p>
+                <h2 id="transmuta-mantra-title" lang="he" dir="rtl">עִמְּךָ־אָנִי</h2>
+                <p className="transmuta-mantra-translation">{mantra.translation}</p>
+                <div className="transmuta-mantra-turn">
+                  <p>{mantra.premise}</p>
+                  <strong>{mantra.question}</strong>
+                  <Link href="/mpa/ego-sum">{mantra.cta} <span aria-hidden="true">→</span></Link>
+                </div>
+              </section>
             </div>
 
-            <section className="transmuta-mantra" aria-labelledby="transmuta-mantra-title">
-              <p className="transmuta-mantra-source">{mantra.source}</p>
-              <h2 id="transmuta-mantra-title" lang="he" dir="rtl">עִמְּךָ־אָנִי</h2>
-              <p className="transmuta-mantra-translation">{mantra.translation}</p>
-              <div className="transmuta-mantra-turn">
-                <p>{mantra.premise}</p>
-                <strong>{mantra.question}</strong>
-                <Link href="/mpa/ego-sum">{mantra.cta} <span aria-hidden="true">→</span></Link>
-              </div>
-            </section>
-
             <section className="transmuta-elgt-entry">
-              <p className="section-kicker">{locale === "es" ? "Laboratorio de experiencia" : "Experience laboratory"}</p>
               <h2>E ↔ L → G → T</h2>
               <p>{locale === "es" ? "No te pregunta cómo creés que funcionás. Te propone nueve escenas y observa qué configuración aparece en tus decisiones." : "It does not ask how you think you operate. It presents nine scenes and observes which configuration emerges through your decisions."}</p>
               <Link href="/mpa/transmuta/elgt">{locale === "es" ? "Probar el simulador" : "Try the simulator"} <span>→</span></Link>

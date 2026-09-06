@@ -9,7 +9,7 @@ const seals = [
   { src: "/mpa-coin-lude.png", label: "Lude" },
   { src: "/mpa-coin-transmuta.png", label: "Transmuta", href: "/mpa/transmuta" },
   { src: "/mpa-coin-ego-sum-v3-antique.png", label: "Ego SUM", href: "/mpa/ego-sum" },
-  { src: "/mpa-coin-stray-sheep-v1.png", label: "Stray Sheep" },
+  { src: "/mpa-coin-stray-sheep-v1.png", label: "Stray Sheep", href: "/stray-sheep/universo" },
 ];
 
 export default function MpaPortalPage() {
