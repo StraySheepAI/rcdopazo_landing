@@ -67,77 +67,113 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .col-card:nth-child(3){animation-delay:.3s}
 .col-card:nth-child(4){animation-delay:.4s}
 @media(max-width:600px){.col-grid{grid-template-columns:1fr}}
+
+/* Casa Editorial MPA */
+body{background:#090312}
+.editorial-shell{position:relative;z-index:1;min-height:100vh;width:100%;overflow:hidden}
+.editorial-nav{height:76px;padding:0 clamp(1.2rem,5vw,5rem);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(150,123,69,.32);background:rgba(9,3,18,.82);backdrop-filter:blur(18px);position:relative;z-index:5}
+.editorial-nav a,.editorial-nav span{font-family:'Cinzel',serif;color:var(--gold);text-decoration:none;letter-spacing:.2em;text-transform:uppercase;font-size:.68rem}
+.editorial-nav strong{font-family:'Cinzel Decorative',serif;font-size:.85rem;letter-spacing:.16em;color:var(--gold)}
+.editorial-stage{min-height:calc(100vh - 76px);padding:clamp(3rem,7vw,7rem) clamp(1.2rem,6vw,7rem) 4rem;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(330px,.95fr);align-items:center;gap:clamp(2rem,5vw,6rem);position:relative}
+.editorial-stage::before{content:'';position:absolute;inset:7% 4%;border:1px solid rgba(150,123,69,.12);border-radius:48% 48% 20px 20px;box-shadow:inset 0 0 100px rgba(150,123,69,.05),0 0 80px rgba(100,20,110,.08);pointer-events:none}
+.stage-copy{position:relative;z-index:2;max-width:760px}
+.stage-eyebrow{font-family:'Cinzel',serif;color:#d863a7;letter-spacing:.42em;text-transform:uppercase;font-size:clamp(.6rem,1vw,.78rem);margin-bottom:1.3rem}
+.stage-title{font-family:'Cinzel Decorative',serif;font-size:clamp(2.8rem,6vw,6.5rem);line-height:.94;letter-spacing:-.04em;margin:0 0 1.5rem;background:linear-gradient(105deg,#594726 0%,#967B45 26%,#d2c298 48%,#967B45 68%,#594726 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 22px rgba(150,123,69,.2));animation:metalSweep 8s ease-in-out infinite}
+.stage-lead{font-family:Georgia,serif;font-size:clamp(1.15rem,2vw,1.65rem);font-style:italic;line-height:1.55;color:rgba(232,224,208,.9);max-width:680px}
+.stage-rule{width:110px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:1.8rem 0}
+.stage-path{font-family:'Cinzel',serif;color:var(--gold);font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;opacity:.85}
+.featured-vault{position:relative;z-index:2;min-height:520px;display:grid;place-items:center}
+.featured-vault::before,.featured-vault::after{content:'';position:absolute;border-radius:50%;border:1px solid rgba(150,123,69,.28);inset:5%}
+.featured-vault::after{inset:15%;border-color:rgba(216,99,167,.22);box-shadow:0 0 70px rgba(216,99,167,.12),inset 0 0 70px rgba(150,123,69,.08);animation:haloPulse 5s ease-in-out infinite}
+.featured-medal{width:min(75%,420px);aspect-ratio:1;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 22px 38px rgba(0,0,0,.7)) drop-shadow(0 0 25px rgba(150,123,69,.2));animation:medalFloat 6s ease-in-out infinite}
+.featured-badge{position:absolute;z-index:3;bottom:5%;left:50%;transform:translateX(-50%);width:min(88%,430px);padding:1.2rem 1.5rem;text-align:center;border:1px solid rgba(150,123,69,.65);border-radius:999px;background:linear-gradient(145deg,rgba(42,18,40,.97),rgba(12,5,20,.96));box-shadow:inset 0 1px rgba(255,255,255,.06),0 14px 40px rgba(0,0,0,.55)}
+.featured-badge span{display:block;font-family:'Cinzel',serif;color:#d863a7;font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.35rem}
+.featured-badge strong{font-family:'Cinzel Decorative',serif;color:var(--gold);font-size:clamp(.78rem,1.3vw,1rem);letter-spacing:.08em}
+.house-main{position:relative;z-index:2;padding:clamp(4rem,7vw,7rem) clamp(1.2rem,6vw,7rem);border-top:1px solid rgba(150,123,69,.25);background:linear-gradient(180deg,rgba(31,11,39,.42),rgba(9,3,18,.9))}
+.section-kicker{text-align:center;color:#d863a7;font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.42em;text-transform:uppercase}
+.section-title{text-align:center;font-family:'Cinzel Decorative',serif;color:var(--gold);font-size:clamp(2rem,4vw,4rem);margin:.8rem 0 1rem}
+.section-intro{text-align:center;color:var(--text-dim);font-family:Georgia,serif;font-style:italic;font-size:1.08rem;line-height:1.65;max-width:720px;margin:0 auto 3.5rem}
+.feature-table{max-width:1240px;margin:0 auto 5rem;display:grid;grid-template-columns:minmax(280px,.78fr) minmax(0,1.22fr);border:1px solid rgba(150,123,69,.42);border-radius:28px;overflow:hidden;background:linear-gradient(135deg,rgba(44,18,43,.93),rgba(13,5,23,.96));box-shadow:0 35px 90px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.05)}
+.feature-art{position:relative;min-height:440px;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,rgba(216,99,167,.15),transparent 55%)}
+.feature-art img{width:min(92%,500px);max-height:430px;object-fit:contain;filter:drop-shadow(0 20px 30px rgba(0,0,0,.55))}
+.feature-copy{padding:clamp(2rem,5vw,5rem);display:flex;flex-direction:column;justify-content:center;border-left:1px solid rgba(150,123,69,.25)}
+.feature-copy small{font-family:'Cinzel',serif;color:#d863a7;letter-spacing:.3em;text-transform:uppercase}
+.feature-copy h3{font-family:'Cinzel Decorative',serif;color:var(--gold);font-size:clamp(1.8rem,3vw,3.2rem);margin:.8rem 0 1rem}
+.feature-copy p{color:rgba(232,224,208,.72);line-height:1.8;max-width:620px}
+.feature-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.8rem}
+.house-button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.8rem 1.3rem;border:1px solid rgba(150,123,69,.7);border-radius:999px;font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.18em;text-decoration:none;text-transform:uppercase;color:var(--gold);background:linear-gradient(145deg,rgba(54,27,48,.9),rgba(15,6,24,.96));box-shadow:inset 0 1px rgba(255,255,255,.06),0 8px 22px rgba(0,0,0,.35);transition:.3s ease}
+.house-button:hover{transform:translateY(-3px);box-shadow:inset 0 1px rgba(255,255,255,.09),0 12px 30px rgba(150,123,69,.2);border-color:var(--gold)}
+.house-button.primary{background:linear-gradient(135deg,#5e4a28,#967B45 45%,#5e4a28);color:#100717;border-color:#b9a06a;font-weight:700}
+.room-grid{max-width:1240px;margin:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem}
+.room{position:relative;min-height:430px;padding:2rem 1.5rem;display:flex;flex-direction:column;align-items:center;text-align:center;border:1px solid rgba(150,123,69,.33);border-radius:220px 220px 24px 24px;background:linear-gradient(180deg,rgba(57,23,56,.62),rgba(12,5,20,.95) 75%);overflow:hidden;box-shadow:inset 0 0 60px rgba(150,123,69,.04),0 18px 44px rgba(0,0,0,.3)}
+.room::before{content:'';position:absolute;inset:12px;border:1px solid rgba(150,123,69,.11);border-radius:inherit;pointer-events:none}
+.room img{width:190px;height:190px;object-fit:contain;filter:drop-shadow(0 14px 25px rgba(0,0,0,.55));transition:.4s ease}
+.room:hover img{transform:translateY(-6px) scale(1.04)}
+.room h3{font-family:'Cinzel Decorative',serif;color:var(--gold);font-size:1.12rem;margin:.4rem 0 .7rem}
+.room p{font-size:.84rem;line-height:1.65;color:var(--text-dim);max-width:270px}
+.room-status{margin-top:auto;padding-top:1.4rem;font-family:'Cinzel',serif;color:var(--gold);font-size:.58rem;letter-spacing:.19em;text-transform:uppercase;opacity:.72}
+.process{max-width:1100px;margin:6rem auto 1rem;padding-top:4rem;border-top:1px solid rgba(150,123,69,.22)}
+.process-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:2rem;background:rgba(150,123,69,.25);border:1px solid rgba(150,123,69,.25);border-radius:20px;overflow:hidden}
+.process-step{padding:1.5rem 1rem;text-align:center;background:#13091d;color:rgba(232,224,208,.7);font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.13em;text-transform:uppercase}
+.process-step b{display:block;color:var(--gold);font-size:1rem;margin-bottom:.45rem}
+@keyframes metalSweep{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
+@keyframes medalFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+@keyframes haloPulse{0%,100%{opacity:.5;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
+@media(max-width:900px){.editorial-stage{grid-template-columns:1fr;text-align:center;padding-top:4rem}.stage-copy{margin:auto}.stage-rule{margin:1.8rem auto}.featured-vault{min-height:430px}.feature-table{grid-template-columns:1fr}.feature-art{min-height:320px}.feature-copy{border-left:0;border-top:1px solid rgba(150,123,69,.25);text-align:center}.feature-actions{justify-content:center}.room-grid{grid-template-columns:1fr}.room{min-height:370px;max-width:560px;width:100%;margin:auto;border-radius:220px 220px 24px 24px}.process-flow{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.editorial-nav{height:64px}.editorial-nav strong{font-size:.68rem}.editorial-nav span{display:none}.editorial-stage{min-height:auto;padding-top:3rem}.featured-vault{min-height:350px}.featured-medal{width:82%}.featured-badge{bottom:0}.house-main{padding-top:3.5rem}.process-flow{grid-template-columns:1fr}.stage-path{line-height:1.8}.feature-actions{flex-direction:column}.house-button{width:100%}}
+@media(prefers-reduced-motion:reduce){.stage-title,.featured-medal,.featured-vault::after{animation:none}}
 </style>
 </head>
 <body>
-<div class="hero">
-  <div class="hero-eyebrow">Magia para Atrevidos</div>
-  <h1 class="hero-title">MPA Publishing House</h1>
-  <div class="hero-sep"></div>
-  <p class="hero-sub">Ideas, historias y experiencias editoriales para explorar el universo de las formas y su transmutación.</p>
-  <div class="hero-mantra">Evigila · Lude · Transmuta</div>
-</div>
-<div class="colecciones">
-  <div class="colecciones-title">Colecciones</div>
-  <div class="col-grid">
-    <div class="col-card stray" onclick="window.open('/mpa/publishing-house/stray-sheep-collection','_top')" style="cursor:pointer">
-      <div class="col-inner">
-        <img class="col-medal" src="/imported-assets/stray-medal.png" onerror="this.style.opacity='0.3'" alt="Stray Sheep"/>
-        <div>
-          <div class="col-name">Stray Sheep</div>
-          <div class="col-ordo">Aurum Roseum · MPA 2026</div>
-        </div>
-        <div class="col-sep"></div>
-        <p class="col-desc">Narrativa breve, gráfica y de estilo directo. Textos que despiertan. Lecturas que no se olvidan.</p>
-        <div class="col-tipo">Narrativa · Reflexión</div>
-        <div class="col-soon">Primer título · Mayo 2026</div>
-        <a href="/mpa/publishing-house/stray-sheep-collection" target="_top" style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.2em;color:#b07050;border:1px solid rgba(196,132,90,0.4);border-radius:20px;padding:.3rem .9rem;margin-top:.3rem;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block">VER COLECCIÓN →</a>
-      </div>
+<div class="editorial-shell">
+  <nav class="editorial-nav"><a href="/mpa" target="_top">← MPA</a><strong>Casa Editorial</strong><span>Evigila · Lude · Transmuta</span></nav>
+  <header class="editorial-stage">
+    <div class="stage-copy">
+      <div class="stage-eyebrow">Magia para Atrevidos presenta</div>
+      <h1 class="stage-title">MPA<br/>Publishing House</h1>
+      <p class="stage-lead">Las ideas también atraviesan estados antes de convertirse en obra.</p>
+      <div class="stage-rule"></div>
+      <div class="stage-path">Fragmento · Manuscrito · Laboratorio · Publicación</div>
     </div>
-    <div class="col-card evigila">
-      <div class="col-inner">
-        <img class="col-medal" src="/imported-assets/evigila-logo.png" alt="Evigila"/>
-        <div>
-          <div class="col-name">Evigila</div>
-          <div class="col-ordo">Aurum · MPA</div>
-        </div>
-        <div class="col-sep"></div>
-        <p class="col-desc">Narrativa y desarrollo personal con enfoque literario. Cuentos de transformación y contenido simbólico.</p>
-        <div class="col-tipo">Narrativa · Simbólico</div>
-        <div class="col-soon">Próximamente</div>
-      </div>
+    <div class="featured-vault" aria-label="Colección destacada Stray Sheep">
+      <img class="featured-medal" src="/imported-assets/stray-medal.png" alt="Medalla de la colección Stray Sheep"/>
+      <div class="featured-badge"><span>Primera sala abierta</span><strong>Colección Stray Sheep</strong></div>
     </div>
-    <div class="col-card transmuta">
-      <div class="col-inner">
-        <img class="col-medal" src="/imported-assets/transmuta-collection.png" alt="Transmuta"/>
-        <div>
-          <div class="col-name">Transmuta</div>
-          <div class="col-ordo">Argentum · MPA</div>
+  </header>
+
+  <main class="house-main">
+    <div class="section-kicker">Mesa de novedades</div>
+    <h2 class="section-title">Primera obra publicada</h2>
+    <p class="section-intro">Entrá a la primera colección publicada de la casa. Conocé la obra, su universo y los personajes que ya forman parte del mundo de Stray.</p>
+    <section class="feature-table">
+      <div class="feature-art"><img src="/imported-assets/stray-hero.png" alt="Universo narrativo de Stray Sheep"/></div>
+      <div class="feature-copy">
+        <small>Obra publicada · Aurum Roseum · MPA 2026</small>
+        <h3>Stray Sheep</h3>
+        <p>Narrativa ilustrada, personajes que acompañan lo que duele y relatos que vuelven visible aquello que suele quedar solo. Una colección para leer, explorar y habitar.</p>
+        <div class="feature-actions">
+          <a class="house-button primary" href="/mpa/publishing-house/stray-sheep-collection" target="_top">Explorar la colección</a>
+          <a class="house-button" href="/stray-sheep" target="_top">Conocer a Stray</a>
+          <a class="house-button" href="/mpa/publishing-house/stray-sheep-collection/reserva" target="_top">Reservar</a>
         </div>
-        <div class="col-sep"></div>
-        <p class="col-desc">Línea ensayística y conceptual. Ensayos breves, análisis y obras vinculadas a procesos de cambio.</p>
-        <div class="col-tipo">Ensayo · Conceptual</div>
-        <div class="col-soon">Próximamente</div>
       </div>
-    </div>
-    <div class="col-card lude">
-      <div class="col-inner">
-        <img class="col-medal" src="/imported-assets/lude-collection.png" alt="Lude"/>
-        <div>
-          <div class="col-name">Lude</div>
-          <div class="col-ordo">Aes · MPA</div>
-        </div>
-        <div class="col-sep"></div>
-        <p class="col-desc">Línea lúdica y participativa. Juegos editoriales, publicaciones interactivas y dinámicas reflexivas.</p>
-        <div class="col-tipo">Lúdico · Interactivo</div>
-        <div class="col-soon">Próximamente</div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="footer-editorial">
-  <div class="footer-mantra">Evigila · Lude · Transmuta</div>
-  <div class="footer-copy">MPA Publishing House · R.C. Dopazo · 2026</div>
+    </section>
+
+    <div class="section-kicker">Las alas de la casa</div>
+    <h2 class="section-title">Salas editoriales</h2>
+    <p class="section-intro">Cada colección mira desde una fuerza diferente. Algunas puertas ya se abrieron; otras están preparando lo que todavía no puede mostrarse.</p>
+    <section class="room-grid">
+      <article class="room"><img src="/imported-assets/evigila-logo.png" alt="Emblema Evigila"/><h3>Evigila</h3><p>Relatos y obras para observar configuraciones, reconocer relaciones y distinguir lo que antes pasaba inadvertido.</p><div class="room-status">Sala en preparación</div></article>
+      <article class="room"><img src="/imported-assets/lude-collection.png" alt="Emblema Lude"/><h3>Lude</h3><p>Libros-juego, experiencias participativas y dispositivos editoriales que permiten comprender mientras se juega.</p><div class="room-status">Sala en preparación</div></article>
+      <article class="room"><img src="/imported-assets/transmuta-collection.png" alt="Emblema Transmuta"/><h3>Transmuta</h3><p>Ensayos, mapas conceptuales y obras para intervenir una forma y ensayar configuraciones nuevas.</p><div class="room-status">Sala en preparación</div></article>
+    </section>
+
+    <section class="process">
+      <div class="section-kicker">El recorrido de una obra</div>
+      <div class="process-flow"><div class="process-step"><b>01</b>Fragmento</div><div class="process-step"><b>02</b>Manuscrito</div><div class="process-step"><b>03</b>Laboratorio editorial</div><div class="process-step"><b>04</b>Obra publicada</div></div>
+    </section>
+  </main>
+  <footer class="footer-editorial"><div class="footer-mantra">Evigila · Lude · Transmuta</div><div class="footer-copy">MPA Publishing House · R.C. Dopazo · 2026</div></footer>
 </div>
 <canvas id="universe"></canvas>
 <style>#universe{position:fixed;inset:0;z-index:0;pointer-events:none}</style>
