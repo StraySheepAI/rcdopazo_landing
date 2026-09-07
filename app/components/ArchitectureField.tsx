@@ -181,7 +181,7 @@ export function ArchitectureField() {
         );
       }
       const halo = ctx!.createRadialGradient(cx, cy, 0, cx, cy, R * 1.35);
-      halo.addColorStop(0, "rgba(232,187,102,.11)");
+      halo.addColorStop(0, "rgba(150,123,69,.11)");
       halo.addColorStop(0.52, "rgba(194,67,152,.05)");
       halo.addColorStop(1, "rgba(80,44,160,0)");
       ctx!.fillStyle = halo;
@@ -193,7 +193,7 @@ export function ArchitectureField() {
         ctx!.translate(cx, cy);
         ctx!.globalAlpha = 0.92;
         ctx!.shadowBlur = 30;
-        ctx!.shadowColor = "rgba(224,166,70,.32)";
+        ctx!.shadowColor = "rgba(150,123,69,.32)";
         ctx!.drawImage(logo!, -R * pulse, -R * pulse, R * 2 * pulse, R * 2 * pulse);
         ctx!.restore();
       }

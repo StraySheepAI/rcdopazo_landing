@@ -111,7 +111,7 @@ export default function MpaTransmutaPage() {
                   <div className="transmuta-school-path">{mantra.passages.map((item, index) => <span key={item}>{index > 0 && <i>→</i>}{item}</span>)}</div>
                   <div className="transmuta-formation-entry">
                     <Image src="/pulsus-fractum-shield.png" alt="" width={280} height={420} />
-                    <div><b>{t.mpa.pulsusTitle}</b><p>{t.mpa.pulsusBody}</p><Link href="/mpa/transmuta/pulsus-fractum">{t.mpa.pulsusCta} <span aria-hidden="true">→</span></Link></div>
+                    <div><b>{t.mpa.pulsusTitle}</b><p>{t.mpa.pulsusBody}</p><Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">{t.mpa.pulsusCta} <span aria-hidden="true">→</span></Link></div>
                   </div>
                 </article>
               </div>

@@ -120,7 +120,7 @@ export default function PrimerDestelloPage() {
             <div>
               <button type="button" onClick={() => setStep(1)}>{tx("Iniciar el Destello", "Begin the Flash")} <b>→</b></button>
               <Link href="/reto">{tx("Cruzar el umbral", "Cross the threshold")} <b>✦</b></Link>
-              <Link className="secondary" href="/mpa/transmuta/pulsus-fractum">{tx("Conocer Pulsus Fractum", "Discover Pulsus Fractum")}</Link>
+              <Link className="secondary" href="/mpa/transmuta/pulsus-fractum?entry=mpa">{tx("Conocer Pulsus Fractum", "Discover Pulsus Fractum")}</Link>
             </div>
           </section>
         </div>

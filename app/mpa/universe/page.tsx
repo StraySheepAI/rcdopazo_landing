@@ -76,7 +76,7 @@ export default function MpaUniversePage() {
       window.localStorage.setItem("mpa-campus-level", "general");
       setMessage("accepted");
       setMessageText("Territorio reconocido. El Campus común se abre.");
-      window.setTimeout(() => window.location.assign("/mpa/transmuta/pulsus-fractum#campus"), 900);
+      window.setTimeout(() => window.location.assign("/mpa/transmuta/pulsus-fractum?entry=mpa#campus"), 900);
       return;
     }
 
@@ -90,7 +90,7 @@ export default function MpaUniversePage() {
       window.localStorage.setItem("mpa-campus-level", `ordo:${second}`);
       setMessage("accepted");
       setMessageText(`Ordo ${second.toUpperCase()} reconocido.`);
-      window.setTimeout(() => window.location.assign("/mpa/transmuta/pulsus-fractum#campus"), 900);
+      window.setTimeout(() => window.location.assign("/mpa/transmuta/pulsus-fractum?entry=mpa#campus"), 900);
       return;
     }
 
@@ -104,7 +104,7 @@ export default function MpaUniversePage() {
     window.localStorage.setItem("mpa-campus-level", `course:${second}:${normalizedId}`);
     setMessage("accepted");
     setMessageText(`Tríada completa. ${second.toUpperCase()} ${normalizedId} reconocido.`);
-    window.setTimeout(() => window.location.assign("/mpa/transmuta/pulsus-fractum#campus"), 900);
+    window.setTimeout(() => window.location.assign("/mpa/transmuta/pulsus-fractum?entry=mpa#campus"), 900);
   }
 
   return (

@@ -68,7 +68,7 @@ export default function MpaPortalPage() {
         <button className="mpa-universe-menu-close" type="button" onClick={() => setMenuOpen(false)} aria-label="Cerrar menú">×</button>
         <p className="mpa-universe-menu-kicker">Territorios del Universo</p>
         <h2>Transmuta</h2>
-        <Link className="mpa-universe-school-entry" href="/mpa/transmuta/pulsus-fractum" onClick={() => setMenuOpen(false)}>
+        <Link className="mpa-universe-school-entry" href="/mpa/transmuta/pulsus-fractum?entry=mpa" onClick={() => setMenuOpen(false)}>
           <Image src="/pulsus-fractum-shield.png" alt="" width={180} height={220} />
           <span>
             <small>Escuela de Metalkimia</small>
@@ -139,7 +139,7 @@ export default function MpaPortalPage() {
           <span className="mpa-cosmos-rise mpa-rise-14">○</span>
           {Array.from({ length: 72 }, (_, index) => {
             const glyphs = ["◇", "✦", "△", "◌", "◆", "□", "♠", "◉"];
-            const colors = ["rgba(211,166,87,.64)", "rgba(215,73,166,.59)", "rgba(157,101,220,.61)"];
+            const colors = ["rgba(150,123,69,.64)", "rgba(215,73,166,.59)", "rgba(157,101,220,.61)"];
             return (
               <span
                 className="mpa-cosmos-rise mpa-cosmos-rise-extra"

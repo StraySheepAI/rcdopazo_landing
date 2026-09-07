@@ -6,16 +6,41 @@ import { useEffect, useState } from "react";
 
 export default function PulsusFractumPage() {
   const [hash, setHash] = useState("");
-  const [view, setView] = useState<"arrival" | "agora" | "atlas">("arrival");
+  const [view, setView] = useState<"arrival" | "agora" | "access" | "atlas">("arrival");
   const [ludusOpen, setLudusOpen] = useState(false);
   const [place, setPlace] = useState<"orientation" | "fundamentos" | "custos" | "reconfigura" | "arquitectos" | null>(null);
+  const [accessCode, setAccessCode] = useState("");
+  const [accessError, setAccessError] = useState("");
+  const [mpaEntry, setMpaEntry] = useState(false);
 
   useEffect(() => {
     const syncHash = () => setHash(window.location.hash);
+    const params = new URLSearchParams(window.location.search);
+    setMpaEntry(params.get("entry") === "mpa" || document.referrer.includes("/mpa/"));
     syncHash();
     window.addEventListener("hashchange", syncHash);
     return () => window.removeEventListener("hashchange", syncHash);
   }, []);
+
+  const requestCampusAccess = () => {
+    if (window.sessionStorage.getItem("pulsus-campus-access") === "open") setView("atlas");
+    else setView("access");
+  };
+
+  const unlockCampus = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const bytes = new TextEncoder().encode(accessCode.trim().toUpperCase());
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    const hashValue = Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
+    if (hashValue === "8af20e022f7ff3850831ae6f8757cb9b11d83aee2da9fb7b0ec39ccfde994666") {
+      window.sessionStorage.setItem("pulsus-campus-access", "open");
+      setAccessError("");
+      setAccessCode("");
+      setView("atlas");
+    } else {
+      setAccessError("La Escuela todavía no reconoce esa palabra.");
+    }
+  };
 
   if (view === "arrival") return (
     <main className="school-visitor">
@@ -23,31 +48,26 @@ export default function PulsusFractumPage() {
       <header className="school-visitor-header">
         <Link href="/">← R.C. Dopazo</Link>
         <span>Escuela de Metalkimia</span>
-        <button type="button" onClick={() => setView("atlas")}>Ya estoy cursando</button>
+        <button type="button" onClick={requestCampusAccess}>Ya estoy cursando</button>
       </header>
 
       <section className="school-campus-arrival">
         <div className="school-campus-copy">
-          <p>Campus MPA · Visita abierta</p>
-          <h1>No hace falta saber<br />qué camino elegir.</h1>
-          <span>Entrá, recorré el Ágora y descubrí qué forma de aprender multiplica tu camino.</span>
+          <p>Escuela de Metalquimia · Campus Pulsus Fractum</p>
+          <h1>Conocé la Escuela<br />Pulsus Fractum.</h1>
+          <span>Una escuela para aprender a distinguir configuraciones, ampliar agencia y transformar experiencia en práctica.</span>
           <div>
-            <button type="button" onClick={() => setView("agora")}>Recorrer el Ágora</button>
-            <a href="#vigilia-abierta">Vivir una experiencia abierta ↓</a>
+            <button type="button" onClick={() => setView("agora")}>Visitar el Ágora</button>
+            {mpaEntry ? <button className="school-campus-access-button" type="button" onClick={requestCampusAccess}>Acceso de cursantes</button> : <a href="#vigilia-abierta">Conocer la primera experiencia ↓</a>}
           </div>
         </div>
 
-        <div className="school-campus-scene" aria-label="Mapa vivo del Campus MPA">
-          <i className="school-campus-path path-one" aria-hidden="true" />
-          <i className="school-campus-path path-two" aria-hidden="true" />
-          <i className="school-campus-path path-three" aria-hidden="true" />
-          <button className="school-building school-building-agora" type="button" onClick={() => setView("agora")}>
-            <Image src="/pulsus-fractum-shield-v6-warm.png" alt="" width={260} height={320} />
-            <small>Todos comienzan aquí</small><strong>Ágora Pulsus</strong><em>Entrar</em>
+        <div className="school-arrival-portrait">
+          <button type="button" onClick={() => setView("agora")} aria-label="Entrar al Ágora">
+            <Image src="/pulsus-agora-interior-v1.png" alt="Interior del Ágora de la Escuela de Metalquimia" width={1680} height={945} priority />
+            <span><small>Una mirada al interior</small><b>Ágora Pulsus</b><em>Atravesar la imagen →</em></span>
           </button>
-          <button className="school-building school-building-custos" type="button" onClick={() => setView("agora")}><b>◐</b><strong>Casa de Custos</strong><small>Observar · delimitar</small></button>
-          <button className="school-building school-building-reconfigura" type="button" onClick={() => setView("agora")}><b>↯</b><strong>Casa de Reconfiguradores</strong><small>Intervenir · transformar</small></button>
-          <button className="school-building school-building-architectus" type="button" onClick={() => setView("agora")}><b>△</b><strong>Casa de Arquitectos</strong><small>Diseñar · integrar</small></button>
+          {mpaEntry && <div className="school-arrival-resources"><a href="/mapa-inicial-pulsus-fractum.svg" download>↓ Descargar mapa inicial</a><button type="button" onClick={() => { setView("agora"); setLudusOpen(true); }}>Abrir Vigilia I</button></div>}
         </div>
       </section>
 
@@ -72,7 +92,7 @@ export default function PulsusFractumPage() {
       <header className="school-visitor-header">
         <button type="button" onClick={() => setView("arrival")}>← Entrada del Campus</button>
         <span>Ágora Pulsus</span>
-        <button type="button" onClick={() => { setHash("#campus"); setView("atlas"); }}>Abrir mapa</button>
+        <button type="button" onClick={() => { setHash("#campus"); requestCampusAccess(); }}>Abrir mapa</button>
       </header>
 
       <section className="school-agora-place">
@@ -109,14 +129,32 @@ export default function PulsusFractumPage() {
           <div className="school-place-overlay" role="dialog" aria-modal="true" aria-label="Información del espacio">
             <article>
               <button className="school-place-close" type="button" onClick={() => setPlace(null)} aria-label="Cerrar">×</button>
-              {place === "orientation" && <><p>Cartelera viva · acceso académico</p><h2>Elegí cómo entrar</h2><span className="school-place-lead">La magia del campus y la estructura de una escuela, juntas. Acá podés descubrir la propuesta, comenzar gratis o continuar tu recorrido.</span><div className="school-course-grid"><button onClick={() => { setPlace(null); setLudusOpen(true); }}><small>Abierto · gratuito</small><b>Vigilia I</b><em>1 experiencia</em><span>Comenzar ahora →</span></button><button onClick={() => setPlace("fundamentos")}><small>Programa inicial</small><b>Fundamentos</b><em>10 fundamentos</em><span>Ver programa →</span></button><button onClick={() => setPlace("custos")}><small>Pasaje formativo</small><b>Custos</b><em>Acceso por inscripción</em><span>Conocer recorrido →</span></button><button onClick={() => setPlace("reconfigura")}><small>Pasaje formativo</small><b>Reconfiguración</b><em>Acceso por inscripción</em><span>Conocer recorrido →</span></button></div><div className="school-student-entry"><div><b>¿Ya estás cursando?</b><span>Entrá a tus clases, materiales y bitácora.</span></div><button onClick={() => setView("atlas")}>Abrir mi espacio →</button></div></>}
+              {place === "orientation" && <><p>Cartelera viva · acceso académico</p><h2>Elegí cómo entrar</h2><span className="school-place-lead">La magia del campus y la estructura de una escuela, juntas. Acá podés descubrir la propuesta, comenzar gratis o continuar tu recorrido.</span><div className="school-course-grid"><button onClick={() => { setPlace(null); setLudusOpen(true); }}><small>Abierto · gratuito</small><b>Vigilia I</b><em>1 experiencia</em><span>Comenzar ahora →</span></button><button onClick={() => setPlace("fundamentos")}><small>Programa inicial</small><b>Fundamentos</b><em>10 fundamentos</em><span>Ver programa →</span></button><button onClick={() => setPlace("custos")}><small>Pasaje formativo</small><b>Custos</b><em>Acceso por inscripción</em><span>Conocer recorrido →</span></button><button onClick={() => setPlace("reconfigura")}><small>Pasaje formativo</small><b>Reconfiguración</b><em>Acceso por inscripción</em><span>Conocer recorrido →</span></button></div><div className="school-student-entry"><div><b>¿Ya estás cursando?</b><span>Entrá a tus clases, materiales y bitácora.</span></div><button onClick={requestCampusAccess}>Abrir mi espacio →</button></div></>}
               {place === "fundamentos" && <><p>Biblioteca común · orientación</p><h2>Fundamentos de Metalquimia</h2><span>Diez fundamentos para distinguir cambio, función, vigilia, agencia y reconfiguración. Podés conocer el índice antes de iniciar un Pasaje.</span><div className="school-depth"><b>Visitante</b><i>Vista general disponible</i><b>Iniciado</b><i>Clases, prácticas y bitácora</i></div><button className="school-place-primary" onClick={() => setLudusOpen(true)}>Comenzar por Vigilia I →</button></>}
-              {place === "custos" && <><p>Casa · Pasaje de observación</p><h2>Custos</h2><span>Aprender a distinguir qué ocurre, qué corresponde y dónde termina cada dominio antes de intervenir.</span><div className="school-depth"><b>Visitante</b><i>Podés conocer su propósito</i><b>En Pasaje</b><i>Prácticas y aulas disponibles</i></div><button className="school-place-primary" onClick={() => setView("atlas")}>Ya curso: abrir mi acceso →</button></>}
-              {place === "reconfigura" && <><p>Casa · Pasaje de intervención</p><h2>Reconfiguradores</h2><span>Explorar configuraciones, alternativas y movimientos capaces de producir otra forma posible.</span><div className="school-depth"><b>Visitante</b><i>El umbral puede recorrerse</i><b>En Pasaje</b><i>Laboratorios y materiales</i></div><button className="school-place-primary" onClick={() => setView("atlas")}>Ya curso: abrir mi acceso →</button></>}
+              {place === "custos" && <><p>Casa · Pasaje de observación</p><h2>Custos</h2><span>Aprender a distinguir qué ocurre, qué corresponde y dónde termina cada dominio antes de intervenir.</span><div className="school-depth"><b>Visitante</b><i>Podés conocer su propósito</i><b>En Pasaje</b><i>Prácticas y aulas disponibles</i></div><button className="school-place-primary" onClick={requestCampusAccess}>Ya curso: abrir mi acceso →</button></>}
+              {place === "reconfigura" && <><p>Casa · Pasaje de intervención</p><h2>Reconfiguradores</h2><span>Explorar configuraciones, alternativas y movimientos capaces de producir otra forma posible.</span><div className="school-depth"><b>Visitante</b><i>El umbral puede recorrerse</i><b>En Pasaje</b><i>Laboratorios y materiales</i></div><button className="school-place-primary" onClick={requestCampusAccess}>Ya curso: abrir mi acceso →</button></>}
               {place === "arquitectos" && <><p>Pasaje de integración</p><h2>Casa de Arquitectos</h2><span>No está cerrada por jerarquía: se revela cuando la experiencia en Custos y Reconfiguración permite integrar sistemas completos.</span><div className="school-seal-lock">△ <b>Profundidad requerida</b></div><button className="school-place-primary" onClick={() => setPlace("orientation")}>Volver a la orientación →</button></>}
             </article>
           </div>
         )}
+      </section>
+    </main>
+  );
+
+  if (view === "access") return (
+    <main className="school-access-gate">
+      <div className="school-visitor-stars" aria-hidden="true" />
+      <button className="school-access-back" type="button" onClick={() => setView("agora")}>← Volver al Ágora</button>
+      <section>
+        <div className="school-access-seal" aria-hidden="true"><i>PF</i></div>
+        <p>Umbral de cursantes</p>
+        <h1>El campus reconoce<br />a quienes tienen la palabra.</h1>
+        <span>Ingresá la clave recibida para abrir las aulas, los materiales y tu recorrido.</span>
+        <form onSubmit={unlockCampus}>
+          <label htmlFor="pulsus-access">Palabra de acceso</label>
+          <div><input id="pulsus-access" type="password" value={accessCode} onChange={(event) => { setAccessCode(event.target.value); setAccessError(""); }} autoComplete="current-password" autoFocus /><button type="submit">Abrir el campus →</button></div>
+          <small className={accessError ? "is-error" : ""}>{accessError || "La palabra distingue mayúsculas y minúsculas por vos: podés escribirla como quieras."}</small>
+        </form>
       </section>
     </main>
   );
