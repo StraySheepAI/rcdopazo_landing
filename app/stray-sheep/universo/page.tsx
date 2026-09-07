@@ -30,23 +30,26 @@ export default function StrayWorldPage() {
         </div>
 
         <div className="stray-world-doors" aria-label={tx("Lugares del Mundo Stray", "Places in Stray World")}>
-          <article className="stray-door stray-door-lab">
-            <Image className="stray-door-image" src="/stray-laboratorio.png" alt={tx("Puerta del Laboratorio", "Laboratory door")} width={715} height={944} />
-            <small>{tx("Acceso 01", "Access 01")}</small>
-            <h2>{tx("Laboratorio", "Laboratory")}</h2>
-            <p>{tx("Donde una forma puede dejar de parecer inevitable.", "Where a form can stop appearing inevitable.")}</p>
-          </article>
-          <article className="stray-door stray-door-oracle">
-            <Image className="stray-door-image stray-door-umbral-image" src="/stray-umbral.png" alt={tx("Artefacto del Umbral", "Threshold artifact")} width={1024} height={1536} />
-            <small>{tx("Acceso 02", "Access 02")}</small>
-            <h2>{tx("El umbral", "The threshold")}</h2>
-            <p>{tx("No devuelve tu imagen. Devuelve una pregunta.", "It does not return your image. It returns a question.")}</p>
-          </article>
-          <article className="stray-door stray-door-roles">
+          <article className="stray-door stray-door-roles" aria-disabled="true">
             <Image className="stray-door-image stray-door-roles-image" src="/stray-portal-roles.png" alt={tx("Portal de Roles", "Role Portal")} width={1080} height={1440} />
-            <small>{tx("Acceso 03", "Access 03")}</small>
+            <span className="stray-door-status">🔒 {tx("Próximamente", "Coming soon")}</span>
+            <small>{tx("Acceso 01", "Access 01")}</small>
             <h2>{tx("Portal de Roles", "Portal of Roles")}</h2>
-            <p>{tx("Las formas que toma Stray.", "The forms Stray takes.")}</p>
+            <p>{tx("Elegí una configuración temporal para explorar.", "Choose a temporary configuration to explore.")}</p>
+          </article>
+          <article className="stray-door stray-door-oracle" aria-disabled="true">
+            <Image className="stray-door-image stray-door-umbral-image" src="/stray-umbral.png" alt={tx("Artefacto del Umbral", "Threshold artifact")} width={1024} height={1536} />
+            <span className="stray-door-status">🔒 {tx("Próximamente", "Coming soon")}</span>
+            <small>{tx("Acceso 02", "Access 02")}</small>
+            <h2>{tx("Portal de los Mundos", "Portal of Worlds")}</h2>
+            <p>{tx("Viajá entre mundos, tiempos y relatos.", "Travel between worlds, times, and stories.")}</p>
+          </article>
+          <article className="stray-door stray-door-lab" aria-disabled="true">
+            <Image className="stray-door-image" src="/stray-laboratorio.png" alt={tx("Puerta del Laboratorio", "Laboratory door")} width={715} height={944} />
+            <span className="stray-door-status">🔒 {tx("Próximamente", "Coming soon")}</span>
+            <small>{tx("Acceso 03", "Access 03")}</small>
+            <h2>{tx("Laboratorio", "Laboratory")}</h2>
+            <p>{tx("La escuela central de Stray estudia lo que sucede en todos los mundos.", "Stray's central school studies what happens across every world.")}</p>
           </article>
         </div>
       </section>
@@ -81,6 +84,9 @@ export default function StrayWorldPage() {
             {openSphere === "parche" && <p>{tx("Dice «ya está»: «Estoy bien», «Ya pasó». No para de moverse, pero la bola sigue intacta.", "She says “it's done”: “I'm fine,” “It's over.” She never stops moving, but the sphere remains intact.")}</p>}
           </article>
         </div>
+        <Link className="stray-works-link" href="/mpa/publishing-house/stray-sheep-collection">
+          {tx("Nuestras obras", "Our works")} <span aria-hidden="true">→</span>
+        </Link>
       </section>
 
       <section className="stray-patrana" id="la-patrana">
