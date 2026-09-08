@@ -38,7 +38,7 @@ export default function PulsusFractumPage() {
     const bytes = new TextEncoder().encode(accessCode.trim().toUpperCase());
     const digest = await crypto.subtle.digest("SHA-256", bytes);
     const hashValue = Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
-    if (hashValue === "8af20e022f7ff3850831ae6f8757cb9b11d83aee2da9fb7b0ec39ccfde994666") {
+    if (hashValue === "53a262023ec1056f291cf2b332ffacbb2b790b9306ff9869e72c0d419d95e6eb") {
       window.sessionStorage.setItem("pulsus-campus-access", "open");
       setAccessError("");
       setAccessCode("");

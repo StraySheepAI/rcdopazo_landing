@@ -124,8 +124,8 @@ export const OBRAS: Obra[] = [
     links: [
       {
         label: "Abrir DIMA",
-        url: "https://dima.magiaparaatrevidos.com",
-        external: true,
+        url: "/dima",
+        external: false,
       },
     ],
     published: true,
