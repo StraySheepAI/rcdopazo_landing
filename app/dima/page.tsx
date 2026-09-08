@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
+import { PERSONAL_EMAIL } from "@/app/lib/contact";
 import styles from "./page.module.css";
 
 type Door = "configuracion" | "metalquimico" | "coleccion";
@@ -75,6 +76,6 @@ export default function DimaPage() {
       {depth >= 2 && <article className={`${styles.analysisCard} ${styles.ats}`}><header><span>ATS</span><div><small>ANATESIS</small><h3>Descomposición de la forma</h3></div></header><div className={styles.analysisGrid}><section><small>MORFOLOGÍA</small><p>{result.bloque2.lectio}</p></section><section><small>NÚMERO DE VERBUS PRIME</small><strong>{result.bloque2.gradus}</strong></section><section><small>CONFIGURACIÓN MÍNIMA</small><p>{result.bloque2.natura}</p></section><section><small>INITIUM DIMA</small><p>{result.bloque2.initium}</p></section></div>{depth === 2 && <button className={styles.nextDepth} onClick={() => setDepth(3)}>ABRIR LA RECONFIGURACIÓN →</button>}</article>}
       {depth >= 3 && <article className={`${styles.analysisCard} ${styles.ars}`}><header><span>ARS M</span><div><small>RECONFIGURACIÓN</small><h3>Volver a abrir lo posible</h3></div></header><div className={styles.analysisGrid}><section><small>VIAE · ALTERNATIVAS</small><p>{result.bloque3.viae}</p></section><section><small>DICTUM MUTARE</small><strong>{result.bloque3.dictum}</strong></section><section><small>PROVOCATIO</small><p>{result.bloque3.provocatio}</p></section><section><small>ACTIVATIO</small><p>{result.bloque3.activatio}</p></section></div><blockquote>{result.bloque3.sussurro}</blockquote></article>}
     </section>}
-    <section className={styles.valuePath}><p className={styles.sectionLabel}>DIMA CRECE CON TU PREGUNTA</p><h2>Una sola lectura. Distintas entregas.</h2><div><article><small>ABIERTO</small><b>Revelación inicial</b><p>Una muestra clara de la configuración.</p></article><article><small>AMPLIADO</small><b>100+ formas</b><p>Morfología, Verbus Prime y archivo validado.</p></article><article><small>INFORME</small><b>Análisis Metalquímico</b><p>ATS + ARS M + integración descargable.</p></article><article><small>PERSONAL</small><b>Integración acompañada</b><p>Consulta personalizada más intervención ATS.</p></article></div><a href="mailto:contacto@rociodopazo.com?subject=Integración personalizada DIMA">AGENDAR UNA INTEGRACIÓN PERSONALIZADA</a></section>
+    <section className={styles.valuePath}><p className={styles.sectionLabel}>DIMA CRECE CON TU PREGUNTA</p><h2>Una sola lectura. Distintas entregas.</h2><div><article><small>ABIERTO</small><b>Revelación inicial</b><p>Una muestra clara de la configuración.</p></article><article><small>AMPLIADO</small><b>100+ formas</b><p>Morfología, Verbus Prime y archivo validado.</p></article><article><small>INFORME</small><b>Análisis Metalquímico</b><p>ATS + ARS M + integración descargable.</p></article><article><small>PERSONAL</small><b>Integración acompañada</b><p>Consulta personalizada más intervención ATS.</p></article></div><a href={`mailto:${PERSONAL_EMAIL}?subject=Integración personalizada DIMA`}>AGENDAR UNA INTEGRACIÓN PERSONALIZADA</a></section>
   </main>;
 }
