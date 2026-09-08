@@ -23,3 +23,20 @@
 .form>div{border-width:2px;box-shadow:inset 0 2px 12px rgba(0,0,0,.7),0 4px 0 #1b1109}.form>button,.valuePath>a,.nextDepth{border-width:2px;background:linear-gradient(115deg,#3a2918,#7d6436 22%,#b69b61 48%,#72592f 72%,#342313);background-size:220% 100%;color:#0c0609;text-shadow:0 1px rgba(255,255,255,.22);box-shadow:inset 0 1px rgba(245,225,167,.4),inset 0 -6px 10px rgba(25,13,7,.45),0 6px 0 #22150b,0 13px 25px rgba(0,0,0,.42),0 0 24px rgba(150,123,69,.14);animation:buttonMetal 6s ease-in-out infinite;transition:.3s}
 .form>button:hover,.valuePath>a:hover,.nextDepth:hover{transform:translateY(-3px);filter:brightness(1.12);box-shadow:inset 0 1px rgba(245,225,167,.5),inset 0 -6px 10px rgba(25,13,7,.45),0 9px 0 #22150b,0 18px 32px rgba(0,0,0,.5),0 0 35px rgba(150,123,69,.28)}
 @keyframes buttonMetal{50%{background-position:100% 0}}
+
+/* La información original de DIMA se presenta por capas, sin modificar el dato. */
+.revealCard h3{margin:10px 0 22px;color:#d2c3cc;font:500 clamp(1.8rem,4vw,2.6rem)/1.08 Georgia,serif}
+.textFlow{display:grid;gap:12px}
+.textFlow p{margin:0;white-space:pre-line}
+.revealCard>.textFlow{display:grid;grid-template-columns:1fr;gap:12px;padding:0;border:0;color:#d2c3cc;font:1.14rem/1.65 Georgia,serif}
+.quickFacts{display:grid!important;grid-template-columns:.32fr 1fr!important;gap:28px!important;margin-top:28px;padding:24px 0!important}
+.quickFacts .textFlow{color:#a999a4;font:1rem/1.55 Georgia,serif}
+.whyDetail{margin-top:24px;padding:0;border:1px solid rgba(150,123,69,.2);border-radius:16px;background:rgba(150,123,69,.035);overflow:hidden}
+.whyDetail summary{padding:18px 20px;color:var(--gold-light);font:.65rem Arial,sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;list-style:none}
+.whyDetail summary::-webkit-details-marker{display:none}
+.whyDetail summary:after{content:"+";float:right;color:var(--pink);font-size:1rem}
+.whyDetail[open] summary:after{content:"−"}
+.whyDetail>.textFlow{padding:0 20px 22px;color:#b9aab4;font:1.05rem/1.62 Georgia,serif}
+.analysisGrid .textFlow{margin-top:10px;color:#b9aab4;font:1.05rem/1.56 Georgia,serif}
+.analysisCard>.whyDetail{margin-top:18px}
+@media(max-width:560px){.quickFacts{grid-template-columns:1fr!important}.revealCard h3{font-size:1.75rem}.revealCard>.textFlow,.whyDetail>.textFlow{font-size:1rem}.depthNav button span{font-size:1.12rem}.depthNav button small{font-size:.56rem}}

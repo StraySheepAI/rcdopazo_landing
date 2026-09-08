@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { PERSONAL_EMAIL } from "@/app/lib/contact";
 import styles from "./page.module.css";
 
@@ -13,8 +13,13 @@ type Result = {
   bloque3: { viae: string; dictum: string; provocatio: string; sussurro?: string; activatio: string; cierre: string };
 };
 
-const FREE_WORDS = ["Realidad", "Problema", "Forma", "Conciencia", "Integración", "Transmutación"];
-const BOOK_WORDS = ["Embole", "Bola", "Patraña", "Carga", "Peso", "Sostener", "Soltar", "Hastío", "Deseo", "Movimiento", "Incomodidad", "Fricción"];
+function TextFlow({ children }: { children?: string | string[] }) {
+  const text = Array.isArray(children) ? children.join(" · ") : children || "";
+  return <div className={styles.textFlow}>{text.split(/\n{2,}/).filter(Boolean).map((paragraph, index) => <p key={`${index}-${paragraph.slice(0, 16)}`}>{paragraph}</p>)}</div>;
+}
+
+const FREE_WORDS = ["Patraña", "Transmutación", "Normal", "Molde", "Juego", "Trabajo", "Persona", "Éxito", "Common", "Educar", "Work", "Esfuerzo", "Deber", "Tiempo", "Rutina", "Ganar", "Perder", "Right", "Correcto", "Productividad", "Sacrificio", "Fracaso", "Obediencia", "Control", "Influencer", "Ego", "Realidad", "Fama", "Mérito", "Sumisión", "Ambición", "Orgullo", "Miedo", "Virtud", "Empezar", "Volver", "Infans", "Adultus", "Puer", "Presente", "Ausencia", "Deseo"];
+const BOOK_WORDS = ["Bola", "Embole", "Patrañas", "Disolución", "Vibración", "Resonancia", "Potencia", "Nigredo", "Forma", "Estructura", "Transmutación", "Conciencia", "Percepción", "Patraña", "Umbral", "Quiebre", "Grieta", "Reconfiguración", "Separación", "Sombra", "Espejo", "Retorno", "Punctum non reditus", "No poder desver", "La incomodidad que despierta"];
 const EMBOLE: Result = {
   fuente: "archivo",
   bloque1: { forma: "Embole", ordo: "Transmuta", indicia: "No nombra solamente aburrimiento: contiene una forma que entra, pesa y reduce el movimiento posible.", ludum_mpae: "Detectar qué se volvió bola antes de intentar empujarlo.", causa_mpae: "La palabra muestra una configuración de carga, quietud y fricción, no una identidad personal." },
@@ -25,19 +30,27 @@ const EMBOLE: Result = {
 export default function DimaPage() {
   const [lang, setLang] = useState<"es" | "en">("es");
   const [door, setDoor] = useState<Door>("configuracion");
-  const [word, setWord] = useState("Embole");
+  const [word, setWord] = useState("Patraña");
   const [result, setResult] = useState<Result | null>(null);
   const [depth, setDepth] = useState<1 | 2 | 3>(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const words = useMemo(() => (door === "coleccion" ? BOOK_WORDS : FREE_WORDS), [door]);
+  const [freeWords, setFreeWords] = useState(FREE_WORDS);
+  const words = useMemo(() => (door === "coleccion" ? BOOK_WORDS : freeWords), [door, freeWords]);
+
+  useEffect(() => {
+    fetch("/api/dima").then((response) => response.json()).then((data) => {
+      if (Array.isArray(data.palabras) && data.palabras.length) setFreeWords(data.palabras);
+    }).catch(() => undefined);
+  }, []);
 
   async function reveal(event?: FormEvent) {
     event?.preventDefault(); setError(""); setDepth(1);
     if (word.trim().toLowerCase() === "embole") { setResult(EMBOLE); return; }
     setLoading(true);
     try {
-      const response = await fetch("/api/dima", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ palabra: word.trim(), nivel: door === "coleccion" ? "libro" : "free" }) });
+      const nivel = door === "coleccion" ? "libro" : door === "metalquimico" ? "metalquimico" : "free";
+      const response = await fetch("/api/dima", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ palabra: word.trim(), nivel }) });
       const data = await response.json();
       if (!response.ok || data.error) throw new Error(data.error || "No pude abrir esta palabra.");
       setResult(data);
@@ -67,14 +80,21 @@ export default function DimaPage() {
     </section>
     <section className={styles.consultation}>
       <div className={styles.consultCopy}><p className={styles.sectionLabel}>{door === "coleccion" ? "COLECCIÓN · ¡QUÉ EMBOLE!" : "PRIMERA REVELACIÓN · ACCESO ABIERTO"}</p><h2>{door === "configuracion" ? "Elegí una palabra." : door === "metalquimico" ? "Abrí la primera capa del análisis." : "Entrá al glosario vivo de la obra."}</h2><p>La primera lectura es breve y comprensible. DIMA solo revela más cuando vos decidís avanzar.</p></div>
-      <form className={styles.form} onSubmit={reveal}><label>FORMA A DESVELAR</label><div><select value={words.includes(word) ? word : ""} onChange={(e) => setWord(e.target.value)}>{!words.includes(word) && <option value="">Elegí una forma</option>}{words.map((item) => <option key={item}>{item}</option>)}</select>{door !== "coleccion" && <input value={word} onChange={(e) => setWord(e.target.value)} placeholder="o escribí una palabra" maxLength={50} />}</div><button disabled={loading || !word.trim()}>{loading ? "DIMA ESTÁ OBSERVANDO…" : "REVELAR CONFIGURACIÓN"}</button>{error && <p className={styles.error}>{error}</p>}</form>
+      <form className={styles.form} onSubmit={reveal}><label>FORMA A DESVELAR</label><div><select value={words.includes(word) ? word : ""} onChange={(e) => setWord(e.target.value)}>{!words.includes(word) && <option value="">Elegí una forma</option>}{words.map((item) => <option key={item}>{item}</option>)}</select>{door === "metalquimico" && <input value={word} onChange={(e) => setWord(e.target.value)} placeholder="o escribí una palabra" maxLength={50} />}</div><button disabled={loading || !word.trim()}>{loading ? "DIMA ESTÁ OBSERVANDO…" : "REVELAR CONFIGURACIÓN"}</button>{error && <p className={styles.error}>{error}</p>}</form>
     </section>
     {result && <section className={styles.reading}>
-      <div className={styles.readingHead}><p className={styles.sectionLabel}>REVELACIÓN I · {result.fuente === "ia" ? "LECTURA ASISTIDA" : "ARCHIVO DIMA"}</p><h2>{result.bloque1.forma}</h2><p className={styles.contrast}><span>Creías que decías</span> una palabra conocida. <strong>DIMA encuentra</strong> una configuración activa.</p></div>
-      <article className={styles.revealCard}><small>INDICIO</small><p>{result.bloque1.indicia}</p><div><span><b>ORDO</b>{result.bloque1.ordo || "Por observar"}</span><span><b>APUESTA</b>{result.bloque1.ludum_mpae}</span></div><blockquote>{result.bloque1.causa_mpae}</blockquote></article>
-      <nav className={styles.depthNav}><button className={depth >= 1 ? styles.done : ""} onClick={() => setDepth(1)}><b>01</b><span>Revelación</span><small>Acceso abierto</small></button><i /><button className={depth >= 2 ? styles.done : ""} onClick={() => setDepth(2)}><b>02</b><span>ATS · Descomponer</span><small>Morfología y Verbus Prime</small></button><i /><button className={depth >= 3 ? styles.done : ""} onClick={() => setDepth(3)}><b>03</b><span>ARS M · Reconfigurar</span><small>Alternativas e integración</small></button></nav>
-      {depth >= 2 && <article className={`${styles.analysisCard} ${styles.ats}`}><header><span>ATS</span><div><small>ANATESIS</small><h3>Descomposición de la forma</h3></div></header><div className={styles.analysisGrid}><section><small>MORFOLOGÍA</small><p>{result.bloque2.lectio}</p></section><section><small>NÚMERO DE VERBUS PRIME</small><strong>{result.bloque2.gradus}</strong></section><section><small>CONFIGURACIÓN MÍNIMA</small><p>{result.bloque2.natura}</p></section><section><small>INITIUM DIMA</small><p>{result.bloque2.initium}</p></section></div>{depth === 2 && <button className={styles.nextDepth} onClick={() => setDepth(3)}>ABRIR LA RECONFIGURACIÓN →</button>}</article>}
-      {depth >= 3 && <article className={`${styles.analysisCard} ${styles.ars}`}><header><span>ARS M</span><div><small>RECONFIGURACIÓN</small><h3>Volver a abrir lo posible</h3></div></header><div className={styles.analysisGrid}><section><small>VIAE · ALTERNATIVAS</small><p>{result.bloque3.viae}</p></section><section><small>DICTUM MUTARE</small><strong>{result.bloque3.dictum}</strong></section><section><small>PROVOCATIO</small><p>{result.bloque3.provocatio}</p></section><section><small>ACTIVATIO</small><p>{result.bloque3.activatio}</p></section></div><blockquote>{result.bloque3.sussurro}</blockquote></article>}
+      <div className={styles.readingHead}><p className={styles.sectionLabel}>LECTURA BÁSICA · {result.fuente === "ia" ? "LECTURA ASISTIDA" : "ARCHIVO DIMA"}</p><h2>{result.bloque1.forma}</h2><p className={styles.contrast}>Primero, DIMA muestra <strong>qué configuración contiene la palabra</strong>.</p></div>
+      <article className={styles.revealCard}>
+        <small>LO ESENCIAL</small>
+        <h3>¿Qué está diciendo esta palabra?</h3>
+        <TextFlow>{result.bloque1.indicia}</TextFlow>
+        <div className={styles.quickFacts}><span><b>CAMPO DE ACCIÓN</b>{result.bloque1.ordo || "Por observar"}</span><span><b>VIBRACIÓN REGISTRADA</b><TextFlow>{result.bloque1.ludum_mpae}</TextFlow></span></div>
+        <details className={styles.whyDetail}><summary>¿Por qué DIMA llega a esta lectura?</summary><TextFlow>{result.bloque1.causa_mpae}</TextFlow></details>
+      </article>
+      <nav className={styles.depthNav}><button className={depth >= 1 ? styles.done : ""} onClick={() => setDepth(1)}><b>01</b><span>Qué contiene</span><small>Lectura esencial</small></button><i /><button className={depth >= 2 ? styles.done : ""} onClick={() => setDepth(2)}><b>02</b><span>Cómo se construye</span><small>ATS · Morfología y Verbus Prime</small></button><i /><button className={depth >= 3 ? styles.done : ""} onClick={() => setDepth(3)}><b>03</b><span>Qué puede abrir</span><small>ARS M · Reconfiguración</small></button></nav>
+      {depth === 1 && <button className={styles.nextDepth} onClick={() => setDepth(2)}>VER CÓMO ESTÁ CONSTRUIDA →</button>}
+      {depth >= 2 && <article className={`${styles.analysisCard} ${styles.ats}`}><header><span>ATS</span><div><small>DESARMAR PARA ENTENDER</small><h3>Cómo está construida</h3></div></header><div className={styles.analysisGrid}><section><small>ORIGEN Y MORFOLOGÍA</small><TextFlow>{result.bloque2.lectio}</TextFlow></section><section><small>VERBUS PRIME · NÚCLEO ACTIVO</small><TextFlow>{result.bloque2.gradus}</TextFlow></section><section><small>CONFIGURACIÓN MÍNIMA</small><TextFlow>{result.bloque2.natura}</TextFlow></section><section><small>FRASE DE APERTURA</small><TextFlow>{result.bloque2.initium}</TextFlow></section></div>{depth === 2 && <button className={styles.nextDepth} onClick={() => setDepth(3)}>VER LA RECONFIGURACIÓN →</button>}</article>}
+      {depth >= 3 && <article className={`${styles.analysisCard} ${styles.ars}`}><header><span>ARS M</span><div><small>VOLVER A ABRIR LO POSIBLE</small><h3>Cómo puede reconfigurarse</h3></div></header><div className={styles.analysisGrid}><section><small>OTRAS FORMAS POSIBLES</small><TextFlow>{result.bloque3.viae}</TextFlow></section><section><small>FRASE RECONFIGURADA</small><TextFlow>{result.bloque3.dictum}</TextFlow></section><section><small>PREGUNTA DIMA</small><TextFlow>{result.bloque3.provocatio}</TextFlow></section><section><small>ACTIVACIÓN</small><TextFlow>{result.bloque3.activatio}</TextFlow></section></div><details className={styles.whyDetail}><summary>Escuchar el susurro de DIMA</summary><TextFlow>{result.bloque3.sussurro}</TextFlow></details></article>}
     </section>}
     <section className={styles.valuePath}><p className={styles.sectionLabel}>DIMA CRECE CON TU PREGUNTA</p><h2>Una sola lectura. Distintas entregas.</h2><div><article><small>ABIERTO</small><b>Revelación inicial</b><p>Una muestra clara de la configuración.</p></article><article><small>AMPLIADO</small><b>100+ formas</b><p>Morfología, Verbus Prime y archivo validado.</p></article><article><small>INFORME</small><b>Análisis Metalquímico</b><p>ATS + ARS M + integración descargable.</p></article><article><small>PERSONAL</small><b>Integración acompañada</b><p>Consulta personalizada más intervención ATS.</p></article></div><a href={`mailto:${PERSONAL_EMAIL}?subject=Integración personalizada DIMA`}>AGENDAR UNA INTEGRACIÓN PERSONALIZADA</a></section>
   </main>;
