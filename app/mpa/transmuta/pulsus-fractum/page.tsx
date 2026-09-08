@@ -12,6 +12,8 @@ export default function PulsusFractumPage() {
   const [accessCode, setAccessCode] = useState("");
   const [accessError, setAccessError] = useState("");
   const [mpaEntry, setMpaEntry] = useState(false);
+  const [heldPlate, setHeldPlate] = useState<string | null>(null);
+  const [vigiliaStarted, setVigiliaStarted] = useState(false);
 
   useEffect(() => {
     const syncHash = () => setHash(window.location.hash);
@@ -116,12 +118,25 @@ export default function PulsusFractumPage() {
 
         {ludusOpen && (
           <article className="school-ludus-threshold">
-            <p>Vigilia I</p>
+            <div className="school-ludus-sparks" aria-hidden="true"><i /><i /><i /><i /><i /></div>
+            <Image className="school-ludus-emblem" src="/pulsus-fractum-shield-v6-warm.png" alt="Emblema de la Escuela de Metalkimia Pulsus Fractum" width={512} height={512} />
+            <p>Experiencia abierta · Vigilia I</p>
             <h2>Hay más platos de los que podés sostener.</h2>
-            <span>Antes de elegir, mirá: ¿cuáles sostenés porque importan y cuáles porque todavía no decidiste soltarlos?</span>
-            <div className="school-plates" aria-hidden="true"><i>Tiempo</i><i>Certeza</i><i>Ayuda</i><i>Movimiento</i></div>
-            <button type="button">Comenzar la experiencia →</button>
-            <small>La experiencia completa será el próximo espacio que construiremos.</small>
+            <span className="school-ludus-lead">Una práctica breve de discernimiento para observar qué estás sosteniendo, qué costo tiene y qué elegirías cuidar si no pudieras mantenerlo todo.</span>
+            <div className="school-ludus-path" aria-label="Recorrido de la experiencia"><span><b>1</b> Reconocer</span><i /><span><b>2</b> Elegir</span><i /><span><b>3</b> Registrar</span></div>
+            {!vigiliaStarted ? (
+              <button className="school-ludus-start" type="button" onClick={() => setVigiliaStarted(true)}>Comenzar la experiencia →</button>
+            ) : (
+              <div className="school-ludus-practice">
+                <p>Primera observación</p>
+                <h3>Si hoy sólo pudieras sostener uno, ¿cuál cuidarías primero?</h3>
+                <div className="school-plates">
+                  {["Tiempo", "Certeza", "Ayuda", "Movimiento"].map((plate) => <button className={heldPlate === plate ? "is-held" : ""} type="button" key={plate} onClick={() => setHeldPlate(plate)}>{plate}</button>)}
+                </div>
+                {heldPlate && <p className="school-ludus-response">Elegiste <b>{heldPlate}</b>. Ahora mirá qué dejarías de sostener para poder cuidarlo de verdad.</p>}
+              </div>
+            )}
+            <small>Acceso libre · 5 minutos · No requiere conocimientos previos</small>
           </article>
         )}
 
