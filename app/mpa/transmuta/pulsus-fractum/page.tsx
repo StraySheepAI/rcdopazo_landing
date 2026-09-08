@@ -14,6 +14,10 @@ export default function PulsusFractumPage() {
   const [mpaEntry, setMpaEntry] = useState(false);
   const [heldPlate, setHeldPlate] = useState<string | null>(null);
   const [vigiliaStarted, setVigiliaStarted] = useState(false);
+  const [releasedPlate, setReleasedPlate] = useState<string | null>(null);
+  const [agencyDomain, setAgencyDomain] = useState<string | null>(null);
+  const [vigiliaNote, setVigiliaNote] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const syncHash = () => setHash(window.location.hash);
@@ -94,7 +98,9 @@ export default function PulsusFractumPage() {
       <header className="school-visitor-header">
         <button type="button" onClick={() => setView("arrival")}>← Entrada del Campus</button>
         <span>Ágora Pulsus</span>
-        <button type="button" onClick={() => { setHash("#campus"); requestCampusAccess(); }}>Abrir mapa</button>
+        <button className="school-desktop-map" type="button" onClick={() => { setHash("#campus"); requestCampusAccess(); }}>Abrir mapa</button>
+        <button className="school-mobile-menu-button" type="button" aria-expanded={mobileMenuOpen} aria-label="Abrir menú del campus" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}><i /><i /><i /></button>
+        {mobileMenuOpen && <nav className="school-mobile-menu" aria-label="Menú del campus"><b>Ágora Pulsus</b><button type="button" onClick={() => { setMobileMenuOpen(false); setHash("#campus"); requestCampusAccess(); }}>Abrir mapa</button><button type="button" onClick={() => { setMobileMenuOpen(false); setPlace("orientation"); }}>Ver cartelera viva</button><button type="button" onClick={() => { setMobileMenuOpen(false); setPlace("fundamentos"); }}>Libro de Fundamentos</button></nav>}
       </header>
 
       <section className="school-agora-place">
@@ -131,9 +137,11 @@ export default function PulsusFractumPage() {
                 <p>Primera observación</p>
                 <h3>Si hoy sólo pudieras sostener uno, ¿cuál cuidarías primero?</h3>
                 <div className="school-plates">
-                  {["Tiempo", "Certeza", "Ayuda", "Movimiento"].map((plate) => <button className={heldPlate === plate ? "is-held" : ""} type="button" key={plate} onClick={() => setHeldPlate(plate)}>{plate}</button>)}
+                  {["Tiempo", "Certeza", "Ayuda", "Movimiento"].map((plate) => <button className={heldPlate === plate ? "is-held" : ""} type="button" key={plate} onClick={() => { setHeldPlate(plate); setReleasedPlate(null); setAgencyDomain(null); }}>{plate}</button>)}
                 </div>
-                {heldPlate && <p className="school-ludus-response">Elegiste <b>{heldPlate}</b>. Ahora mirá qué dejarías de sostener para poder cuidarlo de verdad.</p>}
+                {heldPlate && <div className="school-ludus-step"><p className="school-ludus-response">Elegiste cuidar <b>{heldPlate}</b>. Elegir no es fallar: es gobernar capacidad.</p><h3>¿Qué plato dejarías caer para sostener esa elección?</h3><div className="school-release-options">{["Una expectativa ajena", "Una urgencia", "Una certeza", "El control total"].map((item) => <button className={releasedPlate === item ? "is-selected" : ""} type="button" key={item} onClick={() => { setReleasedPlate(item); setAgencyDomain(null); }}>{item}</button>)}</div></div>}
+                {releasedPlate && <div className="school-ludus-step"><p>Segundo movimiento · Separatio</p><h3>Separaste lo valioso de lo que hoy no podés sostener. ¿Dónde existe capacidad efectiva de acción?</h3><div className="school-domain-options">{["Depende de mí", "Depende de otros", "Depende del sistema"].map((domain) => <button className={agencyDomain === domain ? "is-selected" : ""} type="button" key={domain} onClick={() => setAgencyDomain(domain)}>{domain}</button>)}</div></div>}
+                {agencyDomain && <div className="school-ludus-register"><p>Tercer movimiento · Registro</p><h3>No hace falta controlar todo. Escribí una intervención posible dentro de tu dominio.</h3><textarea value={vigiliaNote} onChange={(event) => setVigiliaNote(event.target.value)} placeholder="Hoy puedo…" aria-label="Registro de una intervención posible" /><div className="school-vigilia-result"><small>Tu configuración visible</small><p>Cuidás <b>{heldPlate}</b>, soltás <b>{releasedPlate?.toLowerCase()}</b> y reconocés que la acción <b>{agencyDomain?.toLowerCase()}</b>.</p>{vigiliaNote.trim() && <blockquote>“{vigiliaNote.trim()}”</blockquote>}<strong>La no-priorización también es una decisión. Ahora la elección volvió a vos.</strong></div></div>}
               </div>
             )}
             <small>Acceso libre · 5 minutos · No requiere conocimientos previos</small>
