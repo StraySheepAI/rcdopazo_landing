@@ -1,108 +1,124 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const sections = ["Umbral", "Discernimiento", "Práctica", "Bitácora"];
+type Lang = "es" | "en";
+type Copy = { es: string; en: string };
+const t = (copy: Copy, lang: Lang) => copy[lang];
+const local = (value: string | Copy, lang: Lang) => typeof value === "string" ? value : value[lang];
 
-export default function FundamentosClaseUnoPage() {
-  const [active, setActive] = useState(0);
-  const [completed, setCompleted] = useState(false);
-  const [note, setNote] = useState("");
-  const [accessChecked, setAccessChecked] = useState(false);
-  const [hasAccess, setHasAccess] = useState(false);
-  const [accessCode, setAccessCode] = useState("");
-  const [accessError, setAccessError] = useState("");
+const flow = [
+  { code:"FRICTION", number:"01", title:{es:"Discernir para decidir",en:"Discern to decide"}, body:{es:"Detectar dónde está la fricción real. Distinguir entre ruido y señal. Identificar qué configuraciones generan resistencia.",en:"Detect where the real friction lives. Distinguish noise from signal. Identify which configurations generate resistance."}},
+  { code:"LEAD", number:"02", title:{es:"Observar para orientar",en:"Observe to orient"}, body:{es:"Identificar los patrones invisibles que operan en el sistema. Ver lo que frena antes de proponer lo que mueve.",en:"Identify the invisible patterns operating within the system. See what holds it back before proposing what moves it."}},
+  { code:"OWNERSHIP", number:"03", title:{es:"Elegir para construir",en:"Choose to build"}, body:{es:"Recuperar agencia sobre el sistema. Definir sobre qué se puede actuar realmente y desde ahí construir.",en:"Recover agency over the system. Define what can actually be acted upon, and build from there."}},
+  { code:"WISDOM", number:"04", title:{es:"Comprender para responder",en:"Understand to respond"}, body:{es:"Integrar la información del sistema. Reconocer qué intervención corresponde. No toda fricción requiere la misma respuesta.",en:"Integrate the system's information. Recognize which intervention fits. Not every friction calls for the same response."}},
+];
 
-  useEffect(() => {
-    setCompleted(window.localStorage.getItem("pulsus-fundamentos-clase-1") === "complete");
-    setNote(window.localStorage.getItem("pulsus-fundamentos-clase-1-note") || "");
-    setHasAccess(window.sessionStorage.getItem("pulsus-campus-access") === "open");
-    setAccessChecked(true);
-  }, []);
+const groups: any[] = [
+  { title:"MPA Flow", label:{es:"Consultoría y soluciones",en:"Consulting & solutions"}, projects:[
+    {title:"SkillPath Flow",tagline:{es:"Talento evaluado por comportamiento real",en:"Talent assessed through real behavior"},body:{es:"Plataforma AI-powered de descubrimiento de talento. Perfiles basados en decisiones reales, no declaraciones. Sistema de niveles, XP y readiness.",en:"AI-powered talent discovery platform. Profiles based on real decisions, not declarations. Levels, XP and readiness system."},badge:{es:"2do lugar — Hackathon IA UTN, abril 2026",en:"2nd place — UTN AI Hackathon, April 2026"},image:"/skillpath-flow-journey-v11.png",url:"https://skillpathflow.com"},
+    {title:{es:"Portal de Experiencias",en:"Experience Portal"},tagline:{es:"Metodologías, contenidos y comunidad convertidos en una experiencia interactiva",en:"Methods, content and community turned into an interactive experience"},body:{es:"Sistema custom y adaptable para programas de formación, coaching, consultoría, membresías y comunidades. Integra contenidos, sesiones, herramientas, progreso, reflexiones, recursos y acompañamiento dentro de un recorrido digital con identidad propia.",en:"A custom, adaptable system for training, coaching, consulting, membership programs and communities. It brings content, sessions, tools, progress, reflections, resources and support into one branded digital journey."},badge:{es:"Arquitectura de Sistemas Custom · Prototipo",en:"Custom Systems Architecture · Prototype"},image:"/portal-experiencias-anonimo-v16.png",status:{es:"Vista anonimizada",en:"Anonymized preview"}},
+    {title:{es:"Sistema para equipos comerciales",en:"System for sales teams"},tagline:{es:"Onboarding, capacitación y centralización operativa",en:"Onboarding, training and operational centralization"},body:{es:"Sistema de onboarding con procesos documentados, preguntas de filtro y puntos críticos accesibles desde cualquier dispositivo. Primer caso: industria inmobiliaria; arquitectura adaptable a otros equipos comerciales.",en:"An onboarding system with documented processes, filtering questions and critical checkpoints accessible from any device. First case: real estate; architecture adaptable to other sales teams."},image:"/proceso-operativo-v16.png",status:{es:"Vista del proceso",en:"Process preview"}},
+    {title:{es:"Dashboard de transformación operativa",en:"Operational transformation dashboard"},tagline:{es:"Estrategia, brechas, métricas y evolución en una sola arquitectura",en:"Strategy, gaps, metrics and evolution in one architecture"},body:{es:"Tablero para convertir un diagnóstico operativo en un sistema de transformación trazable: estado del proyecto, tres horizontes de evolución, brechas críticas, proceso de venta, KPIs y cronograma.",en:"A dashboard that turns an operational diagnosis into a traceable transformation system: project status, three evolution horizons, critical gaps, sales process, KPIs and roadmap."},image:"/dashboard-transformacion-v16.png",status:{es:"Caso anonimizado",en:"Anonymized case"}},
+    {title:"ScrumFlix MPA",tagline:{es:"Entrenamiento PSM I gamificado",en:"Gamified PSM I training"},body:{es:"Plataforma violeta de entrenamiento para certificación Scrum. Niveles progresivos, modos de dificultad, diagnóstico de readiness y plan de repaso adaptativo.",en:"A violet Scrum certification training platform. Progressive levels, difficulty modes, readiness diagnostics and an adaptive review plan."},status:{es:"Experiencia protegida · Captura violeta pendiente",en:"Protected experience · Violet screenshot pending"}},
+    {title:"PSM I Trainer",tagline:{es:"Entrenamiento profundo para PSM I",en:"Deep training for PSM I"},body:{es:"5 niveles progresivos, dailys vivenciales, retros y refuerzo inteligente por concepto. La identidad azul pertenece a este entrenador, no a ScrumFlix.",en:"Five progressive levels, experiential dailies, retros and smart concept-based reinforcement. The blue identity belongs to this trainer, not ScrumFlix."},image:"/psm-trainer-daily-v16.png",status:{es:"Experiencia protegida",en:"Protected experience"}},
+    {title:"Trader Quest",tagline:{es:"Entrenamiento de trading gamificado",en:"Gamified trading training"},body:{es:"Dojo personal para desarrollar criterio real como trader. Misiones progresivas, XP, rachas y progreso guardado automáticamente.",en:"A personal dojo for developing real trading judgment. Progressive missions, XP, streaks and auto-saved progress."},status:{es:"Experiencia protegida",en:"Protected experience"}},
+  ]},
+  { title:{es:"Arquitectura aplicada",en:"Applied architecture"}, label:{es:"Casos desarrollados para Knowing",en:"Selected work developed for Knowing"}, projects:[
+    {title:"Growth Clarity Finder",tagline:{es:"Diagnóstico interactivo para encontrar la próxima oportunidad de evolución",en:"Interactive diagnostic to find the next evolution opportunity"},body:{es:"Recorrido de cinco etapas que transforma respuestas sobre negocio, fricción, complejidad y dependencia en una lectura accionable de crecimiento. Diseño de lógica, experiencia y resultado personalizado.",en:"A five-stage journey that turns answers about business, friction, complexity and dependency into an actionable growth reading. Logic, experience and personalized result design."},image:"/growth-clarity-anonimo-v16.png",status:{es:"Caso anonimizado",en:"Anonymized case"}},
+    {title:{es:"Atlas Sistémico Organizacional",en:"Organizational System Atlas"},tagline:{es:"Hacer visible qué existe, qué falta y qué sostiene cada parte del sistema",en:"Making visible what exists, what is missing and what supports each part of the system"},body:{es:"Atlas interactivo para mapear personas, recursos, reuniones, preguntas, iniciativas y dependencias. Convierte información dispersa en una arquitectura operativa navegable y exportable.",en:"An interactive atlas for mapping people, resources, meetings, questions, initiatives and dependencies. It turns scattered information into a navigable and exportable operating architecture."},image:"/system-atlas-v16.png",status:{es:"Prototipo funcional",en:"Functional prototype"}},
+  ]},
+  { title:{es:"Experiencias narrativas",en:"Narrative experiences"}, label:"MPA Universe · Stray Sheep", projects:[
+    {title:{es:"Portales de Integración — Universo ¡Qué Embole!",en:"Integration Portals — ¡Qué Embole! Universe"},tagline:{es:"La lectura no termina en la página: continúa como experiencia",en:"The reading does not end on the page: it continues as an experience"},body:{es:"Sistema narrativo interactivo que conecta el libro físico con tres recorridos digitales desbloqueables. Códigos de acceso, contenido condicionado, personajes, pruebas y distintas etapas de integración convierten la obra en una experiencia transmedia.",en:"An interactive narrative system connecting the physical book with three unlockable digital journeys. Access codes, conditional content, characters, challenges and progressive integration stages turn the work into a transmedia experience."},mockup:"narrative-portal",status:{es:"Acceso protegido · Se muestran solo capturas",en:"Protected access · Screenshots only"}},
+    {title:"De las Patrañas",tagline:{es:"Tres puertas. Tres formas de mirar la bola.",en:"Three doors. Three ways to look at the ball."},body:{es:"Portal de integración de la segunda parte del libro. Detectá las patrañas del sistema.",en:"Integration portal for the second part of the book. Spot the system's patrañas."},status:{es:"Experiencia protegida",en:"Protected experience"}},
+    {title:"Nigredo Ludus",tagline:{es:"El detector de Nigredo — ¿en qué etapa del proceso estás?",en:"The Nigredo detector — what stage of the process are you in?"},body:{es:"Herramienta simbólica de detección.",en:"Symbolic detection tool."},status:{es:"Experiencia protegida",en:"Protected experience"}},
+    {title:{es:"Reto de Iniciación",en:"Initiation Challenge"},tagline:{es:"Tres señales. Una llave. Un umbral.",en:"Three signs. One key. One threshold."},body:{es:"Experiencia de acceso condicional al universo MPA.",en:"A conditional-access experience into the MPA universe."},status:{es:"Experiencia protegida",en:"Protected experience"}},
+  ]},
+  { title:{es:"Herramientas propias",en:"Own tools"}, label:"MPA Tools", projects:[
+    {title:"DIMA — Conjuratio Dominus",tagline:{es:"No busques una definición. Buscá una revelación.",en:"Don't look for a definition. Look for a revelation."},body:{es:"Decodificación simbólica, tres modos de análisis y modelo freemium.",en:"Symbolic decoding, three analysis modes and a freemium model."},url:"https://dima-pi.vercel.app"},
+  ]},
+];
 
-  const unlockClass = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const bytes = new TextEncoder().encode(accessCode.trim().toUpperCase());
-    const digest = await crypto.subtle.digest("SHA-256", bytes);
-    const hashValue = Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
-    if (hashValue === "8af20e022f7ff3850831ae6f8757cb9b11d83aee2da9fb7b0ec39ccfde994666") {
-      window.sessionStorage.setItem("pulsus-campus-access", "open");
-      setAccessError("");
-      setHasAccess(true);
-    } else setAccessError("La Escuela todavía no reconoce esa palabra.");
-  };
-
-  const saveNote = (value: string) => {
-    setNote(value);
-    window.localStorage.setItem("pulsus-fundamentos-clase-1-note", value);
-  };
-
-  const finish = () => {
-    const next = !completed;
-    setCompleted(next);
-    window.localStorage.setItem("pulsus-fundamentos-clase-1", next ? "complete" : "open");
-  };
-
-  if (!accessChecked) return <main className="school-access-gate" />;
-
-  if (!hasAccess) return (
-    <main className="school-access-gate">
-      <div className="school-visitor-stars" aria-hidden="true" />
-      <Link className="school-access-back" href="/mpa/transmuta/pulsus-fractum?entry=mpa">← Volver al índice de Fundamentos</Link>
-      <section>
-        <div className="school-access-seal" aria-hidden="true"><i>PF</i></div>
-        <p>Umbral de Fundamentos</p>
-        <h1>La clase se abre<br />con la palabra del campus.</h1>
-        <span>El índice puede visitarse. El contenido, los materiales y la bitácora pertenecen al espacio de cursantes.</span>
-        <form onSubmit={unlockClass}>
-          <label htmlFor="class-access">Palabra de acceso</label>
-          <div><input id="class-access" type="password" value={accessCode} onChange={(event) => { setAccessCode(event.target.value); setAccessError(""); }} autoComplete="current-password" autoFocus /><button type="submit">Abrir Fundamentos →</button></div>
-          <small className={accessError ? "is-error" : ""}>{accessError || "Usá la misma palabra de acceso que recibiste para el campus."}</small>
-        </form>
-      </section>
-    </main>
-  );
-
-  return (
-    <main className="pf-classroom">
-      <div className="pf-classroom-stars" aria-hidden="true" />
-      <header className="pf-classroom-header">
-        <Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">← Volver al Ágora</Link>
-        <span>Escuela de Metalkimia · Pulsus Fractum</span>
-        <b>{completed ? "Clase completada" : "Progreso guardado"}</b>
-      </header>
-
-      <div className="pf-classroom-layout">
-        <aside className="pf-classroom-index">
-          <p>Fundamentos</p>
-          <h2>Clase 1</h2>
-          <div className="pf-classroom-progress"><i style={{ width: `${completed ? 100 : Math.max(18, (active + 1) * 25)}%` }} /></div>
-          <small>{completed ? "100% completada" : `Tramo ${active + 1} de ${sections.length}`}</small>
-          <nav aria-label="Índice de la clase">
-            {sections.map((section, index) => <button key={section} type="button" className={active === index ? "is-active" : ""} onClick={() => setActive(index)}><em>{String(index + 1).padStart(2, "0")}</em><span>{section}</span>{completed || index < active ? <b>✓</b> : null}</button>)}
-          </nav>
-          <div className="pf-classroom-resource"><span>Cuaderno de la clase</span><b>Vigilia I · Capacidad, elección y agencia</b><a href="/materiales/cuaderno-vigilia-1.pdf" download>Descargar PDF ↓</a></div>
-        </aside>
-
-        <section className="pf-classroom-content">
-          <div className="pf-classroom-eyebrow">Fundamento I · Vigilia</div>
-          <h1>Antes de transformar,<br />hay que aprender a mirar.</h1>
-          <blockquote>“No observamos problemas. Observamos configuraciones.”</blockquote>
-
-          <div className="pf-classroom-panel">
-            {active === 0 && <article><p className="pf-lesson-label">Umbral de entrada</p><h2>Mirar no es explicar</h2><p>La primera práctica de Metalkimia no consiste en encontrar una respuesta. Consiste en interrumpir por un momento la explicación automática y reconocer qué elementos, relaciones y límites componen lo que está ocurriendo.</p><p>Una configuración no es una condena ni una identidad. Es una forma que tomó un conjunto de relaciones. Si puede discernirse, puede comenzar a explorarse.</p><div className="pf-lesson-callout"><b>Pregunta de umbral</b><span>¿Qué cambia cuando dejás de preguntar “qué está mal” y preguntás “cómo está configurado”?</span></div></article>}
-            {active === 1 && <article><p className="pf-lesson-label">Primer discernimiento</p><h2>Mi parte, la parte del otro y la del sistema</h2><p>Discernir no es dividir el mundo en dos. Es sostener tres referencias a la vez para reconocer correspondencias sin apropiarse de todo ni expulsarlo todo.</p><div className="pf-distinction-grid"><div><b>01 · Mi parte</b><span>¿Qué depende de mi elección, mi capacidad y mi acción?</span></div><div><b>02 · La parte del otro</b><span>¿Qué pertenece a su decisión, su respuesta y su campo?</span></div><div><b>03 · La configuración</b><span>¿Qué emerge de la relación y no pertenece por completo a ninguno?</span></div></div></article>}
-            {active === 2 && <article><p className="pf-lesson-label">Práctica de Separatio</p><h2>Los platos que sostenés</h2><p>Anotá todo lo que hoy intentás sostener. No lo ordenes todavía. Después observá tu capacidad real: tiempo, energía, atención y recursos disponibles.</p><ol><li>Reconocé qué platos sí corresponden a tu campo.</li><li>Discerní cuáles pertenecen al campo de otra persona o al sistema compartido.</li><li>Elegí la alternativa más valiosa para este sistema, en este momento y para este propósito.</li></ol><div className="pf-lesson-callout"><b>La no-priorización también es una decisión.</b><span>Si no elegís qué plato dejar caer, lo elegirá el cansancio, una crisis o una fecha incumplida.</span></div></article>}
-            {active === 3 && <article><p className="pf-lesson-label">Bitácora personal</p><h2>Dejá una huella de lo observado</h2><p>Este registro queda guardado en este dispositivo. Escribí una frase que nombre la distinción más importante que apareció durante la práctica.</p><label htmlFor="lesson-note">Mi fragmento</label><textarea id="lesson-note" value={note} onChange={(event) => saveNote(event.target.value)} placeholder="Hoy pude distinguir que…"/><small>{note ? "Fragmento guardado automáticamente." : "Todavía no escribiste tu fragmento."}</small></article>}
-          </div>
-
-          <div className="pf-classroom-controls">
-            <button type="button" disabled={active === 0} onClick={() => setActive(active - 1)}>← Anterior</button>
-            {active < sections.length - 1 ? <button className="primary" type="button" onClick={() => setActive(active + 1)}>Continuar →</button> : <button className="primary" type="button" onClick={finish}>{completed ? "Reabrir la clase" : "Completar la clase ✓"}</button>}
-          </div>
-        </section>
+export default function Home(){
+  const [lang,setLang]=useState<Lang>("es");
+  const [aboutExpanded,setAboutExpanded]=useState(false);
+  useEffect(()=>{const saved=window.localStorage.getItem("mpa-lang");if(saved==="en")setLang("en")},[]);
+  const changeLanguage=(next:Lang)=>{setLang(next);window.localStorage.setItem("mpa-lang",next);document.documentElement.lang=next};
+  return <main>
+    <div className="cosmos" aria-hidden="true"><span className="nebula n1"/><span className="nebula n2"/><span className="stars"/></div>
+    <nav className="nav-shell" aria-label={lang==="es"?"Navegación principal":"Main navigation"}><div className="nav-inner">
+      <a className="brand" href="#top"><img src="/mpa-flow-logo-final-v7.png" alt="MPA Flow"/><span>Rocío Dopazo</span></a>
+      <div className="nav-links"><a href="#profile">{lang==="es"?"Perfil":"Profile"}</a><a href="#flow">{lang==="es"?"Método":"Method"}</a><a href="#work">{lang==="es"?"Trabajo":"Work"}</a><a href="#contact">{lang==="es"?"Contacto":"Contact"}</a></div>
+      <div className="language"><button className={lang==="es"?"active":""} onClick={()=>changeLanguage("es")}>ES</button><button className={lang==="en"?"active":""} onClick={()=>changeLanguage("en")}>EN</button></div>
+    </div></nav>
+    <header id="top" className="hero"><img className="hero-city" src="/mar-del-plata-night.png" alt="" aria-hidden="true"/><div className="container hero-layout">
+      <div className="hero-content"><p className="eyebrow">Systems · Transformation · Technology &amp; AI</p><h1>Rocío Dopazo</h1><p className="hero-tagline">Making complexity visible. Designing transformation.</p>
+        <p className="hero-role">Systems &amp; Change Architect <span>|</span> IT Delivery Lead <span>|</span> Agile</p><p className="hero-location">Mar del Plata, {lang==="es"?"Provincia de Buenos Aires, Argentina":"Buenos Aires Province, Argentina"}</p>
+        <p className="availability">{lang==="es"?"Disponible para roles remotos, oportunidades híbridas en Mar del Plata y proyectos de consultoría.":"Available for remote roles, hybrid opportunities in Mar del Plata and consulting projects."}</p>
+        <div className="hero-actions"><a className="button primary" href="#work">{lang==="es"?"Ver proyectos":"See projects"}</a><a className="button secondary" href="#contact">{lang==="es"?"Contacto":"Contact"}</a></div>
       </div>
-    </main>
-  );
+      <figure className="hero-portrait"><img src="/rocio-portrait-final-v7.jpeg" alt="Retrato profesional de Rocío Dopazo"/><figcaption>Systems &amp; Change Architect</figcaption></figure>
+    </div></header>
+    <aside className="metrics-ticker" aria-label={lang==="es"?"Experiencia profesional":"Professional experience"}><div className="ticker-track">{[0,1].map(copy=><div className="ticker-set" aria-hidden={copy===1} key={copy}>{[
+      {n:"18",es:"Años de experiencia",en:"Years of experience"},{n:"40+",es:"Stakeholders",en:"Stakeholders"},{n:"30+",es:"Personas lideradas",en:"People led"},{n:"25+",es:"Iniciativas",en:"Initiatives"},{n:"3",es:"Soluciones de IA end-to-end",en:"End-to-end AI solutions"}
+    ].map(item=><span className="ticker-item" key={`${copy}-${item.es}`}><b>{item.n}</b> {lang==="es"?item.es:item.en}<i>·</i></span>)}</div>)}</div></aside>
+    <section id="profile" className="section profile-section" data-content-version="about-v19"><div className="container narrow">
+      <p className="section-kicker">{lang==="es"?"Perfil":"Profile"}</p>
+      <h2>{lang==="es"
+        ? "Arquitectura y liderazgo de sistemas complejos"
+        : "Complex Systems Architecture & Leadership"}
+      </h2>
+      <div className="gradient-rule"/>
+      <p className="lead-copy">{lang==="es"?"Diseño y lidero la transformación de sistemas complejos conectando personas, procesos, información, decisiones y tecnología.":"I design and lead the transformation of complex systems by connecting people, processes, information, decisions and technology."}</p>
+      <p>{lang==="es"?"Mi trabajo comienza donde una organización encuentra fricción: procesos que no escalan, información dispersa, decisiones desconectadas o herramientas que existen, pero todavía no funcionan como un verdadero sistema.":"My work begins where an organization encounters friction: processes that do not scale, scattered information, disconnected decisions or tools that exist but do not yet operate as a true system."}</p>
+      <p>{lang==="es"?"Tengo 18 años de experiencia en organizaciones, proyectos y transformación. Durante los últimos ocho desarrollé mi trayectoria principalmente en tecnología, liderando iniciativas end-to-end de transformación digital, delivery de soluciones, análisis funcional y articulación entre áreas de negocio, equipos técnicos, proveedores y stakeholders.":"I have 18 years of experience across organizations, projects and transformation. For the last eight, I have worked primarily in technology, leading end-to-end digital transformation initiatives, solution delivery, functional analysis and coordination across business areas, technical teams, vendors and stakeholders."}</p>
+      <button className="about-toggle" type="button" aria-expanded={aboutExpanded} aria-controls="about-more" onClick={()=>setAboutExpanded(value=>!value)}>{aboutExpanded?(lang==="es"?"Leer menos":"Read less"):(lang==="es"?"Leer más sobre mi recorrido":"Read more about my journey")}<span aria-hidden="true">{aboutExpanded?"−":"+"}</span></button>
+      {aboutExpanded&&<div id="about-more" className="about-more">
+        <p>{lang==="es"?"Mi diferencial no está en aplicar una herramienta, sino en comprender la arquitectura completa antes de elegirla. Primero identifico qué función debe cumplir el sistema, quiénes intervienen, qué información necesitan y dónde se pierde valor. Después diseño el flujo, la solución y la tecnología capaz de sostenerlos.":"My distinctive value is not applying a particular tool, but understanding the complete architecture before choosing one. I first identify the function the system must perform, who is involved, what information they need and where value is being lost. Then I design the flow, the solution and the technology capable of sustaining them."}</p>
+        <p>{lang==="es"?"Mi recorrido comenzó en gestión pública, investigación aplicada, diseño institucional y modelos de gestión. Esa base evolucionó hacia la transformación digital e incorporó análisis de sistemas, metodologías ágiles, gestión de productos y proyectos, experiencia de usuario e inteligencia artificial aplicada.":"My career began in public management, applied research, institutional design and management models. That foundation evolved toward digital transformation and expanded to include systems analysis, agile methodologies, product and project management, user experience and applied artificial intelligence."}</p>
+        <p>{lang==="es"?"Esta combinación me permite abordar la tecnología como parte de un sistema mayor. Porque una herramienta no transforma por sí sola: transforma cuando se integra con la manera en que las personas trabajan, deciden y generan valor.":"This combination allows me to approach technology as part of a larger system. A tool does not transform an organization on its own: transformation happens when it is integrated with the way people work, make decisions and create value."}</p>
+        <p>{lang==="es"?"Actualmente desarrollo MPA Flow, mi práctica de arquitectura de sistemas y transformación organizacional. Desde allí diseño soluciones digitales y operativas, plataformas, tableros, experiencias de aprendizaje y sistemas de trabajo que hacen visible la complejidad y la convierten en acción posible.":"I currently lead MPA Flow, my systems architecture and organizational transformation practice. Through it, I design digital and operational solutions, platforms, dashboards, learning experiences and ways of working that make complexity visible and turn it into possible action."}</p>
+        <p>{lang==="es"?"Me interesan roles y proyectos donde pueda aportar esta combinación de arquitectura, transformación, tecnología e innovación para resolver desafíos reales y construir formas de operar más claras, adoptables y sostenibles.":"I am interested in roles and projects where I can bring together architecture, transformation, technology and innovation to solve real challenges and build clearer, more adoptable and sustainable ways of operating."}</p>
+      </div>}
+      <div className="stats">{[{n:"18",es:"Años de experiencia",en:"Years of experience"},{n:"40+",es:"Stakeholders",en:"Stakeholders"},{n:"30+",es:"Personas lideradas",en:"People led"},{n:"25+",es:"Iniciativas",en:"Initiatives"},{n:"3",es:"Soluciones de IA end-to-end",en:"End-to-end AI solutions"}].map(item=><div className="stat" key={item.es}><strong>{item.n}</strong><span>{lang==="es"?item.es:item.en}</span></div>)}</div>
+    </div></section>
+    <section className="city-banner" aria-label="Mar del Plata — Making complexity visible. Designing transformation."><img src="/mar-del-plata-banner-final-v2.png" alt="Vista nocturna de Mar del Plata con la identidad visual de Rocío Dopazo"/></section>
+    <section id="flow" className="section flow-section"><div className="container"><div className="flow-heading"><div><h2 className="flow-title">FLOW</h2><p className="flow-intro">{lang==="es"?"Un marco para leer el sistema completo antes de intervenirlo: detectar fricción, orientar la lectura, recuperar ownership y elegir la intervención que corresponde.":"A framework for reading the whole system before intervening in it: detecting friction, orienting the reading, recovering ownership and choosing the intervention that fits."}</p></div><div className="flow-brand" aria-label="MPA Flow"><span className="orbit orbit-one"/><span className="orbit orbit-two"/><img src="/mpa-flow-logo-final-v7.png" alt="Logo de MPA Flow"/></div></div><div className="flow-grid">{flow.map(node=><article className="flow-card" key={node.code}><div className="card-top"><span>{node.code}</span><b>{node.number}</b></div><h3>{t(node.title,lang)}</h3><p>{t(node.body,lang)}</p></article>)}</div></div></section>
+    <section id="work" className="section work-section"><div className="container"><p className="section-kicker">{lang==="es"?"Trabajo":"Work"}</p><h2>{lang==="es"?"Proyectos":"Projects"}</h2><div className="gradient-rule"/>
+      {groups.map((group:any)=><div className="project-group" key={local(group.title,lang)}><div className="group-heading"><h3>{local(group.title,lang)}</h3><span>{local(group.label,lang)}</span></div><div className="projects-grid">{group.projects.map((project:any)=><article className={(project.image||project.mockup)?"project-card project-card-featured":"project-card"} key={local(project.title,lang)}>{project.mockup==="narrative-portal"&&<NarrativePortalVisual lang={lang}/>} {project.image&&<figure className="project-visual"><img src={project.image} alt={`${local(project.title,lang)} — ${lang==="es"?"captura del proyecto":"project screenshot"}`}/></figure>}<h4>{local(project.title,lang)}</h4><p className="project-tagline">{t(project.tagline,lang)}</p><p>{t(project.body,lang)}</p>{project.badge&&<span className="project-badge">{t(project.badge,lang)}</span>}{project.url?<a href={project.url} target="_blank" rel="noreferrer">{lang==="es"?"Visitar":"Visit"} <span>→</span></a>:<span className="no-link">{project.status?t(project.status,lang):(lang==="es"?"Prototipo privado":"Private prototype")}</span>}</article>)}</div></div>)}
+    </div></section>
+    <section id="contact" className="section contact-section"><div className="container narrow"><p className="section-kicker">{lang==="es"?"Contacto":"Contact"}</p><h2>{lang==="es"?"Conversemos sobre tu sistema":"Let's talk about your system"}</h2><p className="contact-intro">{lang==="es"?"Escribime si querés revisar la fricción de tus procesos, sistemas o equipos.":"Write to me if you want to look at the friction in your processes, systems or teams."}</p><div className="contact-cards"><a href="mailto:rociocelestedopazo@gmail.com" className="contact-card"><span>Email</span><strong>rociocelestedopazo@gmail.com</strong></a><a href="https://www.linkedin.com/in/rociodopazo" target="_blank" rel="noreferrer" className="contact-card"><span>LinkedIn</span><strong>linkedin.com/in/rociodopazo</strong></a><a href="https://mpaflowpage.netlify.app" target="_blank" rel="noreferrer" className="contact-card brand-card"><img src="/mpa-flow-logo-final-v7.png" alt="MPA Flow"/><span><small>{lang==="es"?"Práctica profesional":"Professional practice"}</small><strong>MPA Flow</strong></span></a></div></div></section>
+    <footer>© 2026 Rocío Dopazo — MPA Flow · Evigila · Lude · Transmuta</footer>
+  </main>
+}
+
+function MetodoVivoVisual({lang}:{lang:Lang}){
+  return <figure className="project-visual metodo-vivo-visual" aria-label={lang==="es"?"Prototipo de Portal de Experiencias":"Experience Portal prototype"}>
+    <div className="mv-sidebar">
+      <div className="mv-brand"><span>PE</span><strong>{lang==="es"?<>Portal de<br/>Experiencias</>:<>Experience<br/>Portal</>}</strong></div>
+      <nav aria-label={lang==="es"?"Módulos del prototipo":"Prototype modules"}>
+        {[lang==="es"?"Inicio":"Home",lang==="es"?"Recorrido":"Journey",lang==="es"?"Sesiones":"Sessions",lang==="es"?"Progreso":"Progress",lang==="es"?"Reflexiones":"Reflections",lang==="es"?"Comunidad":"Community"].map((item,index)=><span className={index===0?"active":""} key={item}><i/>{item}</span>)}
+      </nav>
+      <small>{lang==="es"?"Tu método. Su proceso.":"Your method. Their journey."}</small>
+    </div>
+    <div className="mv-dashboard">
+      <div className="mv-top"><span>{lang==="es"?"Espacio de acompañamiento":"Mentoring space"}</span><b>{lang==="es"?"Progreso 68%":"Progress 68%"}</b></div>
+      <div className="mv-hero">
+        <img src="/metodo-vivo-mentoring-v12.png" alt="" aria-hidden="true"/>
+        <div className="mv-hero-copy"><small>{lang==="es"?"RECORRIDO ACTIVO":"ACTIVE JOURNEY"}</small><strong>{lang==="es"?"Convertí intención en transformación.":"Turn intention into transformation."}</strong><p>{lang==="es"?"Herramientas, sesiones y evidencia de progreso en una experiencia con tu identidad.":"Tools, sessions and visible progress in an experience built around your identity."}</p><span>{lang==="es"?"Continuar recorrido →":"Continue journey →"}</span></div>
+      </div>
+      <div className="mv-cards"><div><small>{lang==="es"?"PRÓXIMA SESIÓN":"NEXT SESSION"}</small><strong>{lang==="es"?"Claridad para decidir":"Clarity to decide"}</strong><span>{lang==="es"?"Preparar encuentro":"Prepare session"}</span></div><div><small>{lang==="es"?"REFLEXIÓN":"REFLECTION"}</small><strong>{lang==="es"?"¿Qué cambió desde la última conversación?":"What changed since the last conversation?"}</strong><span>{lang==="es"?"Registrar avance":"Capture progress"}</span></div><div><small>{lang==="es"?"HERRAMIENTA":"TOOL"}</small><strong>{lang==="es"?"Mapa de decisiones":"Decision map"}</strong><span>{lang==="es"?"Abrir herramienta":"Open tool"}</span></div></div>
+    </div>
+  </figure>
+}
+
+function NarrativePortalVisual({lang}:{lang:Lang}){
+  const steps=lang==="es"?["LIBRO FÍSICO","ACCESO PROTEGIDO","EXPERIENCIA DIGITAL"]:["PHYSICAL BOOK","PROTECTED ACCESS","DIGITAL EXPERIENCE"];
+  return <figure className="project-visual narrative-portal-visual" aria-label={lang==="es"?"Del libro físico al portal narrativo interactivo":"From the physical book to the interactive narrative portal"}>
+    <div className="np-panel np-book"><img src="/que-embole-book-cover-v14.jpeg" alt={lang==="es"?"Ejemplar físico del libro ¡Qué Embole!":"Physical copy of the book ¡Qué Embole!"}/><span><b>01</b>{steps[0]}</span></div>
+    <i className="np-arrow" aria-hidden="true">→</i>
+    <div className="np-panel np-access"><img src="/que-embole-portal-access-v14.jpeg" alt={lang==="es"?"Página del libro con acceso al portal de integración":"Book page containing access to an integration portal"}/><div className="qr-protection" aria-label={lang==="es"?"Código protegido":"Protected code"}><strong>MPA</strong><small>{lang==="es"?"ACCESO PROTEGIDO":"PROTECTED ACCESS"}</small></div><span><b>02</b>{steps[1]}</span></div>
+    <i className="np-arrow" aria-hidden="true">→</i>
+    <div className="np-panel np-portal"><img src="/que-embole-portals-v14.png" alt={lang==="es"?"Portal digital del universo ¡Qué Embole!":"Digital portal for the ¡Qué Embole! universe"}/><span><b>03</b>{steps[2]}</span></div>
+  </figure>
 }
