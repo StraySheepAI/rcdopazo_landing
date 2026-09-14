@@ -119,7 +119,7 @@ export const OBRAS: Obra[] = [
     note: "Versión activa en proceso de actualización.",
     affiliations: ["Magia para Atrevidos", "Universo ¡Qué Embole!"],
     images: {
-      cover: "/mpa-coin-ego-sum-v3-antique.png",
+      cover: "/dima-machine-cutout-v1.png",
     },
     links: [
       {
