@@ -1081,5 +1081,5 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
 /* Oracle atmosphere */
 .oracle-shell:before{content:"";position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(5,2,7,.45),rgba(5,2,7,.86)),url('/pulsus-agora-interior-v1.png') center/cover no-repeat;opacity:.34;filter:saturate(.82) contrast(1.08);pointer-events:none}
 /* El oráculo funciona como umbral del pasaje central: queda por encima de las puertas. */
-.school-oracle-entry{top:7%}
-@media(max-width:720px){.school-oracle-entry{top:9%}}
+.school-oracle-entry{top:19%}
+@media(max-width:720px){.school-oracle-entry{top:20%}}
