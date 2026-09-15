@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { DEFAULT_CAMPUS_EXPERIENCE, type CampusExperience } from "@/lib/campus-content";
+import { DEFAULT_CAMPUS_EXPERIENCE, type CampusBlock, type CampusExperience } from "@/lib/campus-content";
 
 const COPY = {
   es: {
@@ -116,7 +116,7 @@ export default function PrincipiosUniversalesWorkshop() {
           {active === 4 && (lang === "es" ? <article><p className="pf-lesson-label">Laboratorio · minutos 28–38</p><h2>La relación produce una función que ninguna parte contiene sola.</h2><p>Vas a ver cómo piezas que por separado no iluminan nada producen una función cuando entran en relación. Mirá el circuito y registrá dónde creías que estaba la capacidad de encender.</p><div className="pf-lesson-callout"><b>No tenés que traer materiales</b><span>La experiencia sucede en vivo. En tu cuaderno solo vas a registrar qué cambió en tu manera de mirar la relación.</span></div><div className="pf-lesson-callout"><b>Pregunta</b><span>¿Dónde estaba la luz antes de cerrar el circuito: en una pieza o en la relación?</span></div></article> : <article><p className="pf-lesson-label">Laboratory · minutes 28–38</p><h2>A relationship produces a function that no part contains alone.</h2><p>You will see how pieces that cannot illuminate anything on their own produce a function when they enter into relationship. Observe the circuit and notice where you believed the capacity to light was located.</p><div className="pf-lesson-callout"><b>You do not need to bring materials</b><span>The experience happens live. In your workbook you will only record what changed in the way you observed the relationship.</span></div><div className="pf-lesson-callout"><b>Question</b><span>Where was the light before the circuit closed: in one part, or in the relationship?</span></div></article>)}
           {active === 5 && <article><p className="pf-lesson-label">{lang === "es" ? "Experiencia central · minutos 38–52" : "Core experience · minutes 38–52"}</p><h2>{lang === "es" ? "El tercero que no estabas mirando" : "The third you were not looking at"}</h2><p>{lang === "es" ? "Tomá la situación inicial y separá las dos fuerzas que estabas tratando como únicas. Después observá qué sistema producen juntas." : "Return to your initial situation and separate the two forces you were treating as the only ones. Then observe the system they produce together."}</p><div className="pf-lab-fields"><label>{lang === "es" ? "Primera fuerza" : "First force"}<textarea value={partA} onChange={(e) => save(setPartA, "partA", e.target.value)} /></label><label>{lang === "es" ? "Segunda fuerza" : "Second force"}<textarea value={partB} onChange={(e) => save(setPartB, "partB", e.target.value)} /></label><label className="wide">{lang === "es" ? "El tercero que emerge" : "The third that emerges"}<textarea value={third} onChange={(e) => save(setThird, "third", e.target.value)} placeholder={lang === "es" ? "La relación está produciendo…" : "The relationship is producing…"} /></label></div></article>}
           {active === 6 && <article><p className="pf-lesson-label">{lang === "es" ? "Integración · minutos 52–60" : "Integration · minutes 52–60"}</p><h2>{lang === "es" ? "No salgas con una respuesta. Salí con una observación más precisa." : "Do not leave with an answer. Leave with a more precise observation."}</h2><label>{lang === "es" ? "Un movimiento posible" : "One possible movement"}</label><textarea value={movement} onChange={(e) => save(setMovement, "movement", e.target.value)} placeholder={lang === "es" ? "Después de mirar la configuración, puedo…" : "After observing the configuration, I can…"} /><div className="pf-correspondences"><p>{lang === "es" ? "Lo que te llevás" : "What you take with you"}</p><div><span><b>7</b>{lang === "es" ? "lentes" : "lenses"}</span><span><b>1</b>{lang === "es" ? "situación explorada" : "explored situation"}</span><span><b>1</b>{lang === "es" ? "cuaderno" : "notebook"}</span><span><b>1</b>{lang === "es" ? "continuidad posible" : "possible continuation"}</span></div></div><button className="pu-complete" onClick={finish}>{completed ? t.reopen : t.complete}</button><div className="pu-certificate-form"><h3>{t.certificate}</h3><p>{t.lockedCert}</p><label>{t.name}<input value={participant} onChange={(e) => save(setParticipant, "participant", e.target.value)} /></label><label className="pu-check"><input type="checkbox" checked={attended} onChange={(e) => { setAttended(e.target.checked); persist({ attended: e.target.checked }); }} /> {t.attended}</label><button disabled={!completed || !attended || !participant.trim()} onClick={() => printMode("certificate")}>{t.issue}</button></div></article>}
-          <section className="pu-managed-content"><p className="pf-lesson-label">{liveStage.label}</p><h2>{liveStage.title}</h2><p>{liveStage.body}</p>{liveStage.mediaUrl && <a href={liveStage.mediaUrl} target="_blank" rel="noreferrer">{lang === "es" ? "Abrir recurso de esta etapa ↗" : "Open this stage resource ↗"}</a>}{liveStage.blocks.map(block => <article key={block.id} data-block={block.type}><p>{block.content}</p>{block.url && <a href={block.url} target="_blank" rel="noreferrer">{blockNamesForPublic(block.type, lang)} ↗</a>}</article>)}</section>
+          <section className="pu-managed-content"><p className="pf-lesson-label">{liveStage.label}</p><h2>{liveStage.title}</h2><p>{liveStage.body}</p>{liveStage.mediaUrl && <CampusMedia url={liveStage.mediaUrl} lang={lang} />}{liveStage.blocks.map(block => <article key={block.id} data-block={block.type}><p>{block.content}</p>{block.url && <CampusMedia url={block.url} type={block.type} lang={lang} />}</article>)}</section>
         </div>
         <div className="pf-classroom-controls"><button disabled={active === 0} onClick={() => go(active - 1)}>{t.previous}</button>{active < liveLocale.stages.length - 1 && <button className="primary" onClick={() => go(active + 1)}>{t.next}</button>}</div>
       </section>
@@ -129,4 +129,37 @@ export default function PrincipiosUniversalesWorkshop() {
 function blockNamesForPublic(type: string, lang: "es" | "en") {
   const labels = lang === "es" ? { image: "Ver imagen", video: "Ver video", audio: "Escuchar audio", download: "Descargar material", text: "Leer", prompt: "Abrir consigna" } : { image: "View image", video: "Watch video", audio: "Listen to audio", download: "Download material", text: "Read", prompt: "Open prompt" };
   return labels[type as keyof typeof labels] || (lang === "es" ? "Abrir recurso" : "Open resource");
+}
+
+function mediaKind(url: string, preferred?: CampusBlock["type"]) {
+  if (preferred && ["image", "video", "audio", "download"].includes(preferred)) return preferred;
+  let decoded = url.toLowerCase();
+  try { decoded = decodeURIComponent(url).toLowerCase(); } catch { /* A manually pasted URL may contain a literal percent sign. */ }
+  if (/youtu\.be|youtube\.com|vimeo\.com/.test(decoded)) return "video";
+  if (/\.(png|jpe?g|webp|gif|avif|svg)(?:\?|$)/.test(decoded)) return "image";
+  if (/\.(mp3|wav|ogg|m4a|aac)(?:\?|$)/.test(decoded)) return "audio";
+  if (/\.pdf(?:\?|$)/.test(decoded)) return "download";
+  return "link";
+}
+
+function videoEmbedUrl(url: string) {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.includes("youtu.be")) return `https://www.youtube.com/embed/${parsed.pathname.slice(1)}`;
+    if (parsed.hostname.includes("youtube.com")) return `https://www.youtube.com/embed/${parsed.searchParams.get("v") || parsed.pathname.split("/").pop()}`;
+    if (parsed.hostname.includes("vimeo.com")) return `https://player.vimeo.com/video/${parsed.pathname.split("/").filter(Boolean).pop()}`;
+  } catch { return ""; }
+  return "";
+}
+
+function CampusMedia({ url, type, lang }: { url: string; type?: CampusBlock["type"]; lang: "es" | "en" }) {
+  const kind = mediaKind(url, type);
+  if (kind === "image") return <figure className="pu-campus-media"><img src={url} alt={lang === "es" ? "Material visual de esta etapa" : "Visual material for this stage"} loading="lazy" /></figure>;
+  if (kind === "audio") return <div className="pu-campus-media"><audio controls preload="metadata" src={url}>{lang === "es" ? "Tu navegador no puede reproducir este audio." : "Your browser cannot play this audio."}</audio></div>;
+  if (kind === "video") {
+    const embed = videoEmbedUrl(url);
+    if (embed) return <div className="pu-campus-media is-video"><iframe src={embed} title={lang === "es" ? "Video de esta etapa" : "Video for this stage"} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /></div>;
+  }
+  if (kind === "download") return <div className="pu-campus-media is-document"><iframe src={url} title={lang === "es" ? "Documento de esta etapa" : "Document for this stage"} /><a href={url} target="_blank" rel="noreferrer">{blockNamesForPublic("download", lang)} ↗</a></div>;
+  return <a className="pu-campus-resource" href={url} target="_blank" rel="noreferrer">{blockNamesForPublic(type || "link", lang)} ↗</a>;
 }

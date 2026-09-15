@@ -1100,3 +1100,14 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
 .campus-upload-button:hover{border-color:#aa925e;background:#251026}
 .campus-upload-button.is-disabled{opacity:.45;cursor:not-allowed}
 .campus-upload-button input{position:absolute!important;width:1px!important;height:1px;opacity:0;overflow:hidden;padding:0!important;border:0!important}
+
+.pu-campus-media{width:100%;margin:24px 0;overflow:hidden;border:1px solid rgba(164,132,72,.42);border-radius:18px;background:rgba(7,3,9,.72);box-shadow:0 18px 48px rgba(0,0,0,.28)}
+.pu-campus-media img{display:block;width:100%;max-height:620px;object-fit:contain}
+.pu-campus-media audio{display:block;width:calc(100% - 32px);margin:16px}
+.pu-campus-media.is-video{position:relative;aspect-ratio:16/9}
+.pu-campus-media.is-video iframe,.pu-campus-media.is-document iframe{width:100%;height:100%;border:0}
+.pu-campus-media.is-document{height:min(72vh,720px);display:flex;flex-direction:column}
+.pu-campus-media.is-document iframe{min-height:0;flex:1}
+.pu-campus-media.is-document a,.pu-campus-resource{display:block;padding:14px 18px;color:#c7a95f;text-align:center;text-decoration:none;font-weight:700;letter-spacing:.04em}
+@media(max-width:720px){.pu-campus-media{margin:18px 0;border-radius:12px}.pu-campus-media.is-document{height:520px}}
+.preview-media.has-media{height:auto;min-height:120px;overflow:hidden}.preview-media.has-media img{display:block;width:100%;max-height:220px;object-fit:contain}.preview-media.has-media audio{width:calc(100% - 20px);margin:10px}.preview-media.has-media iframe{width:100%;height:220px;border:0}
