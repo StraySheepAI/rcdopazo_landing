@@ -40,7 +40,7 @@ export async function PUT(request: NextRequest) {
   if (role === "editor") {
     const before = baseline.locales.es.stages.map((stage) => stage.id).join("|");
     const after = content.locales.es.stages.map((stage) => stage.id).join("|");
-    if (before !== after) return NextResponse.json({ error: "Reordenar o agregar etapas requiere acceso de Arquitecta." }, { status: 403 });
+    if (before !== after) return NextResponse.json({ error: "Agregar, eliminar, duplicar o reordenar etapas requiere acceso de Arquitecta." }, { status: 403 });
   }
   const next: CampusExperience = { ...content, version: (current?.version || content.version || 0) + 1, updatedAt: new Date().toISOString(), updatedBy: role };
   await writeBlob(action === "publish" ? PUBLISHED_PATH : DRAFT_PATH, next);
