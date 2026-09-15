@@ -1095,3 +1095,8 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
 .oracle-whisper b{color:#b99c59;font:600 .56rem sans-serif;letter-spacing:.13em;text-transform:uppercase}
 @media(max-width:720px){.oracle-whisper{gap:10px;margin-bottom:18px;padding:10px 12px}.oracle-whisper img{width:42px;height:42px}.oracle-whisper span{font-size:.92rem}.oracle-question>div:nth-of-type(2){margin-top:24px}}
 .oracle-shell{overflow-x:hidden;overflow-y:auto}
+
+.campus-upload-button{position:relative;display:flex!important;align-items:center;justify-content:center;min-width:142px;border:1px solid rgba(150,123,69,.35);border-radius:10px;background:#170b19;color:#aa925e!important;padding:10px 14px;font-size:.88rem!important;letter-spacing:normal!important;text-transform:none!important;cursor:pointer}
+.campus-upload-button:hover{border-color:#aa925e;background:#251026}
+.campus-upload-button.is-disabled{opacity:.45;cursor:not-allowed}
+.campus-upload-button input{position:absolute!important;width:1px!important;height:1px;opacity:0;overflow:hidden;padding:0!important;border:0!important}
