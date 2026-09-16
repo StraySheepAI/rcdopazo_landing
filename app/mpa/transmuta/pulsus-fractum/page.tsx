@@ -100,7 +100,7 @@ export default function PulsusFractumPage() {
         <span>Ágora Pulsus</span>
         <button className="school-desktop-map" type="button" onClick={() => { setHash("#campus"); requestCampusAccess(); }}>Abrir mapa</button>
         <button className="school-mobile-menu-button" type="button" aria-expanded={mobileMenuOpen} aria-label="Abrir menú del campus" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}><i /><i /><i /></button>
-        {mobileMenuOpen && <nav className="school-mobile-menu" aria-label="Menú del campus"><b>Ágora Pulsus</b><Link href="/mpa/transmuta/pulsus-fractum/oraculo">Oráculo de los Pasajes</Link><button type="button" onClick={() => { setMobileMenuOpen(false); setHash("#campus"); requestCampusAccess(); }}>Abrir mapa</button><button type="button" onClick={() => { setMobileMenuOpen(false); setPlace("orientation"); }}>Ver cartelera viva</button><button type="button" onClick={() => { setMobileMenuOpen(false); setPlace("fundamentos"); }}>Materias troncales</button><button type="button" onClick={() => { setMobileMenuOpen(false); setPlace("logica"); }}>Fundamentos de Lógica I</button></nav>}
+        {mobileMenuOpen && <nav className="school-mobile-menu" aria-label="Menú del campus"><b>Ágora Pulsus</b><Link href="/mpa/transmuta/pulsus-fractum/mi-recorrido">Mi recorrido</Link><Link href="/mpa/transmuta/pulsus-fractum/oraculo">Oráculo de los Pasajes</Link><button type="button" onClick={() => { setMobileMenuOpen(false); setHash("#campus"); requestCampusAccess(); }}>Abrir mapa</button><button type="button" onClick={() => { setMobileMenuOpen(false); setPlace("orientation"); }}>Ver cartelera viva</button><button type="button" onClick={() => { setMobileMenuOpen(false); setPlace("fundamentos"); }}>Materias troncales</button><button type="button" onClick={() => { setMobileMenuOpen(false); setPlace("logica"); }}>Fundamentos de Lógica I</button></nav>}
       </header>
 
       <section className="school-agora-place">
@@ -110,7 +110,7 @@ export default function PulsusFractumPage() {
           <p className="school-agora-welcome">Acá empiezan todos. Elegí qué querés encontrar; el campus te mostrará hasta dónde podés entrar hoy.</p>
         </div>
 
-        <Link className="school-oracle-entry" href="/mpa/transmuta/pulsus-fractum/oraculo"><small>Orientación abierta</small><b>Oráculo de los Pasajes</b><span>Descubrir mis puertas →</span></Link>
+        <Link className="school-oracle-entry" href="/mpa/transmuta/pulsus-fractum/oraculo"><small>Orientación abierta</small><b>Oráculo de los Pasajes</b><span>Descubrir mis puertas →</span></Link><Link className="school-journey-entry" href="/mpa/transmuta/pulsus-fractum/mi-recorrido">Mi recorrido · Grado I →</Link>
 
         <div className="school-agora-world" aria-label="Interior del Ágora de Pulsus Fractum">
           <div className="school-magic-lights" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>

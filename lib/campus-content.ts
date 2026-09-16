@@ -1,9 +1,16 @@
 export type CampusLanguage = "es" | "en";
+export type CampusExperienceKind = "workshop" | "course" | "class" | "encounter";
+export type CampusAccessMode = "open" | "key" | "enrollment";
 export type CampusBlock = { id: string; type: "text" | "image" | "video" | "audio" | "download" | "prompt"; content: string; url?: string };
 export type CampusStage = { id: string; name: string; label: string; title: string; body: string; mediaUrl: string; blocks: CampusBlock[] };
 export type CampusLocaleContent = { eyebrow: string; hero: string; subtitle: string; stages: CampusStage[] };
 export type CampusExperience = {
-  slug: "principios-universales";
+  slug: string;
+  name?: string;
+  kind?: CampusExperienceKind;
+  access?: CampusAccessMode;
+  grade?: number;
+  coverUrl?: string;
   version: number;
   updatedAt: string;
   updatedBy: "editor" | "architect" | "system";
@@ -36,6 +43,11 @@ function stages(source: string[][]): CampusStage[] {
 
 export const DEFAULT_CAMPUS_EXPERIENCE: CampusExperience = {
   slug: "principios-universales",
+  name: "Principios Universales",
+  kind: "workshop",
+  access: "key",
+  grade: 0,
+  coverUrl: "",
   version: 1,
   updatedAt: "",
   updatedBy: "system",
@@ -48,5 +60,16 @@ export const DEFAULT_CAMPUS_EXPERIENCE: CampusExperience = {
 export function isCampusExperience(value: unknown): value is CampusExperience {
   if (!value || typeof value !== "object") return false;
   const data = value as Partial<CampusExperience>;
-  return data.slug === "principios-universales" && Boolean(data.locales?.es?.stages?.length) && Boolean(data.locales?.en?.stages?.length);
+  return typeof data.slug === "string" && /^[a-z0-9-]+$/.test(data.slug) && Boolean(data.locales?.es?.stages?.length) && Boolean(data.locales?.en?.stages?.length);
+}
+
+export function blankCampusExperience(slug: string, name: string, kind: CampusExperienceKind, access: CampusAccessMode): CampusExperience {
+  const stage = (stageName: string): CampusStage => ({ id: "umbral", name: stageName, label: "", title: "", body: "", mediaUrl: "", blocks: [] });
+  return {
+    slug, name, kind, access, grade: 0, coverUrl: "", version: 1, updatedAt: "", updatedBy: "system",
+    locales: {
+      es: { eyebrow: name, hero: name, subtitle: "Una experiencia de Pulsus Fractum", stages: [stage("Umbral")] },
+      en: { eyebrow: name, hero: name, subtitle: "A Pulsus Fractum experience", stages: [stage("Threshold")] },
+    },
+  };
 }
