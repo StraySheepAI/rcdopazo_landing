@@ -105,7 +105,7 @@ export default function PortfolioCreativoPage() {
             </div>
           </div>
           <figure className={styles.heroVisionImage}>
-            <Image src="/portfolio-creativo/portfolio-creativo-universo-mpa-v5.png" alt="Rocío escribiendo frente a un libro abierto del que emergen las cartas de los Essentors, las bolas, Stray, la ruleta, caminos, símbolos y portales del universo creativo MPA" width={1024} height={1536} priority sizes="(max-width: 900px) 92vw, 44vw" />
+            <Image src="/portfolio-creativo/portfolio-creativo-hero.png" alt="Mujer escribiendo frente a un libro abierto del que emergen las cartas, caminos, símbolos y portales del universo creativo MPA" width={690} height={962} priority sizes="(max-width: 900px) 92vw, 44vw" />
           </figure>
         </section>
 
