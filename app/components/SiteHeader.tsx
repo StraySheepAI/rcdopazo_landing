@@ -42,6 +42,7 @@ export function SiteHeader() {
         { href: "/obras?filtro=apps-experiencias", label: t.nav.obrasApps },
       ],
     },
+    { href: "https://portfolio.rociodopazo.com", label: t.nav.portfolioCreativo },
     { href: "/#sobre", label: t.nav.sobreRC },
     { href: "/#contacto", label: t.nav.contacto },
   ];
