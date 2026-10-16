@@ -58,6 +58,7 @@
 .emboleGallery img:nth-child(2) { right: 4%; top: 4%; width: 42%; height: auto; z-index: 2; transform: rotate(3deg); }
 .emboleGallery img:nth-child(3) { right: 6%; bottom: 3%; width: 43%; height: auto; z-index: 3; transform: rotate(-2deg); }
 .emboleGallery img:nth-child(4) { left: 7%; bottom: 2%; width: 42%; height: auto; z-index: 1; transform: rotate(2deg); }
+.emboleGallery .codexBook { left: 28%; bottom: 10%; width: 46%; height: auto; z-index: 5; transform: rotate(-1deg); filter: drop-shadow(0 24px 30px rgba(48,11,43,.26)); }
 .emboleAppFeature { grid-column: 1 / -1; display: grid; grid-template-columns: 1.35fr .65fr; align-items: center; gap: clamp(30px,5vw,72px); margin-top: 12px; padding: clamp(28px,4vw,54px); border: 1px solid rgba(216,177,75,.44); border-radius: 24px; background: radial-gradient(circle at 15% 50%, rgba(198,34,119,.2), transparent 25%), linear-gradient(135deg,#19051a,#3a0b31); color: #f8edf4; box-shadow: 0 28px 60px rgba(50,10,45,.22); }
 .emboleAppFeature img { display: block; width: 100%; height: auto; object-fit: cover; object-position: top; border: 1px solid rgba(225,187,83,.35); border-radius: 14px; box-shadow: 0 22px 48px rgba(0,0,0,.38); }
 .emboleAppScreens { position: relative; min-height: 690px; }
@@ -98,6 +99,7 @@
 .gameGallery { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; padding: 45px; background: radial-gradient(circle at 50% 40%, rgba(124,40,145,.35), transparent 30%), linear-gradient(140deg, #190629, #4a103e); border: 1px solid rgba(213,178,84,.45); border-radius: 22px; }
 .gameGallery img { width: 100%; height: 560px; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,.3)); }
 .gameGallery img:nth-child(2) { transform: translateY(45px); }
+.gameGallery .gamesTarot { grid-column: 1 / -1; height: auto; max-height: 430px; object-fit: contain; transform: rotate(-1deg); }
 .writing { position: relative; padding: clamp(90px,12vw,180px) max(10vw,35px); background: radial-gradient(circle at 50% 0, rgba(195,50,127,.12), transparent 38%), linear-gradient(180deg, #f5e9df, #efe1ea); text-align: center; }
 .writing::before { content: "☽  ✦  ☾"; display: block; margin-bottom: 38px; color: var(--gold); letter-spacing: 1.2rem; }
 .writing blockquote { max-width: 1080px; margin: 0 auto; color: var(--plum); font: italic 500 clamp(2.5rem,5.3vw,5.6rem)/1.03 'Cormorant Garamond',Georgia,serif; }
@@ -146,6 +148,7 @@
   .emboleGallery img:nth-child(2) { width: 47%; }
   .emboleGallery img:nth-child(3) { width: 48%; }
   .emboleGallery img:nth-child(4) { width: 46%; }
+  .emboleGallery .codexBook { left: 23%; bottom: 9%; width: 54%; }
   .emboleAppScreens { min-height: 470px; }
   .emboleAppScreens img { width: 68%; max-height: 430px; }
   .tarotGallery { min-height: 430px; padding: 18px; }
@@ -163,5 +166,6 @@
   .digitalMirror { width: 37%; }
   .gameGallery { padding: 20px; gap: 6px; }
   .gameGallery img { height: 300px; }
+  .gameGallery .gamesTarot { height: auto; max-height: 240px; }
   .vision, .writing, .contact { padding-inline: 22px; }
 }

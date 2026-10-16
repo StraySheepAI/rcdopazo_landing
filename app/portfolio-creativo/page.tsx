@@ -131,6 +131,7 @@ export default function PortfolioCreativoPage() {
               <Image src="/portfolio-creativo/embole-book-bolas.png" alt="Doble página física de ¡Qué Embole! con personajes Bolas" width={1086} height={1448} sizes="28vw" />
               <Image src="/portfolio-creativo/embole-book-nigredo.png" alt="Doble página física del capítulo Nigredo" width={1086} height={1448} sizes="28vw" />
               <Image src="/portfolio-creativo/embole-book-lab.png" alt="Doble página física del Stray Mini Lab" width={1086} height={1448} sizes="28vw" />
+              <Image className={styles.codexBook} src="/portfolio-creativo/codex-open-realistic.png" alt="Códex EVIGILA abierto como publicación impresa" width={2048} height={1365} sizes="38vw" />
             </div>
             <div className={styles.emboleAppFeature}>
               <div className={styles.emboleAppScreens}>
@@ -183,6 +184,7 @@ export default function PortfolioCreativoPage() {
             <div className={styles.gameGallery}>
               <Image src="/stray-laboratorio.png" alt="Experiencia lúdica del universo Stray Sheep" width={715} height={944} sizes="30vw" />
               <Image src="/dima-machine-cutout-v1.png" alt="DIMA, dispositivo interactivo de palabras" width={1024} height={1536} sizes="30vw" />
+              <Image className={styles.gamesTarot} src="/portfolio-creativo/products/evigila-universo-completo.png" alt="Universo de juego del Tarot EVIGILA" width={1536} height={1024} sizes="40vw" />
             </div>
           </article>
         </section>
