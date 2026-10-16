@@ -9,9 +9,9 @@ import styles from "./portfolio.module.css";
 
 const copy = {
   es: {
-    eyebrow: "Portfolio creativo · Ilustración · Escritura · Juego",
+    eyebrow: "R.C. Dopazo · Escritora · Ilustradora · Vision Builder",
     title: "Construyo nuevas formas de ver, narrar y jugar.",
-    intro: "Soy Rocío Dopazo, escritora, ilustradora, diseñadora de experiencias y Vision Builder. Traduzco una intención en un sistema visual, narrativo o lúdico capaz de expresar lo que todavía no encontraba su forma.",
+    intro: "Soy R.C. Dopazo, escritora, ilustradora, diseñadora de experiencias y Vision Builder. Traduzco una intención en un sistema visual, narrativo o lúdico capaz de expresar lo que todavía no encontraba su forma.",
     pdf: "Descargar dossier breve",
     explore: "Explorar proyectos",
     visionKicker: "Vision Builder",
@@ -44,9 +44,9 @@ const copy = {
     contact: "Conversar sobre un proyecto",
   },
   en: {
-    eyebrow: "Creative portfolio · Illustration · Writing · Play",
+    eyebrow: "R.C. Dopazo · Writer · Illustrator · Vision Builder",
     title: "I build new ways of seeing, narrating and playing.",
-    intro: "I am Rocío Dopazo, writer, illustrator, experience designer and Vision Builder. I translate an intention into a visual, narrative or playful system capable of expressing what had not yet found its form.",
+    intro: "I'm R.C. Dopazo, writer, illustrator, experience designer and Vision Builder. I translate an intention into a visual, narrative or playful system capable of expressing what had not yet found its form.",
     pdf: "Download short portfolio",
     explore: "Explore projects",
     visionKicker: "Vision Builder",
