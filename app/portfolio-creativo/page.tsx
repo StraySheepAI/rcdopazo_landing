@@ -158,9 +158,9 @@ export default function PortfolioCreativoPage() {
 
           <article className={`${styles.project} ${styles.products}`}>
             <div className={styles.productGallery}>
-              <Image src="/portfolio-creativo/products/evigila-box-tabula-mpa.png" alt="Box Tábula MPA EVIGILA en variantes PVC madera y negro, con paneles intercambiables y plancha de stickers transparente" width={1536} height={1024} sizes="(max-width: 900px) 92vw, 44vw" />
-              <Image src="/portfolio-creativo/products/evigila-box-closed.png" alt="Mockup de la caja cerrada del Tarot EVIGILA" width={1536} height={1024} sizes="(max-width: 900px) 70vw, 25vw" />
-              <Image src="/portfolio-creativo/products/evigila-box-dieline.png" alt="Plantilla de la caja del Tarot EVIGILA" width={1888} height={1334} sizes="(max-width: 900px) 70vw, 28vw" />
+              <Image src="/portfolio-creativo/products/evigila-box-tabula-variants.png" alt="Box Tábula MPA EVIGILA en variantes PVC madera y negro, con paneles intercambiables y stickers opcionales" width={1536} height={1024} sizes="(max-width: 900px) 92vw, 44vw" />
+              <Image src="/portfolio-creativo/products/evigila-box-closed-reference.png" alt="Caja cerrada del Tarot EVIGILA" width={1536} height={1024} sizes="(max-width: 900px) 70vw, 25vw" />
+              <Image src="/portfolio-creativo/products/evigila-dorso.png" alt="Dorso del sistema EVIGILA Tarot" width={1024} height={1536} sizes="(max-width: 900px) 70vw, 28vw" />
             </div>
             <div className={styles.projectText}><p className={styles.kicker}>{t.productsKicker}</p><h3>{t.productsTitle}</h3><p>{t.productsBody}</p></div>
           </article>
