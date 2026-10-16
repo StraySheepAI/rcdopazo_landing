@@ -31,7 +31,7 @@ const copy = {
     tarotBody: "Desarrollo de un universo visual y pedagógico donde cada imagen funciona como escena, personaje y dispositivo de observación. La guía integra ilustración, composición editorial y una lectura que enseña a mirar antes de interpretar.",
     productsKicker: "Objetos editoriales · EVIGILA",
     productsTitle: "El universo también se puede tocar.",
-    productsBody: "La Tábula, el mazo y su caja trasladan el lenguaje de EVIGILA a objetos reales: superficies para leer, cartas para mover y una edición que convierte la experiencia en ritual de mesa.",
+    productsBody: "La Box Tábula MPA es una caja-objeto de PVC: abre, guarda las cartas y permite cambiar los paneles de lectura según la tirada. Puede venir en acabado madera o negro, con una plancha de stickers MPA y Atrevia para personalizarla.",
     digitalKicker: "Diseño de sistemas digitales · Narrativa + interfaz",
     digitalTitle: "Universo Magia para Atrevidos.",
     digitalBody: "Diseñé un territorio digital donde la navegación también cuenta la historia: umbrales, portales, personajes, desafíos y dispositivos simbólicos construyen una experiencia inmersiva. Estas imágenes muestran su arquitectura, pero el Universo MPA no tiene un acceso directo: solo se llega jugando.",
@@ -69,7 +69,7 @@ const copy = {
     tarotBody: "A visual and pedagogical universe where each image works as a scene, a character and an observation device. The guide combines illustration, editorial composition and a reading that teaches us to look before interpreting.",
     productsKicker: "Editorial objects · EVIGILA",
     productsTitle: "The universe can also be held.",
-    productsBody: "The Tabula, deck and box carry EVIGILA's language into real objects: surfaces to read, cards to move and an edition that turns the experience into a tabletop ritual.",
+    productsBody: "The Box Tábula MPA is a PVC object-box: it opens, stores the cards and lets you change the reading panels for each spread. It can come in wood-look or black, with an MPA and Atrevia sticker sheet for personalization.",
     digitalKicker: "Digital systems design · Narrative + interface",
     digitalTitle: "The Magia para Atrevidos Universe.",
     digitalBody: "I designed a digital territory where navigation also tells the story: thresholds, portals, characters, challenges and symbolic devices build an immersive experience. These images reveal its architecture, but the MPA Universe has no direct entrance: it can only be reached through play.",
@@ -158,7 +158,7 @@ export default function PortfolioCreativoPage() {
 
           <article className={`${styles.project} ${styles.products}`}>
             <div className={styles.productGallery}>
-              <Image src="/portfolio-creativo/products/evigila-tabula-frame.png" alt="Tábula EVIGILA con marco plum y detalles dorados" width={1648} height={962} sizes="(max-width: 900px) 92vw, 44vw" />
+              <Image src="/portfolio-creativo/products/evigila-box-tabula-variants.png" alt="Box Tábula MPA EVIGILA en variantes PVC madera y negro, con paneles intercambiables y stickers opcionales" width={1536} height={1024} sizes="(max-width: 900px) 92vw, 44vw" />
               <Image src="/portfolio-creativo/products/evigila-box-closed.png" alt="Mockup de la caja cerrada del Tarot EVIGILA" width={1536} height={1024} sizes="(max-width: 900px) 70vw, 25vw" />
               <Image src="/portfolio-creativo/products/evigila-box-dieline.png" alt="Plantilla de la caja del Tarot EVIGILA" width={1888} height={1334} sizes="(max-width: 900px) 70vw, 28vw" />
             </div>
