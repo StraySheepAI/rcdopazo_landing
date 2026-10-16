@@ -1,0 +1,158 @@
+.page {
+  --ink: #230625;
+  --plum: #390b35;
+  --pink: #cb176c;
+  --gold: #b98630;
+  --paper: #fbf4e9;
+  color: var(--ink);
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.kicker { margin: 0 0 18px; color: var(--pink); font: 700 .7rem/1.2 Arial, sans-serif; letter-spacing: .22em; text-transform: uppercase; }
+.hero { position: relative; min-height: calc(100vh - 76px); display: grid; grid-template-columns: 1fr minmax(420px, .78fr); align-items: center; gap: clamp(30px, 6vw, 100px); padding: clamp(60px, 8vw, 120px) max(6vw, 30px); background: radial-gradient(circle at 88% 18%, rgba(198,35,121,.26), transparent 26%), radial-gradient(circle at 12% 82%, rgba(81,30,117,.17), transparent 27%), linear-gradient(122deg, #fff9ee 0, #f7e9e8 50%, #eadbea 100%); }
+.hero::before { content: "✦"; position: absolute; top: 8%; left: 48%; color: rgba(174,120,37,.7); font-size: 2.2rem; text-shadow: 80px 110px 0 rgba(199,29,110,.3), -90px 230px 0 rgba(83,28,103,.25), 180px 340px 0 rgba(174,120,37,.24); }
+.hero::after { content: ""; position: absolute; inset: 24px; border: 1px solid rgba(169,119,39,.2); pointer-events: none; }
+.heroCopy { position: relative; z-index: 1; max-width: 760px; }
+.hero h1 { margin: 0; color: var(--plum); font: 500 clamp(4.4rem,8vw,9rem)/.83 'Cormorant Garamond',Georgia,serif; letter-spacing: -.055em; }
+.lead { max-width: 690px; margin: 35px 0; color: #493544; font: 400 clamp(1.15rem,1.7vw,1.45rem)/1.7 Arial,sans-serif; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.actions a, .projectText a, .contact a { display: inline-flex; padding: 15px 22px; border: 1px solid var(--plum); border-radius: 999px; font: 700 .7rem Arial,sans-serif; letter-spacing: .1em; text-decoration: none; text-transform: uppercase; }
+.primary { background: var(--plum); color: #fff; box-shadow: 0 10px 30px rgba(55,8,50,.18); }
+.secondary { color: var(--plum); background: rgba(255,255,255,.34); }
+.cover { position: relative; z-index: 1; margin: 0; transform: rotate(1.2deg); filter: drop-shadow(0 32px 55px rgba(42,8,39,.24)); }
+.cover::before { content: ""; position: absolute; inset: 2% -6%; z-index: -1; border: 1px solid rgba(170,118,37,.52); box-shadow: 0 0 50px rgba(203,23,108,.16); transform: rotate(-2.5deg); }
+.cover img { display: block; width: 100%; height: auto; border: 1px solid rgba(173,122,42,.22); }
+.heroVisionImage { position: relative; z-index: 1; margin: 0; transform: rotate(.5deg); filter: drop-shadow(0 30px 50px rgba(42,8,39,.2)); }
+.heroVisionImage::before { content: ""; position: absolute; inset: 3% -4%; z-index: -1; border: 1px solid rgba(170,118,37,.45); border-radius: 50% 50% 24px 24px; box-shadow: 0 0 55px rgba(203,23,108,.14); transform: rotate(-1.5deg); }
+.heroVisionImage img { display: block; width: 100%; height: auto; max-height: 79vh; object-fit: contain; mix-blend-mode: multiply; }
+.heroUniverse { position: relative; z-index: 1; min-height: 690px; margin: 0; border: 1px solid rgba(173,122,42,.38); border-radius: 46% 46% 24px 24px; background: radial-gradient(circle at 50% 35%, rgba(211,54,137,.22), transparent 28%), radial-gradient(circle at 50% 60%, rgba(100,44,143,.2), transparent 45%), rgba(255,249,238,.46); box-shadow: inset 0 0 70px rgba(89,25,83,.08), 0 32px 55px rgba(42,8,39,.19); }
+.heroUniverse::before { content: "VISION · IMAGEN · JUEGO"; position: absolute; top: 6%; left: 50%; transform: translateX(-50%); width: max-content; color: var(--pink); font: 700 .65rem Arial,sans-serif; letter-spacing: .26em; }
+.heroUniverse img { position: absolute; height: auto; border: 1px solid rgba(179,126,43,.36); border-radius: 14px; box-shadow: 0 24px 48px rgba(49,10,43,.28); }
+.heroBook { left: 5%; top: 17%; width: 42%; transform: rotate(-7deg); z-index: 2; }
+.heroTarot { right: 3%; top: 12%; width: 48%; transform: rotate(5deg); z-index: 3; }
+.heroApp { right: 9%; bottom: 8%; width: 52%; transform: rotate(-2deg); z-index: 4; }
+.heroUniverse figcaption { position: absolute; left: 7%; bottom: 8%; width: 27%; color: var(--plum); font: italic 600 1.05rem/1.45 'Cormorant Garamond',Georgia,serif; }
+
+.vision { display: grid; grid-template-columns: 1.2fr .8fr; gap: 8vw; padding: clamp(80px,10vw,150px) max(7vw,35px); background: radial-gradient(circle at 20% 10%, #5b164e, transparent 35%), radial-gradient(circle at 90% 90%, #321263, transparent 25%), #180519; color: #f8f0f6; }
+.vision h2, .projects > header h2, .contact h2 { margin: 0; font: 500 clamp(3.2rem,6vw,6.5rem)/.94 'Cormorant Garamond',Georgia,serif; letter-spacing: -.04em; }
+.vision > div > p:last-child { max-width: 760px; margin-top: 30px; color: #d6c4d1; font: 1.08rem/1.75 Arial,sans-serif; }
+.vision ol { display: grid; align-content: center; gap: 0; margin: 0; padding: 0; list-style: none; }
+.vision li { display: grid; grid-template-columns: 55px 1fr; gap: 15px; padding: 20px 0; border-bottom: 1px solid rgba(221,186,102,.25); color: #f0e5ec; font: 500 1rem/1.4 Arial,sans-serif; }
+.vision li span { color: #cfac5d; font-family: Georgia,serif; }
+
+.projects { position: relative; padding: clamp(90px,10vw,160px) max(5vw,24px); background: radial-gradient(circle at 8% 16%, rgba(137,63,142,.12), transparent 18%), radial-gradient(circle at 94% 55%, rgba(210,45,120,.1), transparent 22%), linear-gradient(180deg, #fffaf1 0, #f7efe9 45%, #f4e8f1 100%); }
+.projects::before { content: "✦   ·   ✧"; position: absolute; top: 42px; left: 50%; transform: translateX(-50%); color: rgba(167,116,37,.65); letter-spacing: 1rem; }
+.projects > header { max-width: 980px; margin: 0 auto 100px; text-align: center; }
+.projects > header h2 { color: var(--plum); }
+.project { max-width: 1320px; margin: 0 auto 140px; }
+.projectText { max-width: 600px; }
+.projectText h3 { margin: 0 0 20px; color: var(--plum); font: 500 clamp(3rem,6vw,6.2rem)/.9 'Cormorant Garamond',Georgia,serif; letter-spacing: -.04em; }
+.projectText > p:last-of-type { color: #55404f; font: 1.05rem/1.75 Arial,sans-serif; }
+.projectText a { margin-top: 20px; color: var(--plum); }
+
+.embole { display: grid; grid-template-columns: .72fr 1.28fr; align-items: center; gap: 7vw; }
+.emboleGallery { position: relative; min-height: 760px; background: radial-gradient(circle at 78% 25%, rgba(202,35,116,.18), transparent 25%), linear-gradient(135deg, #eadbe8, #fff7e7); border: 1px solid rgba(170,118,37,.28); border-radius: 22px; box-shadow: inset 0 0 65px rgba(76,19,71,.07); }
+.emboleGallery img { position: absolute; object-fit: cover; box-shadow: 0 20px 45px rgba(48,11,43,.18); }
+.emboleGallery .book { left: 4%; top: 5%; width: 36%; height: auto; z-index: 4; transform: rotate(-4deg); }
+.emboleGallery img:nth-child(2) { right: 4%; top: 4%; width: 42%; height: auto; z-index: 2; transform: rotate(3deg); }
+.emboleGallery img:nth-child(3) { right: 6%; bottom: 3%; width: 43%; height: auto; z-index: 3; transform: rotate(-2deg); }
+.emboleGallery img:nth-child(4) { left: 7%; bottom: 2%; width: 42%; height: auto; z-index: 1; transform: rotate(2deg); }
+.emboleAppFeature { grid-column: 1 / -1; display: grid; grid-template-columns: 1.35fr .65fr; align-items: center; gap: clamp(30px,5vw,72px); margin-top: 12px; padding: clamp(28px,4vw,54px); border: 1px solid rgba(216,177,75,.44); border-radius: 24px; background: radial-gradient(circle at 15% 50%, rgba(198,34,119,.2), transparent 25%), linear-gradient(135deg,#19051a,#3a0b31); color: #f8edf4; box-shadow: 0 28px 60px rgba(50,10,45,.22); }
+.emboleAppFeature img { display: block; width: 100%; height: auto; object-fit: cover; object-position: top; border: 1px solid rgba(225,187,83,.35); border-radius: 14px; box-shadow: 0 22px 48px rgba(0,0,0,.38); }
+.emboleAppScreens { position: relative; min-height: 690px; }
+.emboleAppScreens img { position: absolute; width: 62%; max-height: 650px; }
+.emboleAppScreens img:first-child { left: 0; top: 0; z-index: 1; transform: rotate(-1.5deg); }
+.emboleAppScreens img:nth-child(2) { right: 0; top: 8%; z-index: 2; transform: rotate(2deg); }
+.emboleAppScreens img:nth-child(3) { right: 2%; bottom: 0; z-index: 3; transform: rotate(-1deg); }
+.emboleAppFeature h4 { margin: 0 0 20px; color: #f1d489; font: 500 clamp(2.5rem,4.6vw,5rem)/.94 'Cormorant Garamond',Georgia,serif; }
+.emboleAppFeature div > p:last-child { color: #d8c6d2; font: 1.03rem/1.72 Arial,sans-serif; }
+
+.tarot { display: grid; grid-template-columns: 1.3fr .7fr; align-items: center; gap: 7vw; }
+.tarotGallery { position: relative; min-height: 690px; padding: 48px; border: 1px solid rgba(210,176,81,.55); border-radius: 26px; background: radial-gradient(circle at 50% 46%, rgba(169,63,183,.26), transparent 28%), radial-gradient(circle at 18% 16%, rgba(238,169,48,.2), transparent 20%), linear-gradient(145deg, #12072d 0, #32104d 48%, #130621 100%); box-shadow: 0 30px 65px rgba(39,8,48,.28), inset 0 0 80px rgba(125,44,142,.19); }
+.tarotGallery::before { content: "✦"; position: absolute; inset: 4% auto auto 50%; color: #e0b654; font-size: 1.4rem; text-shadow: -230px 90px 0 rgba(238,202,102,.55), 220px 170px 0 rgba(238,202,102,.48), -150px 530px 0 rgba(210,61,145,.5); }
+.tarotGallery img { position: absolute; height: auto; border-radius: 12px; box-shadow: 0 25px 46px rgba(0,0,0,.48); transition: transform .35s ease; }
+.tarotGallery:hover .tarotProductDeck { transform: translateX(-8px) rotate(-3deg); }
+.tarotGallery:hover .tarotProductHarmonia { transform: translateX(8px) rotate(4deg); }
+.tarotProductDeck { left: 4%; top: 8%; width: 53%; z-index: 2; transform: rotate(-1.5deg); }
+.tarotProductHarmonia { right: 4%; top: 15%; width: 48%; z-index: 3; transform: rotate(2deg); }
+.tarotBack { left: 3%; bottom: 4%; width: 19%; z-index: 4; transform: rotate(-10deg); }
+.tarotCreatix { right: 3%; bottom: 3%; width: 18%; z-index: 5; transform: rotate(8deg); }
+
+.digital { display: grid; grid-template-columns: .68fr 1.32fr; align-items: center; gap: 5vw; padding: clamp(40px,5vw,72px); border: 1px solid rgba(220,181,77,.45); border-radius: 28px; background: radial-gradient(circle at 85% 15%, rgba(188,38,125,.28), transparent 24%), radial-gradient(circle at 10% 90%, rgba(70,46,157,.28), transparent 28%), linear-gradient(145deg,#150322,#310732 58%,#12051e); box-shadow: 0 34px 70px rgba(40,7,42,.24); }
+.digital .projectText h3 { color: #f8e8c3; }
+.digital .projectText > p:last-of-type { color: #d8c5d4; }
+.digital .projectText a { color: #efcf78; border-color: rgba(220,181,77,.7); }
+.digitalGallery { position: relative; min-height: 650px; }
+.digitalGallery img { position: absolute; height: auto; border: 1px solid rgba(229,191,88,.34); border-radius: 12px; box-shadow: 0 24px 55px rgba(0,0,0,.48); }
+.digitalUniverse { top: 2%; left: 2%; width: 82%; z-index: 1; transform: rotate(-1deg); }
+.digitalPortals { left: 0; bottom: 3%; width: 72%; z-index: 2; transform: rotate(1.5deg); }
+.digitalMirror { right: 1%; bottom: 0; width: 31%; z-index: 3; transform: rotate(-2deg); }
+
+.games { display: grid; grid-template-columns: .75fr 1.25fr; align-items: center; gap: 7vw; }
+.gameGallery { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; padding: 45px; background: radial-gradient(circle at 50% 40%, rgba(124,40,145,.35), transparent 30%), linear-gradient(140deg, #190629, #4a103e); border: 1px solid rgba(213,178,84,.45); border-radius: 22px; }
+.gameGallery img { width: 100%; height: 560px; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,.3)); }
+.gameGallery img:nth-child(2) { transform: translateY(45px); }
+.writing { position: relative; padding: clamp(90px,12vw,180px) max(10vw,35px); background: radial-gradient(circle at 50% 0, rgba(195,50,127,.12), transparent 38%), linear-gradient(180deg, #f5e9df, #efe1ea); text-align: center; }
+.writing::before { content: "☽  ✦  ☾"; display: block; margin-bottom: 38px; color: var(--gold); letter-spacing: 1.2rem; }
+.writing blockquote { max-width: 1080px; margin: 0 auto; color: var(--plum); font: italic 500 clamp(2.5rem,5.3vw,5.6rem)/1.03 'Cormorant Garamond',Georgia,serif; }
+.writing > p:last-child { max-width: 620px; margin: 38px auto 0; color: #6c5664; font: 1rem/1.7 Arial,sans-serif; }
+.contact { padding: clamp(90px,10vw,150px) max(8vw,35px); background: radial-gradient(circle at 85% 30%, #5b164e, transparent 27%), radial-gradient(circle at 10% 80%, #321263, transparent 24%), #170518; color: #fff; text-align: center; }
+.contact h2 { max-width: 1000px; margin: 0 auto; }
+.contact > p:not(.kicker) { max-width: 700px; margin: 28px auto; color: #d9c8d4; font: 1.05rem/1.7 Arial,sans-serif; }
+.contact a { margin-top: 15px; border-color: #c9a658; color: #ebcd7b; }
+.project, .vision, .writing { content-visibility: auto; contain-intrinsic-size: 900px; }
+
+@media (max-width: 900px) {
+  .hero, .vision, .embole, .tarot, .digital, .games { grid-template-columns: 1fr; }
+  .hero { padding-top: 55px; }
+  .hero h1 { font-size: clamp(4rem,16vw,7rem); }
+  .cover, .heroVisionImage { width: min(580px,92vw); margin: auto; }
+  .heroUniverse { width: min(680px,92vw); min-height: 650px; margin: auto; }
+  .vision { gap: 50px; }
+  .projects > header { margin-bottom: 70px; }
+  .project { margin-bottom: 100px; }
+  .projectText { max-width: none; }
+  .emboleGallery { min-height: 590px; }
+  .emboleAppFeature { grid-template-columns: 1fr; }
+  .emboleAppScreens { min-height: 680px; }
+  .tarotGallery { order: 2; min-height: 620px; }
+  .tarot .projectText { order: 1; }
+  .digitalGallery { min-height: 620px; }
+  .gameGallery img { height: 430px; }
+}
+
+@media (max-width: 560px) {
+  .hero { grid-template-columns: minmax(0,1fr); padding-inline: 20px; }
+  .hero::after { inset: 10px; }
+  .hero h1 { font-size: 3.8rem; }
+  .heroUniverse { min-height: 470px; border-radius: 38% 38% 18px 18px; }
+  .heroUniverse::before { top: 4%; font-size: .52rem; }
+  .heroBook { width: 45%; }
+  .heroTarot { width: 52%; }
+  .heroApp { width: 58%; right: 4%; }
+  .heroUniverse figcaption { font-size: .88rem; width: 31%; }
+  .actions { display: grid; }
+  .actions a { justify-content: center; }
+  .projects { padding-inline: 18px; }
+  .emboleGallery { min-height: 470px; }
+  .emboleGallery .book { width: 43%; }
+  .emboleGallery img:nth-child(2) { width: 47%; }
+  .emboleGallery img:nth-child(3) { width: 48%; }
+  .emboleGallery img:nth-child(4) { width: 46%; }
+  .emboleAppScreens { min-height: 470px; }
+  .emboleAppScreens img { width: 68%; max-height: 430px; }
+  .tarotGallery { min-height: 430px; padding: 18px; }
+  .tarotProductDeck { left: 2%; top: 8%; width: 58%; }
+  .tarotProductHarmonia { right: 2%; top: 15%; width: 52%; }
+  .tarotBack { left: 2%; bottom: 3%; width: 24%; }
+  .tarotCreatix { right: 1%; bottom: 2%; width: 22%; }
+  .digital { padding: 28px 18px; }
+  .digitalGallery { min-height: 420px; }
+  .digitalUniverse { width: 92%; }
+  .digitalPortals { width: 80%; bottom: 7%; }
+  .digitalMirror { width: 37%; }
+  .gameGallery { padding: 20px; gap: 6px; }
+  .gameGallery img { height: 300px; }
+  .vision, .writing, .contact { padding-inline: 22px; }
+}
