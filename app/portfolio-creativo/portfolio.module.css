@@ -78,6 +78,12 @@
 .tarotProductHarmonia { right: 4%; top: 15%; width: 48%; z-index: 3; transform: rotate(2deg); }
 .tarotBack { left: 3%; bottom: 4%; width: 19%; z-index: 4; transform: rotate(-10deg); }
 .tarotCreatix { right: 3%; bottom: 3%; width: 18%; z-index: 5; transform: rotate(8deg); }
+.products { display: grid; grid-template-columns: 1.28fr .72fr; align-items: center; gap: 7vw; }
+.productGallery { position: relative; min-height: 700px; border: 1px solid rgba(210,176,81,.5); border-radius: 26px; background: radial-gradient(circle at 48% 42%, rgba(190,44,130,.18), transparent 30%), linear-gradient(145deg, #170722, #32104d 52%, #12051f); box-shadow: 0 30px 65px rgba(39,8,48,.26), inset 0 0 80px rgba(125,44,142,.16); overflow: hidden; }
+.productGallery img { position: absolute; display: block; height: auto; border: 1px solid rgba(226,188,91,.52); border-radius: 12px; box-shadow: 0 24px 46px rgba(0,0,0,.42); object-fit: cover; }
+.productGallery img:first-child { left: 5%; top: 9%; width: 48%; height: 77%; z-index: 2; object-position: center; transform: rotate(-3deg); }
+.productGallery img:nth-child(2) { right: 6%; top: 6%; width: 35%; height: 53%; z-index: 3; object-position: top center; transform: rotate(3deg); }
+.productGallery img:nth-child(3) { right: 4%; bottom: 5%; width: 52%; z-index: 1; transform: rotate(-2deg); }
 
 .digital { display: grid; grid-template-columns: .68fr 1.32fr; align-items: center; gap: 5vw; padding: clamp(40px,5vw,72px); border: 1px solid rgba(220,181,77,.45); border-radius: 28px; background: radial-gradient(circle at 85% 15%, rgba(188,38,125,.28), transparent 24%), radial-gradient(circle at 10% 90%, rgba(70,46,157,.28), transparent 28%), linear-gradient(145deg,#150322,#310732 58%,#12051e); box-shadow: 0 34px 70px rgba(40,7,42,.24); }
 .digital .projectText h3 { color: #f8e8c3; }
@@ -104,7 +110,7 @@
 .project, .vision, .writing { content-visibility: auto; contain-intrinsic-size: 900px; }
 
 @media (max-width: 900px) {
-  .hero, .vision, .embole, .tarot, .digital, .games { grid-template-columns: 1fr; }
+  .hero, .vision, .embole, .tarot, .products, .digital, .games { grid-template-columns: 1fr; }
   .hero { padding-top: 55px; }
   .hero h1 { font-size: clamp(4rem,16vw,7rem); }
   .cover, .heroVisionImage { width: min(580px,92vw); margin: auto; }
@@ -118,6 +124,7 @@
   .emboleAppScreens { min-height: 680px; }
   .tarotGallery { order: 2; min-height: 620px; }
   .tarot .projectText { order: 1; }
+  .productGallery { min-height: 620px; }
   .digitalGallery { min-height: 620px; }
   .gameGallery img { height: 430px; }
 }
@@ -147,6 +154,10 @@
   .tarotProductHarmonia { right: 2%; top: 15%; width: 52%; }
   .tarotBack { left: 2%; bottom: 3%; width: 24%; }
   .tarotCreatix { right: 1%; bottom: 2%; width: 22%; }
+  .productGallery { min-height: 500px; }
+  .productGallery img:first-child { left: 4%; width: 53%; height: 75%; }
+  .productGallery img:nth-child(2) { right: 4%; width: 39%; height: 52%; }
+  .productGallery img:nth-child(3) { width: 57%; }
   .digital { padding: 28px 18px; }
   .digitalGallery { min-height: 420px; }
   .digitalUniverse { width: 92%; }
