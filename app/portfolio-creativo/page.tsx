@@ -152,6 +152,8 @@ export default function PortfolioCreativoPage() {
               <Image className={styles.tarotProductHarmonia} src="/portfolio-creativo/tarot-product-harmonia.png" alt="Producto físico del Tarot MPA: carta Harmonia Pactum" width={1152} height={1402} sizes="30vw" />
               <Image className={styles.tarotBack} src="/portfolio-creativo/tarot-back.png" alt="Contracara del sistema de cartas MPA" width={1004} height={1476} sizes="16vw" />
               <Image className={styles.tarotCreatix} src="/portfolio-creativo/tarot-creatix.png" alt="Carta Creatrix Imperatum del set Infants" width={1004} height={1476} sizes="16vw" />
+              <Image className={styles.tarotBox} src="/portfolio-creativo/products/evigila-box-closed-reference.png" alt="Caja cerrada del Tarot EVIGILA" width={1536} height={1024} sizes="24vw" />
+              <Image className={styles.tarotDorso} src="/portfolio-creativo/products/evigila-dorso.png" alt="Dorso del sistema EVIGILA Tarot" width={1024} height={1536} sizes="14vw" />
             </div>
             <div className={styles.projectText}><p className={styles.kicker}>{t.tarotKicker}</p><h3>{t.tarotTitle}</h3><p>{t.tarotBody}</p></div>
           </article>
@@ -159,8 +161,6 @@ export default function PortfolioCreativoPage() {
           <article className={`${styles.project} ${styles.products}`}>
             <div className={styles.productGallery}>
               <Image src="/portfolio-creativo/products/evigila-universo-completo.png" alt="Universo EVIGILA con Box Tábula, caja cerrada, cartas del tarot y dorso integrado" width={1536} height={1024} sizes="(max-width: 900px) 92vw, 44vw" />
-              <Image src="/portfolio-creativo/products/evigila-box-closed-reference.png" alt="Caja cerrada del Tarot EVIGILA" width={1536} height={1024} sizes="(max-width: 900px) 70vw, 25vw" />
-              <Image src="/portfolio-creativo/products/evigila-dorso.png" alt="Dorso del sistema EVIGILA Tarot" width={1024} height={1536} sizes="(max-width: 900px) 70vw, 28vw" />
             </div>
             <div className={styles.projectText}><p className={styles.kicker}>{t.productsKicker}</p><h3>{t.productsTitle}</h3><p>{t.productsBody}</p></div>
           </article>
