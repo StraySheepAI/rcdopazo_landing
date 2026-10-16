@@ -6,6 +6,13 @@ import { Fragment, useEffect, useState } from "react";
 import { useLanguage } from "../lib/i18n/LanguageContext";
 import { LanguageToggle } from "./LanguageToggle";
 
+type NavItem = {
+  href: string;
+  label: string;
+  kind?: "text";
+  children?: NavItem[];
+};
+
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileSection, setMobileSection] = useState<string | null>(null);
@@ -15,7 +22,7 @@ export function SiteHeader() {
   // "Obras" es la entrada de menú de la sección general (portada del
   // catálogo transversal en /obras); "Obras destacadas" es la vidriera
   // editorial dentro de Home/Obras, no tiene entrada propia de menú.
-  const NAV_LINKS = [
+  const NAV_LINKS: NavItem[] = [
     { href: "/", label: t.nav.inicio },
     {
       href: "/mpa",
@@ -30,19 +37,23 @@ export function SiteHeader() {
       ],
     },
     {
-      href: "/obras",
-      label: t.nav.obras,
+      href: "/portfolio-creativo",
+      label: "Creative Studio",
       kind: "text",
       children: [
-        { href: "/obras?filtro=destacadas", label: t.nav.obrasDestacadas },
-        { href: "/obras?filtro=todas", label: t.nav.obrasTodas },
-        { href: "/obras?filtro=libros", label: t.nav.obrasLibros },
-        { href: "/obras?filtro=musica", label: t.nav.obrasMusica },
-        { href: "/obras?filtro=juegos", label: t.nav.obrasJuegos },
-        { href: "/obras?filtro=apps-experiencias", label: t.nav.obrasApps },
+        { href: "/portfolio-creativo", label: "Vision Builder Portfolio" },
+        {
+          href: "/obras?filtro=todas",
+          label: "All Works",
+          children: [
+            { href: "https://snd.click/a450", label: t.nav.obrasMusica },
+            { href: "/obras?filtro=juegos", label: t.nav.obrasJuegos },
+            { href: "/obras?filtro=apps-experiencias", label: "Experience" },
+          ],
+        },
+        { href: "/obras?filtro=libros", label: "Editorial" },
       ],
     },
-    { href: "/portfolio-creativo", label: t.nav.portfolioCreativo },
     { href: "/#sobre", label: t.nav.sobreRC },
     { href: "/#contacto", label: t.nav.contacto },
   ];
@@ -87,10 +98,15 @@ export function SiteHeader() {
                   </button>
                 )}
                 <div className="nav-dropdown">
-                  {link.children.map((child) => (
-                    <a key={child.href} href={child.href}>
-                      {child.label}
-                    </a>
+                  {link.children.map((child) => child.children ? (
+                    <div className="nav-submenu" key={child.href}>
+                      <a href={child.href}>{child.label}<span aria-hidden="true">›</span></a>
+                      <div className="nav-submenu-panel">
+                        {child.children.map((nested) => <a key={nested.href} href={nested.href}>{nested.label}</a>)}
+                      </div>
+                    </div>
+                  ) : (
+                    <a key={child.href} href={child.href}>{child.label}</a>
                   ))}
                 </div>
               </div>
@@ -147,10 +163,13 @@ export function SiteHeader() {
               </button>
               {mobileSection === link.href && (
                 <div className="mobile-children">
-                  {link.children.map((child) => (
-                    <a className="mobile-child" key={child.href} href={child.href} onClick={closeMobileMenu}>
-                      {child.label}
-                    </a>
+                  {link.children.map((child) => child.children ? (
+                    <div className="mobile-subgroup" key={child.href}>
+                      <a className="mobile-child" href={child.href} onClick={closeMobileMenu}>{child.label}</a>
+                      {child.children.map((nested) => <a className="mobile-grandchild" key={nested.href} href={nested.href} onClick={closeMobileMenu}>{nested.label}</a>)}
+                    </div>
+                  ) : (
+                    <a className="mobile-child" key={child.href} href={child.href} onClick={closeMobileMenu}>{child.label}</a>
                   ))}
                 </div>
               )}

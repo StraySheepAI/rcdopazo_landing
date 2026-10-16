@@ -115,6 +115,15 @@ export default function Home() {
                 <span className="pulse-dot" /> {t.obrasDestacadas.tagRecien}
               </p>
             )}
+            <article className="creative-featured-card reveal">
+              <Image src="/portfolio-creativo/portfolio-creativo-cover.png" alt="Creative Portfolio de R.C. Dopazo" width={720} height={980} />
+              <div>
+                <p className="section-kicker">Creative Studio</p>
+                <h2>Creative Portfolio</h2>
+                <p>Una selección de universos editoriales, juegos, imágenes, música y experiencias construidas como Vision Builder.</p>
+                <Link href="/portfolio-creativo" className="home-section-link">Abrir portfolio <span aria-hidden="true">→</span></Link>
+              </div>
+            </article>
             {featuredObras.map((obra) => (
               <ObraCard key={obra.id} obra={obra} variant="featured" />
             ))}
