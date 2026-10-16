@@ -116,7 +116,7 @@ export default function Home() {
               </p>
             )}
             <article className="creative-featured-card reveal">
-              <Image src="/portfolio-creativo/portfolio-creativo-cover.png" alt="Creative Portfolio de R.C. Dopazo" width={720} height={980} />
+              <Image src="/portfolio-creativo/portfolio-creativo-hero.png" alt="Creative Portfolio de R.C. Dopazo" width={690} height={962} />
               <div>
                 <p className="section-kicker">Creative Studio</p>
                 <h2>Creative Portfolio</h2>

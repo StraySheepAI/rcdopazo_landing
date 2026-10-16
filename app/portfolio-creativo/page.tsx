@@ -158,8 +158,8 @@ export default function PortfolioCreativoPage() {
 
           <article className={`${styles.project} ${styles.products}`}>
             <div className={styles.productGallery}>
-              <Image src="/portfolio-creativo/products/evigila-tabula.jpg" alt="Tábula EVIGILA con la tirada Lo que fue, lo que es y lo que puede ser" width={1803} height={2740} sizes="(max-width: 900px) 92vw, 44vw" />
-              <Image src="/portfolio-creativo/products/evigila-box-front.jpg" alt="Caja física del Tarot EVIGILA" width={1280} height={1944} sizes="(max-width: 900px) 70vw, 25vw" />
+              <Image src="/portfolio-creativo/products/evigila-tabula-enhanced.png" alt="Tábula EVIGILA mejorada con la tirada Lo que fue, lo que es y lo que puede ser" width={1648} height={962} sizes="(max-width: 900px) 92vw, 44vw" />
+              <Image src="/portfolio-creativo/products/evigila-box-enhanced.png" alt="Caja física del Tarot EVIGILA mejorada" width={1024} height={1536} sizes="(max-width: 900px) 70vw, 25vw" />
               <Image src="/portfolio-creativo/products/evigila-box-dieline.png" alt="Plantilla de la caja del Tarot EVIGILA" width={1888} height={1334} sizes="(max-width: 900px) 70vw, 28vw" />
             </div>
             <div className={styles.projectText}><p className={styles.kicker}>{t.productsKicker}</p><h3>{t.productsTitle}</h3><p>{t.productsBody}</p></div>
