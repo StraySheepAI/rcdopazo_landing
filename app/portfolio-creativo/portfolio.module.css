@@ -70,18 +70,18 @@
 .emboleAppFeature div > p:last-child { color: #d8c6d2; font: 1.03rem/1.72 Arial,sans-serif; }
 
 .tarot { display: grid; grid-template-columns: 1.3fr .7fr; align-items: center; gap: 7vw; }
-.tarotGallery { position: relative; min-height: 690px; padding: 48px; border: 1px solid rgba(210,176,81,.55); border-radius: 26px; background: radial-gradient(circle at 50% 46%, rgba(169,63,183,.26), transparent 28%), radial-gradient(circle at 18% 16%, rgba(238,169,48,.2), transparent 20%), linear-gradient(145deg, #12072d 0, #32104d 48%, #130621 100%); box-shadow: 0 30px 65px rgba(39,8,48,.28), inset 0 0 80px rgba(125,44,142,.19); }
+.tarotGallery { position: relative; min-height: 690px; padding: 48px; border: 1px solid rgba(170,118,37,.35); border-radius: 26px; background: radial-gradient(circle at 50% 20%, rgba(255,255,255,.95), transparent 46%), linear-gradient(145deg, #efe4df 0, #fffaf1 55%, #ead9e3 100%); box-shadow: 0 30px 65px rgba(58,24,55,.18), inset 0 0 80px rgba(115,67,105,.08); }
 .tarotGallery::before { content: "✦"; position: absolute; inset: 4% auto auto 50%; color: #e0b654; font-size: 1.4rem; text-shadow: -230px 90px 0 rgba(238,202,102,.55), 220px 170px 0 rgba(238,202,102,.48), -150px 530px 0 rgba(210,61,145,.5); }
 .tarotGallery img { position: absolute; height: auto; border-radius: 12px; box-shadow: 0 25px 46px rgba(0,0,0,.48); transition: transform .35s ease; }
 .tarotGallery:hover .tarotProductDeck { transform: translateX(-8px) rotate(-3deg); }
 .tarotGallery:hover .tarotProductHarmonia { transform: translateX(8px) rotate(4deg); }
-.tarotProductDeck { left: 4%; top: 8%; width: 53%; z-index: 2; transform: rotate(-1.5deg); }
-.tarotProductHarmonia { right: 4%; top: 15%; width: 48%; z-index: 3; transform: rotate(2deg); }
-.tarotBack { left: 3%; bottom: 4%; width: 19%; z-index: 4; transform: rotate(-10deg); }
-.tarotCreatix { right: 3%; bottom: 3%; width: 18%; z-index: 5; transform: rotate(8deg); }
-.tarotBox { left: 22%; bottom: 2%; width: 27%; z-index: 6; transform: rotate(-3deg); }
-.tarotDorso { right: 19%; bottom: 2%; width: 14%; z-index: 6; transform: rotate(6deg); }
-.tarotCodex { left: 20%; top: 29%; width: 60%; z-index: 7; transform: rotate(-1deg); filter: drop-shadow(0 24px 30px rgba(0,0,0,.35)); }
+.tarotProductDeck { left: 3%; top: 8%; width: 23%; z-index: 2; transform: rotate(-4deg); }
+.tarotProductHarmonia { right: 3%; top: 9%; width: 22%; z-index: 3; transform: rotate(4deg); }
+.tarotBack { left: 5%; bottom: 5%; width: 14%; z-index: 4; transform: rotate(-7deg); }
+.tarotCreatix { right: 5%; bottom: 5%; width: 14%; z-index: 5; transform: rotate(7deg); }
+.tarotBox { left: 36%; bottom: 4%; width: 22%; z-index: 6; transform: rotate(-2deg); }
+.tarotDorso { right: 23%; bottom: 5%; width: 11%; z-index: 6; transform: rotate(5deg); }
+.tarotCodex { left: 17%; top: 7%; width: 66%; z-index: 7; transform: rotate(0); filter: drop-shadow(0 22px 28px rgba(48,11,43,.22)); }
 .products { display: grid; grid-template-columns: 1.28fr .72fr; align-items: center; gap: 7vw; }
 .productGallery { position: relative; padding: 18px; border: 1px solid rgba(210,176,81,.5); border-radius: 26px; background: radial-gradient(circle at 48% 42%, rgba(190,44,130,.18), transparent 30%), linear-gradient(145deg, #170722, #32104d 52%, #12051f); box-shadow: 0 30px 65px rgba(39,8,48,.26), inset 0 0 80px rgba(125,44,142,.16); }
 .productGallery img { position: relative; display: block; width: 100%; height: auto; border: 1px solid rgba(226,188,91,.52); border-radius: 12px; box-shadow: 0 24px 46px rgba(0,0,0,.42); object-fit: contain; }
@@ -159,6 +159,7 @@
   .tarotCreatix { right: 1%; bottom: 2%; width: 22%; }
   .tarotBox { left: 21%; bottom: 2%; width: 31%; }
   .tarotDorso { right: 17%; bottom: 2%; width: 16%; }
+  .tarotCodex { left: 12%; top: 8%; width: 76%; }
   .productGallery { min-height: 0; padding: 12px; }
   .digital { padding: 28px 18px; }
   .digitalGallery { min-height: 420px; }
