@@ -81,7 +81,7 @@
 .tarotCreatix { right: 5%; bottom: 5%; width: 14%; z-index: 5; transform: rotate(7deg); }
 .tarotBox { left: 36%; bottom: 4%; width: 22%; z-index: 6; transform: rotate(-2deg); }
 .tarotDorso { right: 23%; bottom: 5%; width: 11%; z-index: 6; transform: rotate(5deg); }
-.tarotCodex { left: 17%; top: 7%; width: 66%; z-index: 7; transform: rotate(0); filter: drop-shadow(0 22px 28px rgba(48,11,43,.22)); }
+.tarotCodex { left: 17%; top: 7%; width: 66%; z-index: 7; transform: rotate(0); border-radius: 0 !important; box-shadow: none !important; filter: drop-shadow(0 22px 28px rgba(48,11,43,.22)); }
 .products { display: grid; grid-template-columns: 1.28fr .72fr; align-items: center; gap: 7vw; }
 .productGallery { position: relative; padding: 18px; border: 1px solid rgba(210,176,81,.5); border-radius: 26px; background: radial-gradient(circle at 48% 42%, rgba(190,44,130,.18), transparent 30%), linear-gradient(145deg, #170722, #32104d 52%, #12051f); box-shadow: 0 30px 65px rgba(39,8,48,.26), inset 0 0 80px rgba(125,44,142,.16); }
 .productGallery img { position: relative; display: block; width: 100%; height: auto; border: 1px solid rgba(226,188,91,.52); border-radius: 12px; box-shadow: 0 24px 46px rgba(0,0,0,.42); object-fit: contain; }
