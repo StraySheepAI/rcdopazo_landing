@@ -152,7 +152,7 @@ export default function PortfolioCreativoPage() {
               <Image className={styles.tarotProductHarmonia} src="/portfolio-creativo/tarot-product-harmonia.png" alt="Producto físico del Tarot MPA: carta Harmonia Pactum" width={1152} height={1402} sizes="30vw" />
               <Image className={styles.tarotBack} src="/portfolio-creativo/tarot-back.png" alt="Contracara del sistema de cartas MPA" width={1004} height={1476} sizes="16vw" />
               <Image className={styles.tarotCreatix} src="/portfolio-creativo/tarot-creatix.png" alt="Carta Creatrix Imperatum del set Infants" width={1004} height={1476} sizes="16vw" />
-              <Image className={styles.tarotBox} src="/portfolio-creativo/products/evigila-box-closed-reference.png" alt="Caja cerrada del Tarot EVIGILA" width={1536} height={1024} sizes="24vw" />
+              <Image className={styles.tarotBox} src="/portfolio-creativo/products/evigila-box-enhanced-cutout.png" alt="Caja cerrada del Tarot EVIGILA" width={1024} height={1536} sizes="18vw" />
               <Image className={styles.tarotDorso} src="/portfolio-creativo/products/evigila-dorso.png" alt="Dorso del sistema EVIGILA Tarot" width={1024} height={1536} sizes="14vw" />
               <Image className={styles.tarotCodex} src="/portfolio-creativo/codex-open-cutout.png" alt="Códex EVIGILA abierto como publicación impresa" width={1536} height={1024} sizes="46vw" />
             </div>
