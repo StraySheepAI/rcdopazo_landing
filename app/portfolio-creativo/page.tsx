@@ -131,7 +131,6 @@ export default function PortfolioCreativoPage() {
               <Image src="/portfolio-creativo/embole-book-bolas.png" alt="Doble página física de ¡Qué Embole! con personajes Bolas" width={1086} height={1448} sizes="28vw" />
               <Image src="/portfolio-creativo/embole-book-nigredo.png" alt="Doble página física del capítulo Nigredo" width={1086} height={1448} sizes="28vw" />
               <Image src="/portfolio-creativo/embole-book-lab.png" alt="Doble página física del Stray Mini Lab" width={1086} height={1448} sizes="28vw" />
-              <Image className={styles.codexBook} src="/portfolio-creativo/codex-open-realistic.png" alt="Códex EVIGILA abierto como publicación impresa" width={2048} height={1365} sizes="38vw" />
             </div>
             <div className={styles.emboleAppFeature}>
               <div className={styles.emboleAppScreens}>
@@ -155,6 +154,7 @@ export default function PortfolioCreativoPage() {
               <Image className={styles.tarotCreatix} src="/portfolio-creativo/tarot-creatix.png" alt="Carta Creatrix Imperatum del set Infants" width={1004} height={1476} sizes="16vw" />
               <Image className={styles.tarotBox} src="/portfolio-creativo/products/evigila-box-closed-reference.png" alt="Caja cerrada del Tarot EVIGILA" width={1536} height={1024} sizes="24vw" />
               <Image className={styles.tarotDorso} src="/portfolio-creativo/products/evigila-dorso.png" alt="Dorso del sistema EVIGILA Tarot" width={1024} height={1536} sizes="14vw" />
+              <Image className={styles.tarotCodex} src="/portfolio-creativo/codex-open-realistic.png" alt="Códex EVIGILA abierto como publicación impresa" width={2048} height={1365} sizes="38vw" />
             </div>
             <div className={styles.projectText}><p className={styles.kicker}>{t.tarotKicker}</p><h3>{t.tarotTitle}</h3><p>{t.tarotBody}</p></div>
           </article>
