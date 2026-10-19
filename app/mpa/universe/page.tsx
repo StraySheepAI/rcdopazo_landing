@@ -21,21 +21,15 @@ export default function MpaUniversePage() {
   const [recognized, setRecognized] = useState({ key: false, territory: false, ordo: false });
 
   useEffect(() => {
-    const initiation = window.localStorage.getItem("mpa-initiation-key");
     const level = window.localStorage.getItem("mpa-campus-level") || "";
-    const next = { key: initiation === "potentia", territory: false, ordo: false };
-
-    if (next.key) setKey("potentia");
+    // Record recognition without writing any of the three keys into the form.
+    // The public gateway must always open with empty fields.
+    const next = { key: false, territory: false, ordo: false };
     if (level === "general") {
-      setTerritoryKey("metalkimia");
       next.territory = true;
     } else if (level.startsWith("ordo:")) {
-      setTerritoryKey(level.split(":")[1] || "");
       next.territory = true;
     } else if (level.startsWith("course:")) {
-      const [, territory, id] = level.split(":");
-      setTerritoryKey(territory || "");
-      setOrdoKey(id || "");
       next.territory = true;
       next.ordo = true;
     }

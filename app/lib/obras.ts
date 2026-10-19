@@ -203,6 +203,71 @@ export const OBRAS: Obra[] = [
     catalogOrder: 4,
     featuredOrder: 2,
   },
+  {
+    id: "tarot-essentors",
+    title: "Tarot de los Essentors",
+    slug: "tarot-essentors",
+    category: "juegos",
+    description:
+      "Un sistema de cartas ilustradas para observar, asociar y abrir lecturas. Cada carta integra personaje, símbolo y una escena dentro del universo MPA.",
+    tagline: "Una baraja para mirar antes de interpretar.",
+    note: "Edición física disponible por solicitud.",
+    affiliations: ["Magia para Atrevidos", "Lude"],
+    images: {
+      cover: "/portfolio-creativo/tarot-product-deck.png",
+      featured: "/portfolio-creativo/tarot-product-harmonia.png",
+    },
+    links: [
+      { label: "Solicitar edición física", url: "/#contacto", external: false },
+      { label: "Abrir EVIGILA Tarot", url: "https://evigilatarot.rociodopazo.com/tarot", external: true },
+    ],
+    published: true,
+    featured: false,
+    catalogOrder: 3,
+    featuredOrder: 3,
+  },
+  {
+    id: "que-embole-juego",
+    title: "¡Qué Embole! · Experiencia jugable",
+    slug: "que-embole-juego",
+    category: "juegos",
+    description:
+      "El universo del libro se vuelve recorrido: portales, ruletas, consignas y dispositivos de observación conectan la lectura con decisiones y jugadas.",
+    tagline: "Tres movimientos. Una bola que cambia de estado.",
+    affiliations: ["Stray Sheep", "Lude"],
+    images: {
+      cover: "/portfolio-creativo/embole-app-jugar.png",
+      featured: "/portfolio-creativo/embole-app-recorrido.png",
+    },
+    links: [
+      { label: "Ver libro y sistema", url: "/portfolio-creativo#proyectos", external: false },
+    ],
+    published: true,
+    featured: false,
+    catalogOrder: 4,
+    featuredOrder: 4,
+  },
+  {
+    id: "musica-mpa",
+    title: "Música del universo MPA",
+    slug: "musica-mpa",
+    category: "musica",
+    description:
+      "Piezas sonoras que acompañan los pasajes, retos y experiencias del universo MPA. La música también funciona como puerta narrativa.",
+    tagline: "Escuchar también es entrar.",
+    affiliations: ["Magia para Atrevidos"],
+    images: {
+      cover: "/hero-cosmic-bg.jpg",
+    },
+    links: [
+      { label: "Escuchar en Spotify", url: "https://open.spotify.com/track/5lS44cNadDa6vtGqGJ7FOt", external: true },
+      { label: "Escuchar otra pieza", url: "https://open.spotify.com/track/5Otw3CJ2Hd4cA3aFVK1S7n", external: true },
+    ],
+    published: true,
+    featured: false,
+    catalogOrder: 5,
+    featuredOrder: 5,
+  },
 ];
 
 /** /obras vista "Destacadas" (default) y Home: selección editorial. */
