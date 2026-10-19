@@ -86,6 +86,26 @@ export interface Obra {
 
 export const OBRAS: Obra[] = [
   {
+    id: "musica-universal",
+    title: "Música · Universal",
+    slug: "musica-universal",
+    category: "musica",
+    description:
+      "Un acceso directo a la música de R.C. Dopazo y al universo sonoro de MPA.",
+    tagline: "Escuchá el universo en movimiento.",
+    affiliations: ["MPA Publishing House", "R.C. Dopazo"],
+    images: {
+      cover: "/mpa-universe-logo.png",
+    },
+    links: [
+      { label: "Escuchar música", url: "https://snd.click/a450", external: true },
+    ],
+    published: true,
+    featured: false,
+    catalogOrder: 5,
+    featuredOrder: 5,
+  },
+  {
     id: "codex-evigila",
     title: "Códex EVIGILA · Vol. I",
     slug: "codex-evigila",

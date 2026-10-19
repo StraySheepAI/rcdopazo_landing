@@ -15,12 +15,17 @@ export function ObraCard({
   const image = variant === "featured" ? obra.images.featured ?? obra.images.cover : obra.images.cover;
 
   return (
-    <div className="book-card">
+    <div className="book-card" data-obra-id={obra.id}>
       <span className="dot-deco gold" style={{ top: 20, right: 64 }} />
       <span className="dot-deco fuchsia" style={{ top: 68, right: 26 }} />
       <div className="book-layout">
         <div className="book-cover">
-          <Image src={image} alt={`Tapa de ${obra.title} — R.C. Dopazo`} width={700} height={1073} />
+          <Image
+            src={image}
+            alt={`Tapa de ${obra.title} — R.C. Dopazo`}
+            width={obra.id === "evigila-tarot" ? 1536 : 700}
+            height={obra.id === "evigila-tarot" ? 1024 : 1073}
+          />
         </div>
         <div className="book-info">
           {obra.affiliations.length > 0 && (

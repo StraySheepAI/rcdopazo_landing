@@ -302,6 +302,8 @@ main,footer{position:relative;z-index:1}
 .note-card::before,.book-card::before{content:'';position:absolute;width:460px;height:460px;border-radius:50%;border:1px solid rgba(150,123,69,.16);top:-200px;right:-160px;pointer-events:none}
 .note-card .dot-deco,.book-card .dot-deco{width:4px;height:4px}
 .book-layout{display:grid;grid-template-columns:210px 1fr;gap:40px;align-items:start}
+.book-card[data-obra-id="evigila-tarot"] .book-layout{grid-template-columns:minmax(340px,42%) 1fr;gap:48px}
+.book-card[data-obra-id="evigila-tarot"] .book-cover{width:100%}
 .book-cover{border-radius:14px;overflow:hidden;border:1px solid rgba(150,123,69,.28);box-shadow:0 24px 50px -18px rgba(0,0,0,.65)}
 .book-cover img{width:100%;height:auto;display:block}
 .book-badge{color:var(--fuchsia-soft);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;margin:0 0 16px}
@@ -312,6 +314,7 @@ main,footer{position:relative;z-index:1}
 .book-note{font-size:.78rem;color:var(--gray);margin:0}
 @media(max-width:640px){
   .book-layout{grid-template-columns:1fr}
+  .book-card[data-obra-id="evigila-tarot"] .book-layout{grid-template-columns:1fr;gap:28px}
   .book-cover{max-width:200px;margin:0 auto}
 }
 .note-badge{display:inline-block;border:1px solid var(--fuchsia-dim);color:var(--fuchsia-soft);border-radius:999px;padding:6px 14px;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:22px}
