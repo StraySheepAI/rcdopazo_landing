@@ -146,7 +146,7 @@ export const OBRAS: Obra[] = [
     links: [
       {
         label: "Abrir presentación",
-        url: "https://evigila-tarot-drive.strayxarte.chatgpt.site/tarot",
+        url: "https://evigilatarot.rociodopazo.com/tarot",
         external: true,
       },
     ],

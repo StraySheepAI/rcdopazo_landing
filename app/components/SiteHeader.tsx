@@ -32,7 +32,7 @@ export function SiteHeader() {
         { href: "/mpa/universe", label: t.nav.mpaUniverse },
         { href: "/mpa/transmuta", label: t.nav.mpaTransmuta },
         { href: "https://mpaflow.com", label: t.nav.mpaFlow },
-        { href: "https://evigela-tarot-page.vercel.app/presentacion.html", label: t.nav.mpaEvigila },
+        { href: "https://evigilatarot.rociodopazo.com/tarot", label: t.nav.mpaEvigila },
         { href: "/mpa/publishing-house", label: t.nav.mpaPublishingHouse },
       ],
     },
