@@ -408,6 +408,13 @@ footer .copy{font-size:.8rem;letter-spacing:.06em}
 .page-body{position:relative;padding:0 0 130px}
 .page-body p{font-size:1.08rem;line-height:1.85;max-width:720px;margin:0 0 26px;color:var(--text-dim)}
 .page-body .section-kicker{display:block;margin:0 0 20px}
+.codex-landing-grid{display:grid;grid-template-columns:minmax(260px,430px) minmax(0,1fr);gap:clamp(42px,8vw,120px);align-items:center}
+.codex-landing-cover{width:min(100%,430px);margin:0 auto;filter:drop-shadow(0 26px 38px rgba(0,0,0,.48))}
+.codex-landing-cover img{display:block;width:100%;height:auto;border-radius:10px}
+.codex-landing-copy h2{margin:0 0 18px;color:#aa925e;font:500 clamp(2.4rem,5vw,4.6rem)/.98 'Cormorant Garamond',serif}
+.codex-landing-copy p{max-width:620px}
+.codex-landing-copy .book-note{color:#c7aa68;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
+@media(max-width:760px){.codex-landing-grid{grid-template-columns:1fr;gap:36px}.codex-landing-cover{width:min(78vw,360px)}.codex-landing-copy{text-align:center}.codex-landing-copy p{margin-left:auto;margin-right:auto}.codex-landing-copy .button{display:inline-flex}}
 .mpa-about-heading{display:flex;align-items:center;gap:clamp(24px,4vw,58px)}
 .mpa-about-heading>img{width:clamp(125px,15vw,205px);height:auto;object-fit:contain;filter:drop-shadow(0 18px 22px rgba(0,0,0,.48)) drop-shadow(0 0 18px rgba(150,123,69,.13))}
 .mpa-about-heading h1{

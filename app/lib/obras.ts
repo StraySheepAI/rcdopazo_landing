@@ -86,6 +86,31 @@ export interface Obra {
 
 export const OBRAS: Obra[] = [
   {
+    id: "codex-evigila",
+    title: "Códex EVIGILA · Vol. I",
+    slug: "codex-evigila",
+    category: "juegos",
+    description:
+      "El libro-guía del Tarot de los Essentors: un sistema de símbolos, personajes y recorridos para aprender a mirar antes de interpretar.",
+    tagline: "El inicio del universo jugable de EVIGILA.",
+    note: "Mini Códex en preparación.",
+    affiliations: ["MPA Publishing House", "Tarot de los Essentors"],
+    images: {
+      cover: "/portfolio-creativo/codex-evigila-cover.png",
+    },
+    links: [
+      {
+        label: "Abrir Códex",
+        url: "/codex-evigila",
+        external: false,
+      },
+    ],
+    published: true,
+    featured: false,
+    catalogOrder: 1,
+    featuredOrder: 3,
+  },
+  {
     id: "que-embole",
     title: "¡Qué Embole!",
     slug: "que-embole",
@@ -105,7 +130,7 @@ export const OBRAS: Obra[] = [
     ],
     published: true,
     featured: true,
-    catalogOrder: 1,
+    catalogOrder: 2,
     featuredOrder: 1,
   },
   {
@@ -130,7 +155,7 @@ export const OBRAS: Obra[] = [
     ],
     published: true,
     featured: false,
-    catalogOrder: 2,
+    catalogOrder: 3,
     featuredOrder: 2,
   },
 ];
