@@ -27,8 +27,8 @@ const copy = {
     emboleAppTitle: "El libro continúa después de cerrar la tapa.",
     emboleAppBody: "La miniapp transforma la lectura en recorrido: organiza umbrales, propone jugadas, registra la vigilia y conecta el universo editorial con experiencias interactivas.",
     tarotKicker: "Sistema simbólico · Ilustración + lectura",
-    tarotTitle: "El Tarot de los Essentors",
-    tarotBody: "Desarrollo de un universo visual y pedagógico donde cada imagen funciona como escena, personaje y dispositivo de observación. La guía integra ilustración, composición editorial y una lectura que enseña a mirar antes de interpretar.",
+    tarotTitle: "EVIGILA Tarot",
+    tarotBody: "El Tarot de los Essentors: un universo visual y pedagógico donde cada imagen funciona como escena, personaje y dispositivo de observación. La guía integra ilustración, composición editorial y una lectura que enseña a mirar antes de interpretar.",
     productsKicker: "Objetos editoriales · EVIGILA",
     productsTitle: "El universo también se puede tocar.",
     productsBody: "La Box Tábula MPA es una caja-objeto de PVC: abre, guarda las cartas y permite cambiar los paneles de lectura según la tirada. Puede venir en acabado madera o negro, con una plancha de stickers MPA y Atrevia para personalizarla. Stickers MPA · Próximamente.",
@@ -65,8 +65,8 @@ const copy = {
     emboleAppTitle: "The book continues after the cover closes.",
     emboleAppBody: "The mini app turns reading into a journey: it organizes thresholds, proposes moves, records progress and connects the editorial universe with interactive experiences.",
     tarotKicker: "Symbolic system · Illustration + reading",
-    tarotTitle: "The Tarot of the Essentors",
-    tarotBody: "A visual and pedagogical universe where each image works as a scene, a character and an observation device. The guide combines illustration, editorial composition and a reading that teaches us to look before interpreting.",
+    tarotTitle: "EVIGILA Tarot",
+    tarotBody: "The Tarot of the Essentors: a visual and pedagogical universe where each image works as a scene, a character and an observation device. The guide combines illustration, editorial composition and a reading that teaches us to look before interpreting.",
     productsKicker: "Editorial objects · EVIGILA",
     productsTitle: "The universe can also be held.",
     productsBody: "The Box Tábula MPA is a PVC object-box: it opens, stores the cards and lets you change the reading panels for each spread. It can come in wood-look or black, with an MPA and Atrevia sticker sheet for personalization. MPA stickers · Coming soon.",
@@ -146,7 +146,7 @@ export default function PortfolioCreativoPage() {
             </div>
           </article>
 
-          <article className={`${styles.project} ${styles.tarot}`}>
+          <article id="evigila-tarot" className={`${styles.project} ${styles.tarot}`}>
             <div className={styles.tarotGallery}>
               <Image className={styles.tarotProductDeck} src="/portfolio-creativo/tarot-product-deck.png" alt="Producto físico del Tarot MPA: composición del mazo Infants" width={1152} height={1441} sizes="36vw" />
               <Image className={styles.tarotProductHarmonia} src="/portfolio-creativo/tarot-product-harmonia.png" alt="Producto físico del Tarot MPA: carta Harmonia Pactum" width={1152} height={1402} sizes="30vw" />

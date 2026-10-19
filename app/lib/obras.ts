@@ -89,7 +89,7 @@ export const OBRAS: Obra[] = [
     id: "codex-evigila",
     title: "Códex EVIGILA · Vol. I",
     slug: "codex-evigila",
-    category: "juegos",
+    category: "libros",
     description:
       "El libro-guía del Tarot de los Essentors: un sistema de símbolos, personajes y recorridos para aprender a mirar antes de interpretar.",
     tagline: "El inicio del universo jugable de EVIGILA.",
@@ -111,6 +111,31 @@ export const OBRAS: Obra[] = [
     featuredOrder: 3,
   },
   {
+    id: "evigila-tarot",
+    title: "EVIGILA Tarot",
+    slug: "evigila-tarot",
+    category: "juegos",
+    description:
+      "El mazo del Tarot de los Essentors: cartas, personajes y símbolos para entrar al juego de EVIGILA.",
+    tagline: "Un universo para mirar, jugar y transmutar.",
+    note: "Próximamente.",
+    affiliations: ["MPA Publishing House", "Tarot de los Essentors"],
+    images: {
+      cover: "/portfolio-creativo/products/evigila-box-enhanced-cutout.png",
+    },
+    links: [
+      {
+        label: "Ver EVIGILA Tarot",
+        url: "/portfolio-creativo#evigila-tarot",
+        external: false,
+      },
+    ],
+    published: true,
+    featured: false,
+    catalogOrder: 2,
+    featuredOrder: 4,
+  },
+  {
     id: "que-embole",
     title: "¡Qué Embole!",
     slug: "que-embole",
@@ -130,7 +155,7 @@ export const OBRAS: Obra[] = [
     ],
     published: true,
     featured: true,
-    catalogOrder: 2,
+    catalogOrder: 3,
     featuredOrder: 1,
   },
   {
@@ -155,7 +180,7 @@ export const OBRAS: Obra[] = [
     ],
     published: true,
     featured: false,
-    catalogOrder: 3,
+    catalogOrder: 4,
     featuredOrder: 2,
   },
 ];
