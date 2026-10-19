@@ -145,9 +145,9 @@ export const OBRAS: Obra[] = [
     },
     links: [
       {
-        label: "Ver EVIGILA Tarot",
-        url: "/portfolio-creativo#evigila-tarot",
-        external: false,
+        label: "Abrir presentación",
+        url: "https://evigila-tarot-drive.strayxarte.chatgpt.site/tarot",
+        external: true,
       },
     ],
     published: true,
