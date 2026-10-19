@@ -121,7 +121,7 @@ export const OBRAS: Obra[] = [
     note: "Próximamente.",
     affiliations: ["MPA Publishing House", "Tarot de los Essentors"],
     images: {
-      cover: "/portfolio-creativo/products/evigila-box-enhanced-cutout.png",
+      cover: "/portfolio-creativo/products/evigila-tarot-mpa-studio.png",
     },
     links: [
       {
