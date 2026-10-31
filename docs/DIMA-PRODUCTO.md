@@ -2,13 +2,23 @@
 
 Referencia editorial proporcionada por la autora: **INSIDE DIMA · DEVOCIÓN**. La gratuita es una consulta completa y comprensible, con voz, preguntas y activación. No es un formulario técnico ni una ficha de casilleros.
 
+## Referencia visual y recorrido confirmados
+
+La referencia es la página publicada en https://www.rociodopazo.com/dima, confirmada por Rocío mediante capturas el 31 de octubre de 2026. Se recuperó su diseño de cámara, atmósfera, oro antiguo metalizado y portales desde la versión de `app/dima/page.module.css` en `main`, conservada en `app/dima/shell.module.css`. El HTML de entrada mantiene ese diseño y conecta el corpus revisado y la base de consultas.
+
+Sus puertas son **Configuración oculta**, **Análisis Metalquímico** y **Colecciones de obra**. No se confunden con Conjuratio Dominus, Verbum Prime y Sermo Dominus del archivo histórico `legacy-imports/dima/index.html`: ese archivo no es la referencia visual solicitada.
+
+Configuración oculta abre las 44 lecturas completas sin clave. Análisis Metalquímico requiere la clave de DIMA Plus. Colecciones de obra requiere la clave histórica del libro. El informe se recorre en tres capas: **Qué contiene** —lectura e interpretación—, **Cómo se construye** —origen y morfología dentro del diagrama— y **Qué puede abrir** —frase, Dictum, insight y activación—. Los botones cambian de capa sin perder la consulta. Las tres capas de la gratuita están disponibles sin clave; no se recortó su contenido para crear un desbloqueo artificial.
+
+Las puertas protegidas validan las claves en el servidor antes de consultar. No hay un cobro ni una compra integrados: disponer de una clave y procesar un pago son acciones distintas. La conexión real de generación y la base remota siguen pendientes; los avisos de la prueba lo explican.
+
 ## DIMA gratuita
 
 Selección pública de palabras con una consulta legible:
 
 1. INSIDE DIMA · palabra y variantes.
 2. Pregunta de entrada.
-3. Palabra raíz con texto completo y fuentes visibles. La palabra por dentro conserva la morfología completa a la vista: clase de palabra, formación y variaciones. El diagrama se agrega como complemento; no sustituye ni oculta esa explicación. No se inventan prefijos ni sufijos para forzar una división.
+3. Palabra raíz con texto completo y fuentes visibles. La configuración de la palabra conserva la morfología completa dentro del diagrama: clase de palabra, formación y variaciones. No se inventan prefijos ni sufijos para forzar una división. Estos contenidos se encuentran en la segunda capa del recorrido.
 4. La lectura DIMA: nota metodológica visible y tarjetas de movimientos simbólicos con sus preguntas. Las relaciones léxicas no se representan como antepasados históricos.
 5. ¿Qué nos dice DIMA?: qué habilita, qué puede limitar y cómo participa la persona con agencia.
 6. Frase transmutada.

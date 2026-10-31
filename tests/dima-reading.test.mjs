@@ -24,7 +24,26 @@ const modulePath = path.join(directory,'component.mjs'); await fs.writeFile(modu
 const { default: Reading } = await import(pathToFileURL(modulePath).href);
 const render = (result,ampliado=false) => renderToStaticMarkup(React.createElement(Reading,{result,ampliado}));
 
-const headings = ['Palabra raíz','La palabra por dentro','La lectura DIMA','¿Qué nos dice DIMA?','Frase transmutada','Dictum Mutare','MPI Insight','Activación'];
+const pageSource = await fs.readFile(new URL('../app/dima/page.tsx',import.meta.url),'utf8');
+let pageCompiled = ts.transpileModule(pageSource,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext,jsx:ts.JsxEmit.ReactJSX}}).outputText;
+for(const [specifier,target] of [['react',pathToFileURL(require.resolve('react')).href],['react/jsx-runtime',pathToFileURL(require.resolve('react/jsx-runtime')).href],['next/link',pathToFileURL(require.resolve('next/link')).href],['@/lib/dima/schema',new URL('../lib/dima/schema.ts',import.meta.url).href],['@/app/lib/contact',new URL('../app/lib/contact.ts',import.meta.url).href],['./InsideReading',pathToFileURL(modulePath).href]])pageCompiled=pageCompiled.replaceAll(JSON.stringify(specifier),JSON.stringify(target));
+pageCompiled=pageCompiled.replace(/import shell from "\.\/shell\.module\.css";/,'const shell = new Proxy({}, {get: (_, key) => String(key)});');
+const pagePath=path.join(directory,'page.mjs');await fs.writeFile(pagePath,pageCompiled);
+const {default:DimaPage}=await import(pathToFileURL(pagePath).href);
+
+const headings = ['Palabra raíz','Configuración de la palabra','La lectura DIMA','¿Qué nos dice DIMA?','Frase transmutada','Dictum Mutare','MPI Insight','Activación'];
+
+test('La entrada recupera las tres puertas y la cámara de la página publicada',async()=>{
+ const html=renderToStaticMarkup(React.createElement(DimaPage));
+ for(const title of ['Configuración oculta','Análisis Metalquímico','Colecciones de obra'])assert.ok(html.includes(title),title);
+ assert.ok(html.includes('class="dimaFigure"'));
+ assert.ok(html.includes('/dima-machine-cutout-v1.png'));
+ assert.ok(html.includes('aria-label="Puertas de DIMA"'));
+ assert.ok(!html.includes('Conjuratio Dominus'));
+ const css=await fs.readFile(new URL('../app/dima/shell.module.css',import.meta.url),'utf8');
+ assert.ok(css.includes("url('/dima-chamber-v1.png')"));
+ assert.ok(css.includes('--gold:#967b45'));
+});
 
 test('Devoción se presenta como la consulta editorial de referencia y no como ocho casilleros', () => {
  const html=render(getReviewedAnalysis('Devoción'));
@@ -37,15 +56,18 @@ test('Devoción se presenta como la consulta editorial de referencia y no como o
  assert.ok(!html.includes('Ver el análisis ampliado')); assert.ok(!html.includes('PASO 1 DE 8')); assert.ok(!html.includes('Nodus · relación y agencia'));
 });
 
-test('Las 44 fichas conservan raíz y morfología completas visibles además del diagrama', () => {
+test('Las 44 fichas explican toda la morfología dentro del diagrama, sin ocultarla ni duplicarla en párrafos externos', () => {
  for(const word of REVIEWED_WORDS){
   const result=getReviewedAnalysis(word);
   const html=render(result);
   const visible=html.replace(/<details\b[\s\S]*?<\/details>/g,'');
+  const figure=visible.match(/<figure\b[\s\S]*?<\/figure>/)?.[0]||'';
   const escape=(text)=>renderToStaticMarkup(React.createElement(React.Fragment,null,text));
   assert.ok(result.inside.linguistica,word);
   for(const text of [result.inside.raiz,...Object.values(result.inside.linguistica),result.inside.morfologia.nota])assert.ok(visible.includes(escape(text)),`${word}: texto completo fuera de desplegables`);
-  for(const label of ['Clase de palabra.','Cómo está formada.','Cómo varía.'])assert.ok(visible.includes(`<strong>${label}</strong>`),word);
+  for(const text of Object.values(result.inside.linguistica))assert.ok(figure.includes(escape(text)),`${word}: morfología dentro del diagrama`);
+  for(const label of ['Cómo está formada','Cómo varía'])assert.ok(figure.includes(`<h4>${label}</h4>`),word);
+  assert.ok(figure.includes('<b>Clase de palabra.</b>'),word);
   assert.ok(getWordMap(word),word);
   assert.ok(html.includes('<figure'),word);
   assert.equal((html.match(/class="movementCards"/g)||[]).length,1,word);
@@ -72,6 +94,22 @@ test('El análisis técnico ampliado aparece solo cuando se solicita esa present
  const result=getReviewedAnalysis('Devoción');
  assert.ok(!render(result).includes('Ver el análisis ampliado'));
  const html=render(result,true);assert.ok(html.includes('Ver el análisis ampliado'));assert.ok(html.includes('Nodus · relación y agencia'));
+});
+
+test('El recorrido por capas conserva el informe completo y muestra la morfología en la segunda', () => {
+ for(const word of REVIEWED_WORDS){
+  const result=getReviewedAnalysis(word);
+  const layers=[1,2,3].map(layer=>renderToStaticMarkup(React.createElement(Reading,{result,layer,showTitle:false})));
+  assert.ok(layers[0].includes('¿Qué nos dice DIMA?'),word);
+  assert.ok(layers[1].includes('Configuración de la palabra'),word);
+  assert.ok(layers[1].includes('Cómo está formada'),word);
+  assert.ok(layers[1].includes('Cómo varía'),word);
+  assert.ok(layers[2].includes('Frase transmutada'),word);
+  assert.ok(layers[2].includes('Activación'),word);
+  const full=layers.join('');
+  const escape=(text)=>renderToStaticMarkup(React.createElement(React.Fragment,null,text));
+  for(const text of [result.inside.raiz,...Object.values(result.inside.linguistica),...result.inside.lectura,result.inside.activacion])assert.ok(full.includes(escape(text)),word);
+ }
 });
 
 await fs.rm(directory, { recursive: true, force: true });
