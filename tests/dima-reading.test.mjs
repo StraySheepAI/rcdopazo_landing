@@ -22,7 +22,7 @@ const modulePath = path.join(directory,'component.mjs'); await fs.writeFile(modu
 const { default: Reading } = await import(pathToFileURL(modulePath).href);
 const render = (result,ampliado=false) => renderToStaticMarkup(React.createElement(Reading,{result,ampliado}));
 
-const headings = ['Palabra raíz','Morfología mágica','¿Qué nos dice DIMA?','Frase transmutada','Dictum Mutare','MPI Insight','Activación'];
+const headings = ['Palabra raíz','Morfología','Morfología mágica','¿Qué nos dice DIMA?','Frase transmutada','Dictum Mutare','MPI Insight','Activación'];
 
 test('Devoción se presenta como la consulta editorial de referencia y no como ocho casilleros', () => {
  const html=render(getReviewedAnalysis('Devoción'));
@@ -36,6 +36,7 @@ test('Devoción se presenta como la consulta editorial de referencia y no como o
 test('Las 44 fichas gratuitas renderizan lectura, morfología mágica, Dictum, insight y activación', () => {
  for(const word of REVIEWED_WORDS){
   const html=render(getReviewedAnalysis(word));
+  assert.ok(getReviewedAnalysis(word).inside.linguistica,word);
   for(const title of headings)assert.ok(html.includes(`<h3>${title}</h3>`),`${word}: ${title}`);
   assert.ok(!html.includes('Pendiente de análisis y revisión'),word);
  }

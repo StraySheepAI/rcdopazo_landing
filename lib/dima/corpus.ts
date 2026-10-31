@@ -2,6 +2,7 @@ import { DIMA_STEPS, normalize, readResult, type DimaResult, type Section } from
 import { EDITORIAL_ENTRIES } from "./editorial.ts";
 import { DEVOCION } from "./devocion.ts";
 import { makeInside } from "./inside.ts";
+import { getMorphology } from "./morphology.ts";
 
 // Source-checked public catalogue. Interpretations remain separate from dictionary evidence.
 // New entries need editorial review; importing a legacy row does not grant verified status.
@@ -57,5 +58,5 @@ export function getReviewedAnalysis(palabra: string): DimaResult | undefined {
   const entry = entries.find((candidate) => normalize(candidate.palabra) === normalize(palabra));
   if (!entry) return undefined;
   const result = structuredClone(entry);
-  return readResult({ ...result, inside: result.inside || makeInside(result) });
+  return readResult({ ...result, inside: { ...(result.inside || makeInside(result)), linguistica: getMorphology(result.palabra) } });
 }

@@ -1,14 +1,18 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import { DIMA_STEPS, readResult } from '../lib/dima/schema.ts';
 import { adaptRow, parseCsv } from '../lib/dima/adapter.ts';
 import { REVIEWED_WORDS, getReviewedAnalysis } from '../lib/dima/corpus.ts';
 import { parseGeneration } from '../lib/dima/prompt.ts';
 import { createDimaHandlers as rawCreateDimaHandlers } from '../lib/dima/service.ts';
+import { createStore } from '../lib/dima/database.ts';
+import { createSqliteDriver } from '../lib/dima/database-sqlite.ts';
 
 import { createDimaAccessHandlers, hashCode, readDimaAccess, DIMA_COOKIE } from '../lib/dima/access.ts';
 const ACCESS_ENV = { DIMA_SESSION_SECRET: 'test-only-secret-'.repeat(4), DIMA_BOOK_CODE_HASH: hashCode('TEST BOOK'), DIMA_PLUS_CODE_HASH: hashCode('TEST PLUS') };
-const createDimaHandlers = (deps) => rawCreateDimaHandlers({ ...deps, env: { ...ACCESS_ENV, ...deps.env } });
+const stores = [];
+const createDimaHandlers = (deps) => { const store = createStore(createSqliteDriver(':memory:')); stores.push(store); return rawCreateDimaHandlers({ ...deps, store, env: { ...ACCESS_ENV, ...deps.env } }); };
+after(() => stores.forEach((store) => store.close()));
 async function authorizedRequest(body) {
   const req = request(body);
   if (body.nivel === 'free') return req;
@@ -54,7 +58,7 @@ test('Patraña y Embole mantienen la misma lectura en las tres modalidades', asy
   const { POST } = createDimaHandlers({ fetch: noFetch, env: {} });
   for (const palabra of ['Patraña', 'Embole']) {
     const results = [];
-    for (const nivel of ['free', 'libro', 'metalquimico']) results.push(await (await POST(await authorizedRequest({ palabra, nivel }))).json());
+    for (const nivel of ['free', 'libro', 'metalquimico']) results.push(readResult(await (await POST(await authorizedRequest({ palabra, nivel }))).json()));
     assert.deepEqual(results[0], results[1]); assert.deepEqual(results[1], results[2]);
   }
 });

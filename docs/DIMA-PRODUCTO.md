@@ -9,13 +9,14 @@ Selección pública de palabras con una consulta legible:
 1. INSIDE DIMA · palabra y variantes.
 2. Pregunta de entrada.
 3. Palabra raíz, con referencia y límites documentales.
-4. Morfología mágica: lectura simbólica, movimientos y preguntas. No se inventan morfemas ni se presenta esta tabla como etimología.
-5. ¿Qué nos dice DIMA?: qué habilita, qué puede limitar y cómo participa la persona con agencia.
-6. Frase transmutada.
-7. Dictum Mutare.
-8. MPI Insight.
-9. Activación concreta.
-10. Firma de cierre y fuentes consultables.
+4. Morfología lingüística: clase de palabra, base y componentes identificables, función de esos componentes y flexión con ejemplos. Una palabra simple también se analiza; no se inventan prefijos ni sufijos para forzar una división.
+5. Morfología mágica: lectura simbólica, movimientos y preguntas. No se presenta esta tabla como análisis gramatical ni como etimología.
+6. ¿Qué nos dice DIMA?: qué habilita, qué puede limitar y cómo participa la persona con agencia.
+7. Frase transmutada.
+8. Dictum Mutare.
+9. MPI Insight.
+10. Activación concreta.
+11. Firma de cierre y fuentes consultables.
 
 Los ocho pasos analíticos originales siguen sosteniendo el método internamente. No tienen que convertirse en ocho apartados técnicos para quien consulta gratis. Devoción conserva el texto de referencia de la autora en `lib/dima/devocion.ts`.
 
@@ -46,3 +47,17 @@ La clave del libro debe conservarse: está impresa en ejemplares ya distribuidos
 Las claves históricas figuraban en el HTML público heredado; esa exposición no autoriza a invalidar la clave del libro. La limitación de intentos incluida opera por instancia; para un límite global entre instancias hace falta almacenamiento compartido o una regla del alojamiento. No se presume que el límite en memoria sea global.
 
 La publicación permanece en pausa hasta la revisión de la autora. La prueba local no requiere entrar a Vercel ni crear cuentas para visitantes.
+
+## Base de lecturas y consultas
+
+Las 44 fichas, incluida su morfología lingüística, se importaron en la base local. El corpus editorial sigue siendo la fuente de la selección gratuita; la importación conserva también una copia en la base. No se amplía automáticamente el catálogo público al recibir consultas de Plus.
+
+Cada respuesta de Plus, incluso una lectura que ya estaba preparada, debe guardarse antes de responder. Las versiones nuevas quedan `pendiente`, con palabra, contexto, respuesta completa, fuentes, origen, modelo cuando corresponde, versión del prompt y fechas. Se registra cada consulta sin almacenar claves, cookies, direcciones IP ni identidad del visitante. Las respuestas idénticas en un mismo contexto no duplican la ficha; las consultas sí se cuentan individualmente.
+
+Para una palabra no incluida en la selección, Plus busca una versión guardada del mismo término, contexto, modelo y versión del prompt. Puede reutilizar una propuesta pendiente dentro de Plus; eso no la convierte en una ficha revisada. Las descartadas no se reutilizan. Si no encuentra una versión, consulta los archivos disponibles, genera, valida y guarda. Una base ausente o con error impide devolver un falso éxito de guardado. La gratuita no depende de la disponibilidad de la base.
+
+La vista `/dima/base` permite abrir lecturas, marcar propuestas como revisadas o descartadas y descargar una copia JSON. Es una herramienta privada de la prueba local, habilitada solo con `DIMA_LOCAL_REVIEW=1` y un host de loopback. En Vercel permanece deshabilitada; hace falta una sesión de edición propia antes de ofrecer esa administración en línea. La clave del libro y la clave de Plus no otorgan permisos de edición. Marcar revisada no publica ni modifica la selección de 44 palabras.
+
+El archivo SQLite local está en `.dima-data/dima.sqlite`, fuera de Git y de los archivos públicos. Es persistente en esta computadora, no una base compartida en la nube. Para el sitio alojado está preparado el conector Neon Postgres mediante `DIMA_DATABASE_URL`; esa base externa y su conexión real todavía no están provisionadas. El sistema rechaza SQLite cuando corre en Vercel para evitar perder consultas en un disco temporal. La conexión de IA sigue pendiente de `ANTHROPIC_API_KEY`.
+
+`npm run db:dima` crea las tablas e importa la selección de forma idempotente. No reemplaza ni borra versiones existentes. Un cambio editorial en una ficha produce otra versión. La copia JSON permite conservar contenido y metadatos, pero no sustituye un respaldo completo del archivo SQLite o del proveedor Postgres.

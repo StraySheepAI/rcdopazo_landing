@@ -4,10 +4,12 @@ import { getReviewedAnalysis, REVIEWED_WORDS } from "./corpus.ts";
 import { DIMA_SYSTEM, generationInput, parseGeneration } from "./prompt.ts";
 import { cleanText, hasText, normalize } from "./schema.ts";
 import { readDimaAccess } from "./access.ts";
+import { createDimaStore, DIMA_PROMPT_VERSION, type DimaStore } from "./database.ts";
+import type { DimaResult } from "./schema.ts";
 
 const PUBLIC_SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3ENMxScg8YKXXTyIIYwkxF7Hh2VHP8f3Rlo8VSsigr420Q_alu8cU2Ft5j3vyyqEib3mlb9tvZ4Lt/pub?gid=1680193813&single=true&output=csv";
 const AIRTABLE_URL = "https://api.airtable.com/v0/app8LodC87ProKbQp/tblg4NxTxNfoZGTxS";
-type Dependencies = { fetch: typeof fetch; env: Record<string, string | undefined> };
+type Dependencies = { fetch: typeof fetch; env: Record<string, string | undefined>; store?: DimaStore | Promise<DimaStore> };
 class DimaError extends Error {
   status: number;
   constructor(message: string, status: number) { super(message); this.status = status; }
@@ -16,6 +18,14 @@ const json = (data: unknown, status = 200) => Response.json(data, { status, head
 const formulaString = (value: string) => `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
 
 export function createDimaHandlers(deps: Dependencies) {
+  let store: Promise<DimaStore> | undefined;
+  async function requireStore() {
+    try {
+      const value = await (store ||= Promise.resolve(deps.store || createDimaStore(deps.env)));
+      await value.initialize();
+      return value;
+    } catch { store = undefined; throw new DimaError("La base de DIMA no está disponible. La consulta de Plus necesita poder guardar su lectura. Intentá nuevamente.", 503); }
+  }
   async function publicRows() {
     const response = await deps.fetch(PUBLIC_SHEET, { cache: "no-store", signal: AbortSignal.timeout(10000) });
     if (!response.ok) throw new Error("Planilla no disponible.");
@@ -40,17 +50,34 @@ export function createDimaHandlers(deps: Dependencies) {
         const { palabra: input, nivel, contexto: contextInput = "" } = body as Record<string, unknown>;
         const palabra = cleanText(input);
         if (!hasText(palabra) || palabra.length > 100 || /[\r\n\x00-\x1f]/.test(palabra)) throw new DimaError("Ingresá una palabra o expresión de hasta 100 caracteres.", 400);
-        if (!["free", "metalquimico", "libro", "plus", "vip"].includes(String(nivel))) throw new DimaError("Elegí una modalidad válida de DIMA.", 400);
+        if (typeof nivel !== "string" || !["free", "metalquimico", "libro", "plus", "vip"].includes(nivel)) throw new DimaError("Elegí una modalidad válida de DIMA.", 400);
         if (typeof contextInput !== "string" || contextInput.length > 1000) throw new DimaError("El contexto debe tener hasta 1000 caracteres.", 400);
         if (nivel !== "free") {
           const required = nivel === "libro" ? "libro" : "plus";
           if (readDimaAccess(request, deps.env) !== required) throw new DimaError(required === "libro" ? "Ingresá la clave de ¡Qué embole! para abrir la colección." : "Ingresá tu clave de DIMA Plus para consultar una palabra libre.", 401);
         }
         if (nivel === "libro" && !BOOK_WORDS.some((word) => normalize(word) === normalize(palabra))) throw new DimaError("Esta forma pertenece a otra colección de DIMA.", 404);
+        const isPlus = !["free", "libro"].includes(String(nivel));
+        const storage = isPlus ? await requireStore() : undefined;
+        const model = deps.env.DIMA_MODEL || "claude-haiku-4-5-20251001";
+        const context = cleanText(contextInput);
+        async function deliver(result: DimaResult, usedModel?: string) {
+          if (!storage) return json(result);
+          try {
+            const saved = await storage.save(result, { contexto: context, modelo: usedModel, versionPrompt: DIMA_PROMPT_VERSION });
+            return json({ ...result, registro: { id: saved.id, estado: saved.estado, guardado: true } });
+          } catch { throw new DimaError("No pudimos guardar la lectura en la base. No la marcamos como guardada. Intentá nuevamente.", 503); }
+        }
         const reviewed = getReviewedAnalysis(palabra);
-        if (reviewed) return json(reviewed);
+        if (reviewed) return await deliver(reviewed);
         if (nivel === "free") {
           throw new DimaError("Esta palabra todavía no tiene una ficha completa en la selección pública. Elegí una de las palabras disponibles.", 404);
+        }
+        if (storage) {
+          let previous;
+          try { previous = await storage.find(palabra, context, model); }
+          catch { throw new DimaError("No pudimos consultar la base de DIMA. Intentá nuevamente.", 503); }
+          if (previous) return await deliver(previous.resultado, previous.modelo || model);
         }
         // Sheets and the extended archive are independent sources.
         const rows = await publicRows().catch(() => null);
@@ -71,7 +98,6 @@ export function createDimaHandlers(deps: Dependencies) {
           if (fields && typeof fields === "object" && !Array.isArray(fields)) {
             if (normalize(cleanText(fields.Forma)).replace(/\s/g, "") !== normalized) throw new DimaError("La ficha encontrada no corresponde a la consulta.", 502);
             const archived = adaptRow(fields, palabra, "base");
-            if (archived.estado === "completo") return json(archived);
             reference = archived;
           }
         }
@@ -82,7 +108,7 @@ export function createDimaHandlers(deps: Dependencies) {
         const response = await deps.fetch("https://api.anthropic.com/v1/messages", {
           method: "POST", headers: { "Content-Type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
           body: JSON.stringify({
-            model: deps.env.DIMA_MODEL || "claude-haiku-4-5-20251001", max_tokens: 2800,
+            model, max_tokens: 3600,
             system: DIMA_SYSTEM,
             messages: [{ role: "user", content: generationInput(palabra, cleanText(contextInput), reference) }],
           }), signal: AbortSignal.timeout(30000),
@@ -91,8 +117,10 @@ export function createDimaHandlers(deps: Dependencies) {
         const data = await response.json();
         const text = Array.isArray(data.content) ? data.content.filter((block: { type?: string }) => block.type === "text").map((block: { text?: string }) => block.text || "").join("") : "";
         if (text.length > 80000) throw new DimaError("DIMA devolvió una lectura demasiado extensa.", 502);
-        try { return json(parseGeneration(text, data.stop_reason, palabra, reference)); }
+        let result;
+        try { result = parseGeneration(text, data.stop_reason, palabra, reference); }
         catch { throw new DimaError("La lectura llegó incompleta o con un formato inesperado. Intentá nuevamente.", 502); }
+        return await deliver(result, typeof data.model === "string" ? data.model : model);
       } catch (error) {
         if (error instanceof DimaError) return json({ error: error.message }, error.status);
         return json({ error: "No pudimos completar la lectura de DIMA. Intentá nuevamente." }, 502);

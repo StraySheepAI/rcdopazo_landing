@@ -28,7 +28,7 @@ export function readDimaAccess(request: Request, env: Env, now = Date.now()): Di
 }
 
 const json = (body: unknown, status = 200, headers: Record<string, string> = {}) => Response.json(body, { status, headers: { "Cache-Control": "no-store", ...headers } });
-function sameOrigin(request: Request) {
+export function sameDimaOrigin(request: Request) {
   const origin = request.headers.get("origin");
   if (request.headers.get("sec-fetch-site") === "cross-site") return false;
   if (!origin) return true;
@@ -56,7 +56,7 @@ export function createDimaAccessHandlers(env: Env, now = () => Date.now()) {
       return json({ acceso, ...(acceso === "plus" ? { consultaLibreDisponible: Boolean(env.ANTHROPIC_API_KEY) } : {}) });
     },
     async POST(request: Request) {
-      if (!sameOrigin(request)) return json({ error: "Este acceso debe abrirse desde DIMA." }, 403);
+      if (!sameDimaOrigin(request)) return json({ error: "Este acceso debe abrirse desde DIMA." }, 403);
       if (!configuredSecret(env)) return json({ error: "Los accesos con clave todavía no están configurados en esta instalación." }, 503);
       const ip = request.headers.get("x-vercel-forwarded-for")?.split(",")[0].trim() || "local";
       const attempt = failures.get(ip);
@@ -80,7 +80,7 @@ export function createDimaAccessHandlers(env: Env, now = () => Date.now()) {
       } catch { return json({ error: "No pudimos leer la clave. Intentá nuevamente." }, 400); }
     },
     async DELETE(request: Request) {
-      if (!sameOrigin(request)) return json({ error: "Este acceso debe cerrarse desde DIMA." }, 403);
+      if (!sameDimaOrigin(request)) return json({ error: "Este acceso debe cerrarse desde DIMA." }, 403);
       return json({ acceso: null }, 200, { "Set-Cookie": `${DIMA_COOKIE}=; Max-Age=0; ${cookieAttributes(request)}` });
     },
   };

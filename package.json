@@ -10,9 +10,11 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
-    "test:dima": "node --experimental-strip-types --test tests/dima*.test.mjs"
+    "test:dima": "node --experimental-strip-types --test tests/dima*.test.mjs",
+    "db:dima": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/dima-db.mjs"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
     "@vercel/blob": "^2.8.0",
     "next": "16.2.6",
     "react": "19.2.6",

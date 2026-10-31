@@ -26,6 +26,7 @@ export default function DimaPage() {
   const [result, setResult] = useState<DimaResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [saved, setSaved] = useState(false);
   const [code, setCode] = useState("");
   const [unlocking, setUnlocking] = useState(false);
   const [accessError, setAccessError] = useState("");
@@ -66,7 +67,7 @@ export default function DimaPage() {
 
   function clearReading() {
     requestId.current += 1; activeRequest.current?.abort();
-    setResult(null); setError(""); setLoading(false);
+    setResult(null); setError(""); setLoading(false); setSaved(false);
   }
   function chooseWord(value: string) { clearReading(); setWord(value); }
   function chooseMode(next: Mode) { clearReading(); setMode(next); setWord(""); setCode(""); setAccessError(""); }
@@ -109,7 +110,7 @@ export default function DimaPage() {
       }
       const next = readResult(data);
       if (normalize(next.palabra) !== normalize(term) || !next.inside) throw new Error("La lectura recibida no corresponde a esta consulta.");
-      setResult(next);
+      setResult(next); setSaved(data.registro?.guardado === true);
     } catch (cause) {
       if (!controller.signal.aborted && id === requestId.current) setError(cause instanceof Error ? cause.message : "No pudimos completar la consulta.");
     } finally { if (!controller.signal.aborted && id === requestId.current) setLoading(false); }
@@ -126,10 +127,11 @@ export default function DimaPage() {
       {locked ? <form className={styles.accessForm} onSubmit={unlock}><h3>{MODE_INFO[mode].title}</h3><p>{mode === "libro" ? "Ingresá la clave de ¡Qué embole! para abrir el glosario de la obra." : "Ingresá tu clave de DIMA Plus para abrir la consulta libre."}</p><label htmlFor="dima-code">Tu clave de acceso</label><div className={styles.searchRow}><input id="dima-code" type="password" value={code} onChange={(event) => setCode(event.target.value)} maxLength={120} autoComplete="off" /><button type="submit" disabled={unlocking || !code.trim()}>{unlocking ? "Comprobando…" : "Abrir mi acceso"}</button></div>{accessError && <p className={styles.error} role="alert">{accessError}</p>}</form> : <>
         <form className={styles.form} onSubmit={(event) => consult(word, event)}>
           <label htmlFor="dima-word">{mode === "libro" ? "Elegí una palabra de ¡Qué embole!" : mode === "plus" ? "¿Qué palabra o expresión querés consultar?" : "¿Qué palabra querés explorar?"}</label>
-          <div className={styles.searchRow}><input id="dima-word" list="dima-words" value={word} onChange={(event) => chooseWord(event.target.value)} placeholder={mode === "plus" ? "Escribí una palabra o expresión" : "Escribí o elegí una palabra"} maxLength={100} autoComplete="off" /><datalist id="dima-words">{words.map((item) => <option key={item} value={item} />)}</datalist><button type="submit" disabled={loading || !word.trim() || (mode === "plus" && !providerReady)}>{loading ? "Consultando…" : "Consultar →"}</button></div>
-          {mode === "plus" && !providerReady && <p className={styles.setupNotice}>Tu acceso está reconocido. La consulta libre todavía no está conectada en esta copia de prueba.</p>}
+          <div className={styles.searchRow}><input id="dima-word" list="dima-words" value={word} onChange={(event) => chooseWord(event.target.value)} placeholder={mode === "plus" ? "Escribí una palabra o expresión" : "Escribí o elegí una palabra"} maxLength={100} autoComplete="off" /><datalist id="dima-words">{words.map((item) => <option key={item} value={item} />)}</datalist><button type="submit" disabled={loading || !word.trim() || (mode === "plus" && !providerReady && !publicWords.some((item) => normalize(item) === normalize(word.trim())))}>{loading ? "Consultando…" : "Consultar →"}</button></div>
+          {mode === "plus" && !providerReady && <p className={styles.setupNotice}>La generación de palabras nuevas todavía no está conectada en esta copia. Podés probar el guardado de Plus con cualquiera de las palabras de la selección.</p>}
+          {mode === "plus" && <p>Las lecturas se conservan en el archivo privado de DIMA para su revisión.</p>}
           {mode === "libro" && bookNotice && <p className={styles.setupNotice}>{bookNotice}</p>}
-          <p className={styles.status} role="status">{loading ? `DIMA está consultando ${word}.` : result ? `Consulta DIMA de ${result.palabra} disponible.` : ""}</p>
+          <p className={styles.status} role="status">{loading ? `DIMA está consultando ${word}.` : result ? `Consulta DIMA de ${result.palabra} disponible.${saved ? " Guardada en la base de DIMA." : ""}` : ""}</p>
           {error && <p className={styles.error} role="alert">{error}</p>}
         </form>
         {mode === "free" && <div className={styles.examples}><span>Podés empezar por</span>{INITIAL_WORDS.map((item) => <button key={item} type="button" onClick={() => consult(item)}>{item}</button>)}</div>}
