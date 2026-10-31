@@ -1,101 +1,183 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
+import { normalize, readResult, type DimaResult } from "@/lib/dima/schema";
+import ReadingJourney, { type ReadingDepth } from "./ReadingJourney";
+import shell from "./shell.module.css";
 import { PERSONAL_EMAIL } from "@/app/lib/contact";
-import styles from "./page.module.css";
 
-type Door = "configuracion" | "metalquimico" | "coleccion";
-type Result = {
-  fuente?: string;
-  bloque1: { forma: string; indicia: string; ludum_mpae: string; causa_mpae: string; ordo?: string };
-  bloque2: { initium: string; lectio: string; gradus: string; natura: string };
-  bloque3: { viae: string; dictum: string; provocatio: string; sussurro?: string; activatio: string; cierre: string };
-};
-
-function TextFlow({ children }: { children?: string | string[] }) {
-  const text = Array.isArray(children) ? children.join(" · ") : children || "";
-  return <div className={styles.textFlow}>{text.split(/\n{2,}/).filter(Boolean).map((paragraph, index) => <p key={`${index}-${paragraph.slice(0, 16)}`}>{paragraph}</p>)}</div>;
-}
-
-const FREE_WORDS = ["Patraña", "Transmutación", "Normal", "Molde", "Juego", "Trabajo", "Persona", "Éxito", "Common", "Educar", "Work", "Esfuerzo", "Deber", "Tiempo", "Rutina", "Ganar", "Perder", "Right", "Correcto", "Productividad", "Sacrificio", "Fracaso", "Obediencia", "Control", "Influencer", "Ego", "Realidad", "Fama", "Mérito", "Sumisión", "Ambición", "Orgullo", "Miedo", "Virtud", "Empezar", "Volver", "Infans", "Adultus", "Puer", "Presente", "Ausencia", "Deseo"];
-const BOOK_WORDS = ["Bola", "Embole", "Patrañas", "Disolución", "Vibración", "Resonancia", "Potencia", "Nigredo", "Forma", "Estructura", "Transmutación", "Conciencia", "Percepción", "Patraña", "Umbral", "Quiebre", "Grieta", "Reconfiguración", "Separación", "Sombra", "Espejo", "Retorno", "Punctum non reditus", "No poder desver", "La incomodidad que despierta"];
-const EMBOLE: Result = {
-  fuente: "archivo",
-  bloque1: { forma: "Embole", ordo: "Transmuta", indicia: "No nombra solamente aburrimiento: contiene una forma que entra, pesa y reduce el movimiento posible.", ludum_mpae: "Detectar qué se volvió bola antes de intentar empujarlo.", causa_mpae: "La palabra muestra una configuración de carga, quietud y fricción, no una identidad personal." },
-  bloque2: { initium: "Em- + bole: una forma compuesta por dos núcleos activos.", lectio: "Em- introduce o sitúa dentro. Bole remite a bola, lanzamiento, masa y golpe. Juntas producen la imagen de algo que entra y ocupa.", gradus: "2 Verbus Prime · EM + BOLE", natura: "Configuración mínima: algo ingresa, adquiere peso y compromete el movimiento." },
-  bloque3: { viae: "Nombrar la carga · distinguir lo inmóvil · recuperar un movimiento mínimo.", dictum: "No soy el embole: observo qué se hizo bola y elijo qué puede volver a moverse.", provocatio: "¿Qué estás llamando aburrimiento para no mirar la carga que contiene?", sussurro: "¿Qué cambiaría si dejara de ser una definición sobre vos?", activatio: "ATS descompone la forma. ARS M abre una configuración alternativa sin negar lo observado.", cierre: "Lo visto no desaparece: cambia su relación con lo posible." },
-};
-
+type Mode = "free" | "libro" | "plus";
+type Access = "libro" | "plus" | null;
+const INITIAL_WORDS = ["Devoción", "Normal", "Miedo", "Embole"];
 export default function DimaPage() {
   const [lang, setLang] = useState<"es" | "en">("es");
-  const [door, setDoor] = useState<Door>("configuracion");
-  const [word, setWord] = useState("Patraña");
-  const [result, setResult] = useState<Result | null>(null);
   const [depth, setDepth] = useState<1 | 2 | 3>(1);
+  const [mode, setMode] = useState<Mode>("free");
+  const [access, setAccess] = useState<Access>(null);
+  const [providerReady, setProviderReady] = useState(false);
+  const [word, setWord] = useState("");
+  const [publicWords, setPublicWords] = useState<string[]>([]);
+  const [bookWords, setBookWords] = useState<string[]>([]);
+  const [plusWords, setPlusWords] = useState<string[]>([]);
+  const [bookNotice, setBookNotice] = useState("");
+  const [result, setResult] = useState<DimaResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [freeWords, setFreeWords] = useState(FREE_WORDS);
-  const words = useMemo(() => (door === "coleccion" ? BOOK_WORDS : freeWords), [door, freeWords]);
+  const [saved, setSaved] = useState(false);
+  const [code, setCode] = useState("");
+  const [unlocking, setUnlocking] = useState(false);
+  const [accessError, setAccessError] = useState("");
+  const activeRequest = useRef<AbortController | null>(null);
+  const requestId = useRef(0);
+  const pendingLayer = useRef<ReadingDepth | null>(null);
+  const words = mode === "libro" ? bookWords : mode === "plus" ? plusWords : publicWords;
+  const locked = mode !== "free" && access !== mode;
+
+  function focusLayer(layer: ReadingDepth) {
+    const panel = document.getElementById(`dima-layer-${layer}`);
+    panel?.focus({ preventScroll: true });
+    panel?.scrollIntoView({ block: "start", behavior: "auto" });
+  }
+  useEffect(() => {
+    if (pendingLayer.current) { focusLayer(pendingLayer.current); pendingLayer.current = null; }
+  }, [depth]);
 
   useEffect(() => {
-    fetch("/api/dima").then((response) => response.json()).then((data) => {
-      if (Array.isArray(data.palabras) && data.palabras.length) setFreeWords(data.palabras);
+    const controller = new AbortController();
+    const query = new URLSearchParams(window.location.search).get("palabra");
+    const requestedMode = new URLSearchParams(window.location.search).get("nivel");
+    if (requestedMode === "plus" || requestedMode === "libro") setMode(requestedMode);
+    if (query) setWord(query.slice(0, 100));
+    fetch("/api/dima", { signal: controller.signal }).then(async (response) => {
+      const data = await response.json();
+      if (!response.ok || !Array.isArray(data.palabras) || !data.palabras.every((item: unknown) => typeof item === "string")) throw new Error();
+      if (!controller.signal.aborted) setPublicWords(data.palabras);
+    }).catch(() => { if (!controller.signal.aborted) setError("No pudimos cargar la selección. Intentá nuevamente."); });
+    fetch("/api/dima/access", { signal: controller.signal }).then((response) => response.json()).then((data) => {
+      if (controller.signal.aborted) return;
+      if (data.acceso === "libro" || data.acceso === "plus") setAccess(data.acceso);
+      setProviderReady(data.consultaLibreDisponible === true);
     }).catch(() => undefined);
+    return () => { controller.abort(); activeRequest.current?.abort(); };
   }, []);
 
-  async function reveal(event?: FormEvent) {
-    event?.preventDefault(); setError(""); setDepth(1);
-    if (word.trim().toLowerCase() === "embole") { setResult(EMBOLE); return; }
-    setLoading(true);
-    try {
-      const nivel = door === "coleccion" ? "libro" : door === "metalquimico" ? "metalquimico" : "free";
-      const response = await fetch("/api/dima", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ palabra: word.trim(), nivel }) });
+  useEffect(() => {
+    if (mode === "free" || access !== mode) return;
+    const controller = new AbortController();
+    fetch(`/api/dima?nivel=${mode}`, { signal: controller.signal }).then(async (response) => {
       const data = await response.json();
-      if (!response.ok || data.error) throw new Error(data.error || "No pude abrir esta palabra.");
-      setResult(data);
-    } catch (cause) { setError(cause instanceof Error ? cause.message : "No pude abrir esta palabra."); }
-    finally { setLoading(false); }
+      if (!response.ok) throw new Error(data.error || "No pudimos abrir la colección.");
+      if (controller.signal.aborted) return;
+      if (!Array.isArray(data.palabras) || !data.palabras.every((item: unknown) => typeof item === "string")) throw new Error("La colección llegó incompleta.");
+      if (mode === "libro") { setBookWords(data.palabras); setBookNotice(typeof data.aviso === "string" ? data.aviso : ""); }
+      else setPlusWords(data.palabras);
+    }).catch((cause) => { if (!controller.signal.aborted) setError(cause.message); });
+    return () => controller.abort();
+  }, [mode, access]);
+
+  function clearReading() {
+    requestId.current += 1; activeRequest.current?.abort();
+    pendingLayer.current = null;
+    setResult(null); setError(""); setLoading(false); setSaved(false); setDepth(1);
+  }
+  function chooseWord(value: string) { clearReading(); setWord(value); }
+  function chooseMode(next: Mode) { clearReading(); setMode(next); setWord(""); setCode(""); setAccessError(""); }
+
+  async function unlock(event: FormEvent) {
+    event.preventDefault(); setUnlocking(true); setAccessError("");
+    try {
+      const response = await fetch("/api/dima/access", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ codigo: code }) });
+      const data = await response.json();
+      if (!response.ok || !["libro", "plus"].includes(data.acceso)) throw new Error(data.error || "No pudimos abrir este acceso.");
+      clearReading(); setAccess(data.acceso); setMode(data.acceso); setCode("");
+      const status = await (await fetch("/api/dima/access")).json();
+      setProviderReady(status.consultaLibreDisponible === true);
+    } catch (cause) { setAccessError(cause instanceof Error ? cause.message : "No pudimos validar la clave."); }
+    finally { setUnlocking(false); }
   }
 
-  function chooseDoor(next: Door) { setDoor(next); setResult(null); setDepth(1); setWord(next === "coleccion" ? "Embole" : "Realidad"); }
+  async function logout() {
+    clearReading(); setAccess(null); setMode("free"); setBookWords([]); setPlusWords([]); setBookNotice(""); setCode(""); setWord(""); setProviderReady(false);
+    try {
+      const response = await fetch("/api/dima/access", { method: "DELETE" });
+      if (!response.ok) throw new Error();
+      clearReading(); setAccess(null); setMode("free"); setBookWords([]); setPlusWords([]); setBookNotice(""); setCode(""); setWord(""); setProviderReady(false);
+    } catch { setAccessError("No pudimos cerrar el acceso. Intentá nuevamente."); }
+  }
 
-  return <main className={styles.page}>
-    <div className={styles.atmosphere} aria-hidden="true"><i /><i /><i /><i /><i /></div>
-    <header className={styles.header}><Link href="/mpa">← MPA</Link><span>DIMA · {lang === "es" ? "ARCHIVO VIVO" : "LIVING ARCHIVE"}</span><div className={styles.headerActions}><button className={lang === "es" ? styles.langActive : ""} onClick={() => setLang("es")}>ES</button><button className={lang === "en" ? styles.langActive : ""} onClick={() => setLang("en")}>EN</button><Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">PULSUS FRACTUM</Link></div></header>
-    <section className={styles.hero}>
-      <div className={styles.orbit} aria-hidden="true"><span>Δ</span></div>
-      <img className={styles.dimaFigure} src="/dima-machine-cutout-v1.png" alt="DIMA" />
-      <p className={styles.eyebrow}>{lang === "es" ? "DISPOSITIVO INTELIGENTE METALQUÍMICO ACTIVO" : "ACTIVE INTELLIGENT METALKIMIC DEVICE"}</p><h1>DIMA</h1>
-      <p className={styles.manifesto}>{lang === "es" ? "No define la palabra. La abre para mostrar la configuración que contiene." : "It does not define the word. It opens it to reveal the configuration it contains."}</p>
-      <div className={styles.sequence}><span><b>01</b> {lang === "es" ? "Elegí una puerta" : "Choose a door"}</span><i /><span><b>02</b> {lang === "es" ? "Recibí una revelación" : "Receive a revelation"}</span><i /><span><b>03</b> {lang === "es" ? "Profundizá si lo necesitás" : "Go deeper if needed"}</span></div>
+  async function consult(value: string, event?: FormEvent) {
+    event?.preventDefault(); clearReading();
+    const term = value.trim();
+    if (!term || locked) return;
+    const id = requestId.current; const controller = new AbortController(); activeRequest.current = controller;
+    setWord(term); setLoading(true);
+    try {
+      const response = await fetch("/api/dima", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ palabra: term, nivel: mode }), signal: controller.signal });
+      const data = await response.json();
+      if (controller.signal.aborted || id !== requestId.current) return;
+      if (!response.ok || data.error) {
+        if (response.status === 401) { setAccess(null); setBookWords([]); }
+        throw new Error(data.error || "No pudimos abrir esta palabra.");
+      }
+      const next = readResult(data);
+      if (normalize(next.palabra) !== normalize(term) || !next.inside) throw new Error("La lectura recibida no corresponde a esta consulta.");
+      setResult(next); setSaved(data.registro?.guardado === true);
+      if (mode === "plus") setPlusWords((previous) => [...new Set([...previous, next.palabra])].sort((a, b) => a.localeCompare(b, "es")));
+    } catch (cause) {
+      if (!controller.signal.aborted && id === requestId.current) setError(cause instanceof Error ? cause.message : "No pudimos completar la consulta.");
+    } finally { if (!controller.signal.aborted && id === requestId.current) setLoading(false); }
+  }
+
+  function advance(next: ReadingDepth) {
+    if (next <= depth) { focusLayer(next); return; }
+    pendingLayer.current = next;
+    setDepth((current) => Math.max(current, next) as ReadingDepth);
+  }
+
+  return <main className={shell.page}>
+    <div className={shell.atmosphere} aria-hidden="true"><i /><i /><i /><i /><i /></div>
+    <header className={shell.header}><Link href="/mpa">← MPA</Link><span>DIMA · {lang === "es" ? "ARCHIVO VIVO" : "LIVING ARCHIVE"}</span><div className={shell.headerActions}><button type="button" className={lang === "es" ? shell.langActive : ""} aria-pressed={lang === "es"} onClick={() => setLang("es")}>ES</button><button type="button" className={lang === "en" ? shell.langActive : ""} aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button><Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">PULSUS FRACTUM</Link></div></header>
+    <section className={shell.hero} aria-labelledby="dima-title">
+      <div className={shell.orbit} aria-hidden="true"><span>Δ</span></div>
+      <img className={shell.dimaFigure} src="/dima-machine-cutout-v1.png" alt="DIMA" width={470} height={560} />
+      <p className={shell.eyebrow}>{lang === "es" ? "DISPOSITIVO INTELIGENTE METALQUÍMICO ACTIVO" : "ACTIVE INTELLIGENT METALKIMIC DEVICE"}</p><h1 id="dima-title">DIMA</h1>
+      <p className={shell.manifesto}>{lang === "es" ? "No define la palabra. La abre para mostrar la configuración que contiene." : "It does not define the word. It opens it to reveal the configuration it contains."}</p>
+      <div className={shell.sequence}><span><b>01</b> {lang === "es" ? "Elegí una puerta" : "Choose a door"}</span><i /><span><b>02</b> {lang === "es" ? "Recibí una revelación" : "Receive a revelation"}</span><i /><span><b>03</b> {lang === "es" ? "Profundizá si lo necesitás" : "Go deeper if needed"}</span></div>
     </section>
-    <section className={styles.portal}>
-      <p className={styles.sectionLabel}>{lang === "es" ? "¿QUÉ QUERÉS MIRAR HOY?" : "WHAT DO YOU WANT TO LOOK AT TODAY?"}</p>
-      <div className={styles.doors}>
-        <button className={door === "configuracion" ? styles.activeDoor : ""} onClick={() => chooseDoor("configuracion")}><span className={styles.glyph}>◐</span><small>{lang === "es" ? "PUERTA I" : "DOOR I"}</small><b>{lang === "es" ? "Configuración oculta" : "Hidden configuration"}</b><em>{lang === "es" ? "Lo que creés decir / lo que la forma contiene" : "What you think you say / what the form contains"}</em></button>
-        <button className={door === "metalquimico" ? styles.activeDoor : ""} onClick={() => chooseDoor("metalquimico")}><span className={styles.glyph}>△</span><small>{lang === "es" ? "PUERTA II" : "DOOR II"}</small><b>{lang === "es" ? "Análisis Metalquímico" : "Metalkimic Analysis"}</b><em>{lang === "es" ? "Una lectura completa, entregada por capas" : "A complete reading, delivered in layers"}</em></button>
-        <button className={door === "coleccion" ? styles.activeDoor : ""} onClick={() => chooseDoor("coleccion")}><span className={styles.glyph}>◇</span><small>{lang === "es" ? "PUERTA III" : "DOOR III"}</small><b>{lang === "es" ? "Colecciones de obra" : "Work collections"}</b><em>{lang === "es" ? "Glosarios que se abren con cada libro o producto" : "Glossaries unlocked by each book or product"}</em></button>
+    <section className={shell.portal}>
+      <p className={shell.sectionLabel}>{lang === "es" ? "¿QUÉ QUERÉS MIRAR HOY?" : "WHAT DO YOU WANT TO LOOK AT TODAY?"}</p>
+      <nav className={shell.doors} aria-label="Puertas de DIMA">
+        <button type="button" className={mode === "free" ? shell.activeDoor : ""} aria-pressed={mode === "free"} onClick={() => chooseMode("free")}><span className={shell.glyph}>◐</span><small>PUERTA I</small><b>Configuración oculta</b><em>Lo que creés decir / lo que la forma contiene</em></button>
+        <button type="button" className={mode === "plus" ? shell.activeDoor : ""} aria-pressed={mode === "plus"} onClick={() => chooseMode("plus")}><span className={shell.glyph}>△</span><small>PUERTA II</small><b>Análisis Metalquímico</b><em>Una lectura completa, entregada por capas</em></button>
+        <button type="button" className={mode === "libro" ? shell.activeDoor : ""} aria-pressed={mode === "libro"} onClick={() => chooseMode("libro")}><span className={shell.glyph}>◇</span><small>PUERTA III</small><b>Colecciones de obra</b><em>Glosarios que se abren con cada libro o producto</em></button>
+      </nav>
+    </section>
+    <section className={shell.consultation} id="dima-consultation" aria-labelledby="consultation-title">
+      <div className={shell.consultCopy}><p className={shell.sectionLabel}>{mode === "libro" ? "COLECCIÓN · ¡QUÉ EMBOLE!" : mode === "plus" ? "ANÁLISIS AMPLIADO · DIMA PLUS" : "PRIMERA REVELACIÓN · ACCESO ABIERTO"}</p><h2 id="consultation-title">{mode === "free" ? "Elegí una palabra." : mode === "plus" ? "Abrí la primera capa del análisis." : "Entrá al glosario vivo de la obra."}</h2><p>{mode === "free" ? `${publicWords.length ? `Explorá ${publicWords.length} palabras sin clave.` : "Explorá la selección de palabras sin clave."} Primero abrimos su construcción; después, sus relaciones y posibilidades de reconfiguración. La síntesis llega al final.` : mode === "plus" ? "Tu clave de DIMA Plus abre el análisis ampliado y la consulta de palabras o expresiones libres." : "La clave incluida en ¡Qué embole! abre su colección. Conservá la misma clave que figura en tu libro."}</p>
+        {access && <div className={shell.accessState}><span>Tu acceso {access === "libro" ? "¡Qué embole!" : "DIMA Plus"} está abierto.</span><button type="button" onClick={logout}>Cerrar acceso</button></div>}
+        {lang === "en" && <p className={shell.notice}>The prepared readings are currently available in Spanish.</p>}
       </div>
+      {locked ? <form className={shell.form} onSubmit={unlock}><label htmlFor="dima-code">{mode === "libro" ? "CLAVE DE ¡QUÉ EMBOLE!" : "CLAVE DE DIMA PLUS"}</label><div className={shell.keyFields}><input id="dima-code" type="password" value={code} onChange={(event) => setCode(event.target.value)} maxLength={120} autoComplete="off" placeholder="Ingresá tu clave" /></div><button type="submit" disabled={unlocking || !code.trim()}>{unlocking ? "COMPROBANDO…" : "ABRIR MI ACCESO"}</button>{accessError && <p className={shell.error} role="alert">{accessError}</p>}</form> : <form className={shell.form} onSubmit={(event) => consult(word, event)}>
+        <label htmlFor="dima-word">FORMA A DESVELAR</label>
+        <div className={mode === "libro" ? shell.keyFields : undefined}>
+          {mode !== "libro" && <select aria-label="Elegí una palabra de la selección" value={words.includes(word) ? word : ""} onChange={(event) => chooseWord(event.target.value)}><option value="">Elegí una palabra</option>{words.map((item) => <option key={item} value={item}>{item}</option>)}</select>}
+          {mode === "libro" ? <select id="dima-word" value={words.includes(word) ? word : ""} onChange={(event) => chooseWord(event.target.value)}><option value="">Elegí una forma</option>{words.map((item) => <option key={item} value={item}>{item}</option>)}</select> : <input id="dima-word" value={word} onChange={(event) => chooseWord(event.target.value)} placeholder={mode === "plus" ? "o escribí una palabra o expresión" : "o escribí una palabra"} maxLength={100} autoComplete="off" />}
+        </div>
+        <button type="submit" disabled={loading || !word.trim() || (mode === "plus" && !providerReady && !words.some((item) => normalize(item) === normalize(word.trim())))}>{loading ? "DIMA ESTÁ OBSERVANDO…" : "REVELAR CONFIGURACIÓN"}</button>
+        {mode === "plus" && !providerReady && <p className={shell.notice}>La generación de palabras nuevas todavía no está conectada en esta copia. Podés consultar las palabras de la selección y las lecturas ya guardadas.</p>}
+        {mode !== "free" && <p className={shell.notice}>Las consultas de Plus y de la colección se conservan en el archivo privado de DIMA para su revisión.</p>}
+        {mode === "libro" && bookNotice && <p className={shell.notice}>{bookNotice}</p>}
+        {error && <p className={shell.error} role="alert">{error}</p>}{accessError && <p className={shell.error} role="alert">{accessError}</p>}
+        <p className={shell.notice} role="status">{loading ? `DIMA está consultando ${word}.` : result ? `Consulta de ${result.palabra} disponible.${saved ? " Guardada en la base de DIMA." : ""}` : ""}</p>
+      </form>}
     </section>
-    <section className={styles.consultation}>
-      <div className={styles.consultCopy}><p className={styles.sectionLabel}>{door === "coleccion" ? "COLECCIÓN · ¡QUÉ EMBOLE!" : "PRIMERA REVELACIÓN · ACCESO ABIERTO"}</p><h2>{door === "configuracion" ? "Elegí una palabra." : door === "metalquimico" ? "Abrí la primera capa del análisis." : "Entrá al glosario vivo de la obra."}</h2><p>La primera lectura es breve y comprensible. DIMA solo revela más cuando vos decidís avanzar.</p></div>
-      <form className={styles.form} onSubmit={reveal}><label>FORMA A DESVELAR</label><div><select value={words.includes(word) ? word : ""} onChange={(e) => setWord(e.target.value)}>{!words.includes(word) && <option value="">Elegí una forma</option>}{words.map((item) => <option key={item}>{item}</option>)}</select>{door === "metalquimico" && <input value={word} onChange={(e) => setWord(e.target.value)} placeholder="o escribí una palabra" maxLength={50} />}</div><button disabled={loading || !word.trim()}>{loading ? "DIMA ESTÁ OBSERVANDO…" : "REVELAR CONFIGURACIÓN"}</button>{error && <p className={styles.error}>{error}</p>}</form>
-    </section>
-    {result && <section className={styles.reading}>
-      <div className={styles.readingHead}><p className={styles.sectionLabel}>LECTURA BÁSICA · {result.fuente === "ia" ? "LECTURA ASISTIDA" : "ARCHIVO DIMA"}</p><h2>{result.bloque1.forma}</h2><p className={styles.contrast}>Primero, DIMA muestra <strong>qué configuración contiene la palabra</strong>.</p></div>
-      <article className={styles.revealCard}>
-        <small>LO ESENCIAL</small>
-        <h3>¿Qué está diciendo esta palabra?</h3>
-        <TextFlow>{result.bloque1.indicia}</TextFlow>
-        <div className={styles.quickFacts}><span><b>CAMPO DE ACCIÓN</b>{result.bloque1.ordo || "Por observar"}</span><span><b>VIBRACIÓN REGISTRADA</b><TextFlow>{result.bloque1.ludum_mpae}</TextFlow></span></div>
-        <details className={styles.whyDetail}><summary>¿Por qué DIMA llega a esta lectura?</summary><TextFlow>{result.bloque1.causa_mpae}</TextFlow></details>
-      </article>
-      <nav className={styles.depthNav}><button className={depth >= 1 ? styles.done : ""} onClick={() => setDepth(1)}><b>01</b><span>Qué contiene</span><small>Lectura esencial</small></button><i /><button className={depth >= 2 ? styles.done : ""} onClick={() => setDepth(2)}><b>02</b><span>Cómo se construye</span><small>ATS · Morfología y Verbus Prime</small></button><i /><button className={depth >= 3 ? styles.done : ""} onClick={() => setDepth(3)}><b>03</b><span>Qué puede abrir</span><small>ARS M · Reconfiguración</small></button></nav>
-      {depth === 1 && <button className={styles.nextDepth} onClick={() => setDepth(2)}>VER CÓMO ESTÁ CONSTRUIDA →</button>}
-      {depth >= 2 && <article className={`${styles.analysisCard} ${styles.ats}`}><header><span>ATS</span><div><small>DESARMAR PARA ENTENDER</small><h3>Cómo está construida</h3></div></header><div className={styles.analysisGrid}><section><small>ORIGEN Y MORFOLOGÍA</small><TextFlow>{result.bloque2.lectio}</TextFlow></section><section><small>VERBUS PRIME · NÚCLEO ACTIVO</small><TextFlow>{result.bloque2.gradus}</TextFlow></section><section><small>CONFIGURACIÓN MÍNIMA</small><TextFlow>{result.bloque2.natura}</TextFlow></section><section><small>FRASE DE APERTURA</small><TextFlow>{result.bloque2.initium}</TextFlow></section></div>{depth === 2 && <button className={styles.nextDepth} onClick={() => setDepth(3)}>VER LA RECONFIGURACIÓN →</button>}</article>}
-      {depth >= 3 && <article className={`${styles.analysisCard} ${styles.ars}`}><header><span>ARS M</span><div><small>VOLVER A ABRIR LO POSIBLE</small><h3>Cómo puede reconfigurarse</h3></div></header><div className={styles.analysisGrid}><section><small>OTRAS FORMAS POSIBLES</small><TextFlow>{result.bloque3.viae}</TextFlow></section><section><small>FRASE RECONFIGURADA</small><TextFlow>{result.bloque3.dictum}</TextFlow></section><section><small>PREGUNTA DIMA</small><TextFlow>{result.bloque3.provocatio}</TextFlow></section><section><small>ACTIVACIÓN</small><TextFlow>{result.bloque3.activatio}</TextFlow></section></div><details className={styles.whyDetail}><summary>Escuchar el susurro de DIMA</summary><TextFlow>{result.bloque3.sussurro}</TextFlow></details></article>}
+    {mode === "free" && <div className={shell.startWords}><span>Podés empezar por</span>{INITIAL_WORDS.map((item) => <button key={item} type="button" onClick={() => consult(item)}>{item}</button>)}</div>}
+    {result && !locked && <section className={shell.reading} aria-label={`Consulta DIMA de ${result.palabra}`}>
+      <header className={shell.readingHead} id="dima-reading-heading"><p className={shell.sectionLabel}>{mode === "free" ? "LECTURA GRATUITA" : mode === "libro" ? "COLECCIÓN · ¡QUÉ EMBOLE!" : "ANÁLISIS METALQUÍMICO"}</p><h2>{result.palabra}</h2><p className={shell.contrast}>Empezá por su origen y su construcción. Después explorá sus relaciones y reconfiguración; la síntesis reúne lo descubierto al final.</p></header>
+      <ReadingJourney result={result} depth={depth} ampliado={mode === "plus"} onAdvance={advance} onRestart={() => { clearReading(); setWord(""); document.getElementById("dima-consultation")?.scrollIntoView({ block: "start" }); document.getElementById("dima-word")?.focus(); }} />
     </section>}
-    <section className={styles.valuePath}><p className={styles.sectionLabel}>DIMA CRECE CON TU PREGUNTA</p><h2>Una sola lectura. Distintas entregas.</h2><div><article><small>ABIERTO</small><b>Revelación inicial</b><p>Una muestra clara de la configuración.</p></article><article><small>AMPLIADO</small><b>100+ formas</b><p>Morfología, Verbus Prime y archivo validado.</p></article><article><small>INFORME</small><b>Análisis Metalquímico</b><p>ATS + ARS M + integración descargable.</p></article><article><small>PERSONAL</small><b>Integración acompañada</b><p>Consulta personalizada más intervención ATS.</p></article></div><a href={`mailto:${PERSONAL_EMAIL}?subject=Integración personalizada DIMA`}>AGENDAR UNA INTEGRACIÓN PERSONALIZADA</a></section>
+    <section className={shell.valuePath}><p className={shell.sectionLabel}>DIMA CRECE CON TU PREGUNTA</p><h2>Una sola lectura. Distintas entregas.</h2><div><article><small>ABIERTO</small><b>Configuración oculta</b><p>{publicWords.length ? `${publicWords.length} lecturas completas` : "Lecturas de la selección"}, para recorrer sin clave y a tu ritmo.</p></article><article><small>AMPLIADO · CON CLAVE</small><b>Análisis Metalquímico</b><p>DIMA Plus: análisis ampliado, consulta libre y guardado en la base. Las palabras nuevas requieren la conexión de IA.</p><button type="button" onClick={() => { const selected = word; chooseMode("plus"); setWord(selected); document.getElementById("dima-consultation")?.scrollIntoView({ block: "start" }); }}>Abrir DIMA Plus</button></article><article><small>COLECCIÓN · CON CLAVE</small><b>¡Qué embole!</b><p>El glosario de la obra se abre con la clave que ya tenés en el libro.</p><button type="button" onClick={() => { chooseMode("libro"); document.getElementById("dima-consultation")?.scrollIntoView({ block: "start" }); }}>Abrir mi colección</button></article><article><small>PERSONAL</small><b>Integración acompañada</b><p>Un espacio para profundizar tu pregunta con acompañamiento.</p></article></div><a href={`mailto:${PERSONAL_EMAIL}?subject=Integraci%C3%B3n%20personalizada%20DIMA`}>CONSULTAR POR UNA INTEGRACIÓN PERSONALIZADA</a></section>
+    <footer className={shell.footer}><span>DIMA · Magia para Atrevidos</span><Link href="/mpa">Volver al universo MPA →</Link></footer>
   </main>;
 }

@@ -1,0 +1,1 @@
+export const BOOK_WORDS = ["Bola", "Embole", "Patrañas", "Disolución", "Vibración", "Resonancia", "Potencia", "Nigredo", "Forma", "Estructura", "Transmutación", "Conciencia", "Percepción", "Patraña", "Umbral", "Quiebre", "Grieta", "Reconfiguración", "Separación", "Sombra", "Espejo", "Retorno", "Punctum non reditus", "No poder desver", "La incomodidad que despierta"];
