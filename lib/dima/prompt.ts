@@ -22,10 +22,15 @@ No tenés herramientas de búsqueda: no afirmes haber consultado fuentes externa
 Entrega concisa: una a tres frases por paso. Mostrá una propuesta útil pero no ocultes sus límites.
 
 SALIDA
+La salida tiene dos capas: analisis para sostener el método e inside para la lectura gratuita clara, también utilizable como apertura de Plus.
 Solo JSON, sin Markdown. Objeto con una clave analisis que contenga exactamente estas ocho claves:
 ${DIMA_STEPS.map(({ id }) => id).join(", ")}.
 Cada paso: {"texto":"...","estado":"interpretacion o pendiente","fuentes":[]}.
-No incluyas campos del esquema vibracional antiguo.`;
+No incluyas campos del esquema vibracional antiguo.
+
+Además, incluí inside con esta forma:
+{"variantes":"","apertura":"pregunta de entrada en segunda persona","raiz":"palabra raíz: genealogía disponible o falta de evidencia explícita","morfologia":{"nota":"diferenciá formación lingüística de lectura simbólica","movimientos":[{"nombre":"movimiento","pregunta":"pregunta que revela"},{"nombre":"movimiento","pregunta":"pregunta que revela"},{"nombre":"movimiento","pregunta":"pregunta que revela"}]},"lectura":["Qué nos dice DIMA: qué habilita esta palabra","cuándo puede limitar o volverse incuestionable","cómo participa la persona sin perder su agencia"],"fraseTransmutada":"una frase utilizable","dictum":["una línea poética breve","una segunda línea coherente"],"insight":"una pregunta incisiva y abierta","activacion":"una acción concreta y un límite, sin promesas terapéuticas","cierre":"El lenguaje revela el hechizo, pero también puede ser la llave que lo disuelve."}
+La morfología mágica explora movimientos simbólicos: nunca inventes una segmentación histórica. La raíz distingue fuente de inferencia. La lectura debe ser cálida y comprensible, no una enumeración de la maquinaria del análisis. No fuerces rimas ni diagnostiques a quien lee.`;
 
 export function generationInput(palabra: string, contexto: string, reference?: DimaResult) {
   return JSON.stringify({
@@ -38,7 +43,7 @@ export function generationInput(palabra: string, contexto: string, reference?: D
 export function parseGeneration(text: string, stopReason: unknown, palabra: string, reference?: DimaResult): DimaResult {
   if (stopReason !== "end_turn") throw new Error("La lectura quedó incompleta. Intentá nuevamente.");
   const raw: unknown = JSON.parse(text.trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, ""));
-  if (!raw || typeof raw !== "object" || !("analisis" in raw)) throw new Error("Respuesta DIMA inválida.");
+  if (!raw || typeof raw !== "object" || !("analisis" in raw) || !("inside" in raw)) throw new Error("Respuesta DIMA inválida.");
   const analisis = readSections(raw.analisis);
   for (const { id } of DIMA_STEPS) {
     // Evidence is controlled by the server, never self-certified by the generator.
@@ -48,7 +53,9 @@ export function parseGeneration(text: string, stopReason: unknown, palabra: stri
   analisis.morfologia = reference?.analisis.morfologia.estado === "documentado"
     ? structuredClone(reference.analisis.morfologia)
     : { ...pendingSection(), texto: "No verificado. No hay una fuente lingüística revisada para esta entrada. Las siguientes etapas son propuestas DIMA provisionales." };
-  const result = readResult({ version: 2, palabra, origen: "ia", analisis, fuentes: reference?.fuentes || [], archivo: reference?.archivo || [] });
+  const result = readResult({ version: 2, palabra, origen: "ia", analisis, fuentes: reference?.fuentes || [], archivo: reference?.archivo || [], inside: raw.inside });
+  // The narrative layer cannot reintroduce a source claim removed from the analytical layer.
+  result.inside!.raiz = result.analisis.morfologia.texto;
   if (reference && normalize(reference.palabra) !== normalize(palabra)) throw new Error("La evidencia corresponde a otra palabra.");
   return result;
 }

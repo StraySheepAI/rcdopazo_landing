@@ -1,6 +1,6 @@
 # Consulta DIMA
 
-La pantalla ofrece una consulta directa y una ficha de ocho pasos, sin las tres puertas previas ni navegación obligatoria entre capas:
+La pantalla ofrece tres modalidades según `docs/DIMA-PRODUCTO.md`. La gratuita se presenta como INSIDE DIMA, con raíz, morfología mágica, lectura, frase transmutada, Dictum, insight y activación. El método conserva ocho pasos internos:
 
 morfología/etimología → Pulsus → configuración/operación → distinciones → Nodus/relación/agencia → transmutación → definición DIMA → frase síntesis.
 
@@ -8,7 +8,7 @@ morfología/etimología → Pulsus → configuración/operación → distincione
 
 La primera implementación anunciaba todos los nombres de la planilla aunque solo Patraña y Embole tenían el nuevo análisis. Esto producía ocho casilleros con el mismo mensaje de pendiente. Esa entrega no constituía una lectura útil.
 
-El catálogo público ahora contiene **43 fichas con contenido específico**: las 42 entradas de la selección anterior más Embole. Se normaliza `persona` a `Persona` y se corrige `Rigth` a `Right`. Cada ficha contiene los ocho pasos y una referencia lingüística. La pantalla ofrece solo fichas completas del corpus, no todas las filas en preparación de Google Sheets.
+El catálogo público ahora contiene **44 fichas con contenido específico**: las 42 entradas de la selección anterior, Embole y la consulta de Devoción suministrada por la autora. Se normaliza `persona` a `Persona` y se corrige `Rigth` a `Right`. Cada ficha contiene los ocho pasos y una referencia lingüística. La pantalla ofrece solo fichas completas del corpus, no todas las filas en preparación de Google Sheets.
 
 Las referencias documentan el alcance del primer paso: DLE para español, Online Etymology Dictionary para inglés y Lewis & Short a través de Perseus/Logeion para latín. Si una entrada no desarrolla toda su genealogía, el texto lo dice; no se completa una historia ausente mediante cortes arbitrarios de letras. Las hipótesis, como la procedencia que el DLE propone para ganar, conservan su carácter posible.
 
@@ -28,7 +28,7 @@ Cada etapa tiene texto, estado (`documentado`, `interpretacion`, `pendiente`) y 
 
 `GET /api/dima` devuelve únicamente la selección completa, disponible sin claves, Google Sheets ni llamadas a un modelo. Cada palabra de esa lista debe poder devolver ocho pasos con contenido mediante `POST` en modalidad `free`.
 
-Para una entrada fuera de la selección, el modo ampliado puede recuperar Google Sheets y Airtable como contexto y generar con Anthropic si existe una clave. Una ficha parcial de Airtable se usa como material de trabajo; ya no evita la generación devolviendo ocho casilleros vacíos. Si no hay análisis ni generación configurada, se muestra un mensaje de indisponibilidad, sin simular una ficha terminada.
+Para una entrada fuera de la selección, el modo ampliado puede recuperar Google Sheets y Airtable como contexto y generar con Anthropic si existe una clave. Una ficha parcial de Airtable se usa como material de trabajo; ya no evita la generación devolviendo ocho casilleros vacíos. Si no hay análisis ni generación configurada, se muestra un mensaje de indisponibilidad, sin simular una ficha terminada. Las consultas no públicas requieren primero la sesión del alcance correspondiente: libro o Plus.
 
 Se mantiene la API Messages de Anthropic y el modelo existente `claude-haiku-4-5-20251001`. `DIMA_MODEL` permite una configuración explícita posterior. `ANTHROPIC_API_KEY` y `AIRTABLE_TOKEN` permanecen en el servidor. El método va en `system`; el término, contexto y material de archivo van como datos en `user`. El servidor valida las ocho etapas y rechaza truncamiento. Sin evidencia lingüística revisada, la generación no puede autocertificar el origen ni inventar enlaces visibles.
 
@@ -44,8 +44,8 @@ El adaptador admite columnas nuevas explícitas: `Morfologia_Etimologia`, `Pulsu
 
 ## Verificación y publicación
 
-`npm run test:dima` comprueba individualmente cada una de las 43 palabras ofrecidas, además del contrato, los archivos heredados, los fallos y la generación simulada. Ninguna palabra anunciada puede contener el mensaje repetido de pendiente.
+`npm run test:dima` comprueba individualmente cada una de las 44 palabras ofrecidas, además del contrato, los archivos heredados, los fallos y la generación simulada. Ninguna palabra anunciada puede contener el mensaje repetido de pendiente.
 
-`npx tsc --noEmit` y `npm run build` comprueban la integración. El recorrido local debe permitir elegir una palabra, consultar, leer los ocho pasos, ver la fuente y consultar otra. Cambiar el término cancela la consulta anterior y retira su resultado.
+`npx tsc --noEmit` y `npm run build` comprueban la integración. El recorrido local debe permitir elegir una palabra, consultar, leer los la consulta INSIDE DIMA, ver la fuente y consultar otra. Cambiar el término cancela la consulta anterior y retira su resultado.
 
 Las credenciales reales del proveedor y el entorno de producción no se dan por probados con respuestas simuladas. La publicación sigue detenida hasta la revisión de la autora. No se requiere iniciar sesión en Vercel para revisar la copia local.

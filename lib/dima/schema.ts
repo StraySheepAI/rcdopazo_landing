@@ -1,3 +1,7 @@
+import { readInside, type InsideDima } from "./inside-schema.ts";
+import { cleanText, hasText } from "./text.ts";
+export { cleanText, hasText, normalize } from "./text.ts";
+
 export const DIMA_STEPS = [
   { id: "morfologia", title: "Morfología y etimología", depth: 1 },
   { id: "pulsus", title: "Pulsus", depth: 1 },
@@ -20,11 +24,8 @@ export type DimaResult = {
   analisis: Record<StepId, Section>;
   fuentes: Source[];
   archivo: { etiqueta: string; texto: string }[];
+  inside?: InsideDima;
 };
-
-export const normalize = (value: string) => value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-export const cleanText = (value: unknown) => typeof value === "string" ? value.replace(/[\u200B-\u200D\uFEFF]/g, "").trim() : "";
-export const hasText = (value: unknown) => Boolean(cleanText(value).replace(/^[—–\-\s]+$/, ""));
 
 export function pendingSection(): Section {
   return { texto: "Pendiente de análisis y revisión. El archivo disponible no permite completar este paso.", estado: "pendiente", fuentes: [] };
@@ -83,6 +84,6 @@ export function readResult(value: unknown): DimaResult {
   return {
     version: 2, palabra: cleanText(value.palabra), origen: value.origen as DimaResult["origen"],
     estado: DIMA_STEPS.every(({ id }) => analisis[id].estado !== "pendiente") ? "completo" : "parcial",
-    analisis, fuentes, archivo,
+    analisis, fuentes, archivo, ...(value.inside === undefined ? {} : { inside: readInside(value.inside) }),
   };
 }

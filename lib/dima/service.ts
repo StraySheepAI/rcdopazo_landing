@@ -3,6 +3,7 @@ import { BOOK_WORDS } from "./catalog.ts";
 import { getReviewedAnalysis, REVIEWED_WORDS } from "./corpus.ts";
 import { DIMA_SYSTEM, generationInput, parseGeneration } from "./prompt.ts";
 import { cleanText, hasText, normalize } from "./schema.ts";
+import { readDimaAccess } from "./access.ts";
 
 const PUBLIC_SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3ENMxScg8YKXXTyIIYwkxF7Hh2VHP8f3Rlo8VSsigr420Q_alu8cU2Ft5j3vyyqEib3mlb9tvZ4Lt/pub?gid=1680193813&single=true&output=csv";
 const AIRTABLE_URL = "https://api.airtable.com/v0/app8LodC87ProKbQp/tblg4NxTxNfoZGTxS";
@@ -21,7 +22,12 @@ export function createDimaHandlers(deps: Dependencies) {
     return parseCsv(await response.text());
   }
   return {
-    async GET() {
+    async GET(request?: Request) {
+      if (request && new URL(request.url).searchParams.get("nivel") === "libro") {
+        if (readDimaAccess(request, deps.env) !== "libro") return json({ error: "Ingresá la clave de ¡Qué embole! para abrir la colección." }, 401);
+        const connected = Boolean(deps.env.ANTHROPIC_API_KEY);
+        return json({ palabras: connected ? BOOK_WORDS : BOOK_WORDS.filter((word) => getReviewedAnalysis(word)), ...(connected ? {} : { aviso: "Esta copia muestra las entradas de la colección que ya tienen una lectura preparada." }) });
+      }
       return json({ palabras: REVIEWED_WORDS });
     },
     async POST(request: Request) {
@@ -34,8 +40,12 @@ export function createDimaHandlers(deps: Dependencies) {
         const { palabra: input, nivel, contexto: contextInput = "" } = body as Record<string, unknown>;
         const palabra = cleanText(input);
         if (!hasText(palabra) || palabra.length > 100 || /[\r\n\x00-\x1f]/.test(palabra)) throw new DimaError("Ingresá una palabra o expresión de hasta 100 caracteres.", 400);
-        if (!["free", "metalquimico", "libro"].includes(String(nivel))) throw new DimaError("Elegí una modalidad válida de DIMA.", 400);
+        if (!["free", "metalquimico", "libro", "plus", "vip"].includes(String(nivel))) throw new DimaError("Elegí una modalidad válida de DIMA.", 400);
         if (typeof contextInput !== "string" || contextInput.length > 1000) throw new DimaError("El contexto debe tener hasta 1000 caracteres.", 400);
+        if (nivel !== "free") {
+          const required = nivel === "libro" ? "libro" : "plus";
+          if (readDimaAccess(request, deps.env) !== required) throw new DimaError(required === "libro" ? "Ingresá la clave de ¡Qué embole! para abrir la colección." : "Ingresá tu clave de DIMA Plus para consultar una palabra libre.", 401);
+        }
         if (nivel === "libro" && !BOOK_WORDS.some((word) => normalize(word) === normalize(palabra))) throw new DimaError("Esta forma pertenece a otra colección de DIMA.", 404);
         const reviewed = getReviewedAnalysis(palabra);
         if (reviewed) return json(reviewed);

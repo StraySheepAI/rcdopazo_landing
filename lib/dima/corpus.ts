@@ -1,5 +1,7 @@
 import { DIMA_STEPS, normalize, readResult, type DimaResult, type Section } from "./schema.ts";
 import { EDITORIAL_ENTRIES } from "./editorial.ts";
+import { DEVOCION } from "./devocion.ts";
+import { makeInside } from "./inside.ts";
 
 // Source-checked public catalogue. Interpretations remain separate from dictionary evidence.
 // New entries need editorial review; importing a legacy row does not grant verified status.
@@ -7,6 +9,7 @@ const interpretation = (texto: string): Section => ({ texto, estado: "interpreta
 const checked = "2026-10-31";
 
 const entries: DimaResult[] = [
+  DEVOCION,
   {
     version: 2, palabra: "Patraña", origen: "archivo", estado: "completo", archivo: [],
     fuentes: [{ id: "dle-patrana", titulo: "RAE-ASALE · DLE: patraña", url: "https://dle.rae.es/patraña", consulta: checked }],
@@ -52,5 +55,7 @@ for (const entry of EDITORIAL_ENTRIES) {
 export const REVIEWED_WORDS = entries.filter((entry) => entry.estado === "completo").map((entry) => entry.palabra).sort((a, b) => a.localeCompare(b, "es"));
 export function getReviewedAnalysis(palabra: string): DimaResult | undefined {
   const entry = entries.find((candidate) => normalize(candidate.palabra) === normalize(palabra));
-  return entry ? structuredClone(entry) : undefined;
+  if (!entry) return undefined;
+  const result = structuredClone(entry);
+  return readResult({ ...result, inside: result.inside || makeInside(result) });
 }
