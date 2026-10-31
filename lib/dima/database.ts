@@ -112,6 +112,10 @@ export async function createDimaStore(env: Record<string, string | undefined>): 
     const { createPostgresDriver } = await import("./database-postgres.ts");
     return createStore(createPostgresDriver(env.DIMA_DATABASE_URL));
   }
+  if (env.DIMA_STORAGE === "blob" && (env.BLOB_READ_WRITE_TOKEN || (env.BLOB_STORE_ID && env.VERCEL_OIDC_TOKEN))) {
+    const { createBlobStore } = await import("./database-blob.ts");
+    return createBlobStore(env);
+  }
   if (env.DIMA_SQLITE_PATH && !env.VERCEL) {
     const { createSqliteDriver } = await import("./database-sqlite.ts");
     return createStore(createSqliteDriver(env.DIMA_SQLITE_PATH));

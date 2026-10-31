@@ -1,4 +1,5 @@
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { dimaProvider } from "./provider.ts";
 
 export type DimaAccess = "libro" | "plus";
 export const DIMA_COOKIE = "dima_access";
@@ -53,7 +54,7 @@ export function createDimaAccessHandlers(env: Env, now = () => Date.now()) {
   return {
     async GET(request: Request) {
       const acceso = readDimaAccess(request, env, now());
-      return json({ acceso, ...(acceso === "plus" ? { consultaLibreDisponible: Boolean(env.ANTHROPIC_API_KEY) } : {}) });
+      return json({ acceso, ...(acceso === "plus" ? { consultaLibreDisponible: Boolean(dimaProvider(env)) } : {}) });
     },
     async POST(request: Request) {
       if (!sameDimaOrigin(request)) return json({ error: "Este acceso debe abrirse desde DIMA." }, 403);

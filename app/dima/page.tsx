@@ -19,6 +19,7 @@ export default function DimaPage() {
   const [word, setWord] = useState("");
   const [publicWords, setPublicWords] = useState<string[]>([]);
   const [bookWords, setBookWords] = useState<string[]>([]);
+  const [plusWords, setPlusWords] = useState<string[]>([]);
   const [bookNotice, setBookNotice] = useState("");
   const [result, setResult] = useState<DimaResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ export default function DimaPage() {
   const activeRequest = useRef<AbortController | null>(null);
   const requestId = useRef(0);
   const pendingLayer = useRef<ReadingDepth | null>(null);
-  const words = mode === "libro" ? bookWords : publicWords;
+  const words = mode === "libro" ? bookWords : mode === "plus" ? plusWords : publicWords;
   const locked = mode !== "free" && access !== mode;
 
   function focusLayer(layer: ReadingDepth) {
@@ -60,14 +61,15 @@ export default function DimaPage() {
   }, []);
 
   useEffect(() => {
-    if (mode !== "libro" || access !== "libro") return;
+    if (mode === "free" || access !== mode) return;
     const controller = new AbortController();
-    fetch("/api/dima?nivel=libro", { signal: controller.signal }).then(async (response) => {
+    fetch(`/api/dima?nivel=${mode}`, { signal: controller.signal }).then(async (response) => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "No pudimos abrir la colección.");
       if (controller.signal.aborted) return;
       if (!Array.isArray(data.palabras) || !data.palabras.every((item: unknown) => typeof item === "string")) throw new Error("La colección llegó incompleta.");
-      setBookWords(data.palabras); setBookNotice(typeof data.aviso === "string" ? data.aviso : "");
+      if (mode === "libro") { setBookWords(data.palabras); setBookNotice(typeof data.aviso === "string" ? data.aviso : ""); }
+      else setPlusWords(data.palabras);
     }).catch((cause) => { if (!controller.signal.aborted) setError(cause.message); });
     return () => controller.abort();
   }, [mode, access]);
@@ -94,11 +96,11 @@ export default function DimaPage() {
   }
 
   async function logout() {
-    clearReading(); setAccess(null); setMode("free"); setBookWords([]); setBookNotice(""); setCode(""); setWord(""); setProviderReady(false);
+    clearReading(); setAccess(null); setMode("free"); setBookWords([]); setPlusWords([]); setBookNotice(""); setCode(""); setWord(""); setProviderReady(false);
     try {
       const response = await fetch("/api/dima/access", { method: "DELETE" });
       if (!response.ok) throw new Error();
-      clearReading(); setAccess(null); setMode("free"); setBookWords([]); setBookNotice(""); setCode(""); setWord(""); setProviderReady(false);
+      clearReading(); setAccess(null); setMode("free"); setBookWords([]); setPlusWords([]); setBookNotice(""); setCode(""); setWord(""); setProviderReady(false);
     } catch { setAccessError("No pudimos cerrar el acceso. Intentá nuevamente."); }
   }
 
@@ -119,6 +121,7 @@ export default function DimaPage() {
       const next = readResult(data);
       if (normalize(next.palabra) !== normalize(term) || !next.inside) throw new Error("La lectura recibida no corresponde a esta consulta.");
       setResult(next); setSaved(data.registro?.guardado === true);
+      if (mode === "plus") setPlusWords((previous) => [...new Set([...previous, next.palabra])].sort((a, b) => a.localeCompare(b, "es")));
     } catch (cause) {
       if (!controller.signal.aborted && id === requestId.current) setError(cause instanceof Error ? cause.message : "No pudimos completar la consulta.");
     } finally { if (!controller.signal.aborted && id === requestId.current) setLoading(false); }
@@ -159,9 +162,9 @@ export default function DimaPage() {
           {mode !== "libro" && <select aria-label="Elegí una palabra de la selección" value={words.includes(word) ? word : ""} onChange={(event) => chooseWord(event.target.value)}><option value="">Elegí una palabra</option>{words.map((item) => <option key={item} value={item}>{item}</option>)}</select>}
           {mode === "libro" ? <select id="dima-word" value={words.includes(word) ? word : ""} onChange={(event) => chooseWord(event.target.value)}><option value="">Elegí una forma</option>{words.map((item) => <option key={item} value={item}>{item}</option>)}</select> : <input id="dima-word" value={word} onChange={(event) => chooseWord(event.target.value)} placeholder={mode === "plus" ? "o escribí una palabra o expresión" : "o escribí una palabra"} maxLength={100} autoComplete="off" />}
         </div>
-        <button type="submit" disabled={loading || !word.trim() || (mode === "plus" && !providerReady && !publicWords.some((item) => normalize(item) === normalize(word.trim())))}>{loading ? "DIMA ESTÁ OBSERVANDO…" : "REVELAR CONFIGURACIÓN"}</button>
-        {mode === "plus" && !providerReady && <p className={shell.notice}>La generación de palabras nuevas todavía no está conectada en esta copia. Podés probar el análisis ampliado y el guardado con las palabras de la selección.</p>}
-        {mode === "plus" && <p className={shell.notice}>Las consultas de Plus se conservan en el archivo privado de DIMA para su revisión.</p>}
+        <button type="submit" disabled={loading || !word.trim() || (mode === "plus" && !providerReady && !words.some((item) => normalize(item) === normalize(word.trim())))}>{loading ? "DIMA ESTÁ OBSERVANDO…" : "REVELAR CONFIGURACIÓN"}</button>
+        {mode === "plus" && !providerReady && <p className={shell.notice}>La generación de palabras nuevas todavía no está conectada en esta copia. Podés consultar las palabras de la selección y las lecturas ya guardadas.</p>}
+        {mode !== "free" && <p className={shell.notice}>Las consultas de Plus y de la colección se conservan en el archivo privado de DIMA para su revisión.</p>}
         {mode === "libro" && bookNotice && <p className={shell.notice}>{bookNotice}</p>}
         {error && <p className={shell.error} role="alert">{error}</p>}{accessError && <p className={shell.error} role="alert">{accessError}</p>}
         <p className={shell.notice} role="status">{loading ? `DIMA está consultando ${word}.` : result ? `Consulta de ${result.palabra} disponible.${saved ? " Guardada en la base de DIMA." : ""}` : ""}</p>
