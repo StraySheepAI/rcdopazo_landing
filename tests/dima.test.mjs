@@ -239,6 +239,18 @@ test('Salir revoca la cookie del dispositivo y no envía la clave en URLs', asyn
   assert.equal((await response.json()).acceso, null);
 });
 
+test('El acceso local conserva la clave aunque Next use localhost internamente', async () => {
+  const handlers = createDimaAccessHandlers(ACCESS_ENV);
+  const request = (origin, host, site = 'same-origin') => new Request('http://localhost:3100/api/dima/access', { method: 'POST', headers: { origin, host, 'sec-fetch-site': site }, body: JSON.stringify({ codigo: 'TEST BOOK' }) });
+  const accepted = await handlers.POST(request('http://127.0.0.1:3100', '127.0.0.1:3100'));
+  assert.equal(accepted.status, 200);
+  assert.equal((await accepted.json()).acceso, 'libro');
+  assert.equal((await handlers.POST(request('http://other.test:3100', 'other.test:3100'))).status, 403);
+  assert.equal((await handlers.POST(request('http://127.0.0.1:3101', '127.0.0.1:3101'))).status, 403);
+  assert.equal((await handlers.POST(request('http://127.0.0.1:3100', '127.0.0.1:3100', 'cross-site'))).status, 403);
+  assert.equal((await handlers.DELETE(new Request('http://localhost:3100/api/dima/access', { method: 'DELETE', headers: { origin: 'http://127.0.0.1:3100', host: '127.0.0.1:3100' } }))).status, 200);
+});
+
 test('No hay acceso por clave inválida, origen ajeno o secreto ausente', async () => {
   const handlers = createDimaAccessHandlers(ACCESS_ENV);
   const invalid = await handlers.POST(new Request('http://localhost/api/dima/access', { method: 'POST', body: JSON.stringify({ codigo: 'INVALIDA' }) }));

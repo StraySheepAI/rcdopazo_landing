@@ -41,6 +41,8 @@ No se agregan promesas de historial, descarga, cobro o límites comerciales sin 
 
 Las claves se configuran como hashes normalizados mediante `DIMA_BOOK_CODE_HASH` y `DIMA_PLUS_CODE_HASH`. `DIMA_SESSION_SECRET` es obligatorio, aleatorio y exclusivo del servidor; no hay un secreto de reserva fijo. En la copia local se conservaron las claves históricas mediante sus hashes en `.env.local`, que está excluido de Git. No se cargaron nuevas variables en Vercel.
 
-Las claves históricas figuraban en el HTML público heredado; antes de habilitar contenido reservado o generación de pago en producción corresponde definir las claves vigentes y retirar esa exposición. La limitación de intentos incluida opera por instancia; para un límite global entre instancias hace falta almacenamiento compartido o una regla del alojamiento. No se presume que el límite en memoria sea global.
+La clave del libro debe conservarse: está impresa en ejemplares ya distribuidos y cambiarla dejaría sin acceso a sus lectores. No se reemplaza ni se elimina por una rotación técnica. La copia local conserva la clave original del código heredado mediante su hash; no se copia el valor en nuevos archivos públicos. La confirmación contra el texto del libro en Notion sigue pendiente: las páginas consultadas no mostraron la clave escrita.
+
+Las claves históricas figuraban en el HTML público heredado; esa exposición no autoriza a invalidar la clave del libro. La limitación de intentos incluida opera por instancia; para un límite global entre instancias hace falta almacenamiento compartido o una regla del alojamiento. No se presume que el límite en memoria sea global.
 
 La publicación permanece en pausa hasta la revisión de la autora. La prueba local no requiere entrar a Vercel ni crear cuentas para visitantes.

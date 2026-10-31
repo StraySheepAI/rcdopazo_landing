@@ -30,7 +30,18 @@ export function readDimaAccess(request: Request, env: Env, now = Date.now()): Di
 const json = (body: unknown, status = 200, headers: Record<string, string> = {}) => Response.json(body, { status, headers: { "Cache-Control": "no-store", ...headers } });
 function sameOrigin(request: Request) {
   const origin = request.headers.get("origin");
-  return request.headers.get("sec-fetch-site") !== "cross-site" && (!origin || origin === new URL(request.url).origin);
+  if (request.headers.get("sec-fetch-site") === "cross-site") return false;
+  if (!origin) return true;
+  const url = new URL(request.url);
+  if (origin === url.origin) return true;
+  // Next may use localhost internally while the reader opens the loopback IP.
+  // Accept only the actual local Host, never an arbitrary forwarded host.
+  const host = request.headers.get("host");
+  if (url.protocol !== "http:" || !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || !host) return false;
+  try {
+    const local = new URL(`http://${host}`);
+    return ["localhost", "127.0.0.1", "[::1]"].includes(local.hostname) && local.port === url.port && origin === local.origin;
+  } catch { return false; }
 }
 function cookieAttributes(request: Request) {
   const url = new URL(request.url);
