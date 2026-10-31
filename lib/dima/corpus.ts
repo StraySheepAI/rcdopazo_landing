@@ -1,6 +1,7 @@
-import { normalize, type DimaResult, type Section } from "./schema.ts";
+import { DIMA_STEPS, normalize, readResult, type DimaResult, type Section } from "./schema.ts";
+import { EDITORIAL_ENTRIES } from "./editorial.ts";
 
-// Small, source-checked baseline. Interpretations remain explicitly separate from the DLE evidence.
+// Source-checked public catalogue. Interpretations remain separate from dictionary evidence.
 // New entries need editorial review; importing a legacy row does not grant verified status.
 const interpretation = (texto: string): Section => ({ texto, estado: "interpretacion", fuentes: [] });
 const checked = "2026-10-31";
@@ -36,7 +37,19 @@ const entries: DimaResult[] = [
   },
 ];
 
-export const REVIEWED_WORDS = entries.map((entry) => entry.palabra);
+for (const entry of EDITORIAL_ENTRIES) {
+  const id = `lexico-${normalize(entry.palabra).replace(/\s+/g, "-")}`;
+  entries.push(readResult({
+    version: 2, palabra: entry.palabra, origen: "archivo", archivo: [],
+    fuentes: [{ id, titulo: `${entry.diccionario || "RAE-ASALE · DLE"}: ${entry.palabra.toLowerCase()}`, url: entry.url, consulta: checked }],
+    analisis: Object.fromEntries(DIMA_STEPS.map((step, index) => [step.id, {
+      texto: entry.pasos[index], estado: index === 0 ? "documentado" : "interpretacion", fuentes: index === 0 ? [id] : [],
+    }])),
+  }));
+}
+
+// A word is advertised only if it has a complete reading; a legacy row is not a published entry.
+export const REVIEWED_WORDS = entries.filter((entry) => entry.estado === "completo").map((entry) => entry.palabra).sort((a, b) => a.localeCompare(b, "es"));
 export function getReviewedAnalysis(palabra: string): DimaResult | undefined {
   const entry = entries.find((candidate) => normalize(candidate.palabra) === normalize(palabra));
   return entry ? structuredClone(entry) : undefined;

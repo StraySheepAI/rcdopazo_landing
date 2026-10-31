@@ -22,14 +22,7 @@ export function createDimaHandlers(deps: Dependencies) {
   }
   return {
     async GET() {
-      try {
-        const rows = await publicRows();
-        const words = new Map<string, string>();
-        for (const palabra of [...REVIEWED_WORDS, ...rows.map((row) => row.Forma).filter(hasText)]) words.set(normalize(palabra), palabra);
-        return json({ palabras: [...words.values()] });
-      } catch {
-        return json({ palabras: REVIEWED_WORDS, aviso: "El archivo principal no está disponible. Podés consultar las fichas de referencia." });
-      }
+      return json({ palabras: REVIEWED_WORDS });
     },
     async POST(request: Request) {
       try {
@@ -46,14 +39,13 @@ export function createDimaHandlers(deps: Dependencies) {
         if (nivel === "libro" && !BOOK_WORDS.some((word) => normalize(word) === normalize(palabra))) throw new DimaError("Esta forma pertenece a otra colección de DIMA.", 404);
         const reviewed = getReviewedAnalysis(palabra);
         if (reviewed) return json(reviewed);
+        if (nivel === "free") {
+          throw new DimaError("Esta palabra todavía no tiene una ficha completa en la selección pública. Elegí una de las palabras disponibles.", 404);
+        }
         // Sheets and the extended archive are independent sources.
         const rows = await publicRows().catch(() => null);
         const match = rows?.find((row) => normalize(row.Forma || "") === normalize(palabra));
-        const reference = match ? adaptRow(match, palabra, "planilla") : undefined;
-        if (nivel === "free") {
-          if (reference) return json(reference);
-          throw new DimaError(rows ? "Esta palabra todavía no forma parte del archivo abierto de DIMA." : "No pudimos abrir el archivo. Intentá nuevamente.", rows ? 404 : 502);
-        }
+        let reference = match ? adaptRow(match, palabra, "planilla") : undefined;
         const airtableToken = deps.env.AIRTABLE_TOKEN;
         if (airtableToken) {
           const compact = palabra.toLowerCase().replace(/\s/g, "");
@@ -68,13 +60,14 @@ export function createDimaHandlers(deps: Dependencies) {
           const fields = data.records?.[0]?.fields;
           if (fields && typeof fields === "object" && !Array.isArray(fields)) {
             if (normalize(cleanText(fields.Forma)).replace(/\s/g, "") !== normalized) throw new DimaError("La ficha encontrada no corresponde a la consulta.", 502);
-            return json(adaptRow(fields, palabra, "base"));
+            const archived = adaptRow(fields, palabra, "base");
+            if (archived.estado === "completo") return json(archived);
+            reference = archived;
           }
         }
         const key = deps.env.ANTHROPIC_API_KEY;
         if (!key) {
-          if (reference) return json(reference);
-          throw new DimaError("No hay una ficha disponible y la lectura asistida no está configurada.", 503);
+          throw new DimaError("Todavía no hay un análisis completo de esta palabra en esta versión. Podés consultar cualquiera de las palabras de la selección pública.", 503);
         }
         const response = await deps.fetch("https://api.anthropic.com/v1/messages", {
           method: "POST", headers: { "Content-Type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
