@@ -10,6 +10,9 @@ import type { DimaResult } from "./schema.ts";
 
 const PUBLIC_SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3ENMxScg8YKXXTyIIYwkxF7Hh2VHP8f3Rlo8VSsigr420Q_alu8cU2Ft5j3vyyqEib3mlb9tvZ4Lt/pub?gid=1680193813&single=true&output=csv";
 const AIRTABLE_URL = "https://api.airtable.com/v0/app8LodC87ProKbQp/tblg4NxTxNfoZGTxS";
+// Explicit spelling aliases only. Keep meaningful accent distinctions such as
+// si / sí in storage; do not strip every stored word's accents for cache lookup.
+const QUERY_ALIASES = new Map([["ridiculo", "Ridículo"]]);
 type Dependencies = { fetch: typeof fetch; env: Record<string, string | undefined>; store?: DimaStore | Promise<DimaStore> };
 class DimaError extends Error {
   status: number;
@@ -59,7 +62,8 @@ export function createDimaHandlers(deps: Dependencies) {
         try { body = JSON.parse(raw); } catch { throw new DimaError("La consulta no tiene un formato válido.", 400); }
         if (!body || typeof body !== "object" || Array.isArray(body)) throw new DimaError("La consulta no tiene un formato válido.", 400);
         const { palabra: input, nivel, contexto: contextInput = "" } = body as Record<string, unknown>;
-        const palabra = cleanText(input);
+        const cleaned = cleanText(input);
+        const palabra = QUERY_ALIASES.get(normalize(cleaned)) || cleaned;
         if (!hasText(palabra) || palabra.length > 100 || /[\r\n\x00-\x1f]/.test(palabra)) throw new DimaError("Ingresá una palabra o expresión de hasta 100 caracteres.", 400);
         if (typeof nivel !== "string" || !["free", "metalquimico", "libro", "plus", "vip"].includes(nivel)) throw new DimaError("Elegí una modalidad válida de DIMA.", 400);
         if (typeof contextInput !== "string" || contextInput.length > 1000) throw new DimaError("El contexto debe tener hasta 1000 caracteres.", 400);

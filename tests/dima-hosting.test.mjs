@@ -136,14 +136,18 @@ test('Plus recupera las consultas elaboradas en el chat sin API, sin inventar un
    const localEnv={DIMA_SESSION_SECRET:env.DIMA_SESSION_SECRET,DIMA_PLUS_CODE_HASH:env.DIMA_PLUS_CODE_HASH,DIMA_BOOK_CODE_HASH:env.DIMA_BOOK_CODE_HASH};
    let network=0;
    const handlers=createDimaHandlers({env:localEnv,store,fetch:async()=>{network++;throw new Error('network must not be used');}});
-   const response=await handlers.POST(await request('Ridículo'));
-   assert.equal(response.status,200);
-   const data=await response.json();
-   assert.equal(data.registro.id,saved.id);
-   assert.equal(data.registro.guardado,true);
-   assert.deepEqual(data.inside,reading.inside);
+   for(const [index,query] of ['Ridículo','ridículo','RIDICULO','ridiculo'].entries()){
+    const response=await handlers.POST(await request(query));
+    assert.equal(response.status,200,query);
+    const data=await response.json();
+    assert.equal(data.palabra,'Ridículo');
+    assert.equal(data.registro.id,saved.id);
+    assert.equal(data.registro.guardado,true);
+    assert.deepEqual(data.inside,reading.inside);
+    assert.equal((await store.get(saved.id)).consultas,index+2);
+   }
    assert.equal((await store.get(saved.id)).modelo,null);
-   assert.equal((await store.get(saved.id)).consultas,2);
+   assert.equal((await store.get(saved.id)).consultas,5);
    assert.equal((await store.list()).total,1);
    assert.equal(network,0);
    assert.equal(await store.find('Ridículo','otro contexto',null),undefined);
