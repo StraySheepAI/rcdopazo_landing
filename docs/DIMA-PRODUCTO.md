@@ -8,15 +8,14 @@ Selección pública de palabras con una consulta legible:
 
 1. INSIDE DIMA · palabra y variantes.
 2. Pregunta de entrada.
-3. Palabra raíz, con referencia y límites documentales.
-4. Morfología lingüística: clase de palabra, base y componentes identificables, función de esos componentes y flexión con ejemplos. Una palabra simple también se analiza; no se inventan prefijos ni sufijos para forzar una división.
-5. Morfología mágica: lectura simbólica, movimientos y preguntas. No se presenta esta tabla como análisis gramatical ni como etimología.
-6. ¿Qué nos dice DIMA?: qué habilita, qué puede limitar y cómo participa la persona con agencia.
-7. Frase transmutada.
-8. Dictum Mutare.
-9. MPI Insight.
-10. Activación concreta.
-11. Firma de cierre y fuentes consultables.
+3. La palabra por dentro: diagrama del origen disponible, componentes gramaticales cuando están identificados, variaciones y relaciones. No se inventan prefijos ni sufijos para forzar una división. La raíz con referencias y la descripción morfológica completa quedan en un desplegable.
+4. La lectura DIMA: tarjetas de movimientos simbólicos y sus preguntas, con la nota metodológica desplegable. Las relaciones léxicas no se representan como antepasados históricos.
+5. ¿Qué nos dice DIMA?: qué habilita, qué puede limitar y cómo participa la persona con agencia.
+6. Frase transmutada.
+7. Dictum Mutare.
+8. MPI Insight.
+9. Activación concreta.
+10. Firma de cierre y fuentes consultables.
 
 Los ocho pasos analíticos originales siguen sosteniendo el método internamente. No tienen que convertirse en ocho apartados técnicos para quien consulta gratis. Devoción conserva el texto de referencia de la autora en `lib/dima/devocion.ts`.
 

@@ -1,5 +1,18 @@
 import { DIMA_STEPS, type DimaResult } from "@/lib/dima/schema";
+import { getWordMap } from "@/lib/dima/word-map";
 import styles from "./page.module.css";
+
+function WordAnatomy({ result }: { result: DimaResult }) {
+  const morphology = result.inside?.linguistica;
+  const map = getWordMap(result.palabra);
+  return <figure className={styles.wordMap} aria-label={`Origen, formación y relaciones de ${result.palabra}`}>
+    <figcaption className={styles.srOnly}>El origen histórico, cuando está documentado, conduce a la forma consultada. Las ramas muestran variaciones y relaciones; la familia léxica no representa ascendencia.</figcaption>
+    {map?.origen && <><div className={styles.originNode}><span>{map.origen.lengua}</span><strong>{map.origen.forma}</strong></div><div className={styles.mapArrow} aria-hidden="true">↓</div></>}
+    {map?.piezas && <><p className={styles.mapLabel}>Componentes gramaticales</p><ol className={styles.wordPieces}>{map.piezas.map((piece) => <li key={piece.forma}><strong>{piece.forma}</strong><span>{piece.funcion}</span></li>)}</ol><div className={styles.mapArrow} aria-hidden="true">↓</div></>}
+    <div className={styles.wordNode}><span>La palabra</span><strong>{result.palabra}</strong>{morphology && <small>{morphology.categoria}</small>}</div>
+    {map ? <ul className={styles.wordBranches}>{map.ramas.map((branch) => <li key={branch.titulo}><h4>{branch.titulo}</h4><div>{branch.formas.map((form) => <span key={form}>{form}</span>)}</div></li>)}</ul> : morphology && <ul className={styles.wordBranches}><li><h4>Cómo está formada</h4><p>{morphology.formacion}</p></li><li><h4>Cómo varía</h4><p>{morphology.flexion}</p></li></ul>}
+  </figure>;
+}
 
 export default function InsideReading({ result, ampliado = false }: { result: DimaResult; ampliado?: boolean }) {
   const inside = result.inside;
@@ -11,12 +24,15 @@ export default function InsideReading({ result, ampliado = false }: { result: Di
       <p className={styles.opening}>{inside.apertura}</p>
       <p className={styles.consulted}>Consultamos a DIMA, el Dispositivo Inteligente de Magia Alquímica.</p>
     </header>
-    <section><h3>Palabra raíz</h3><p>{inside.raiz}</p>
-      {result.fuentes.map((source) => <a className={styles.sourceInline} key={source.id} href={source.url} target="_blank" rel="noopener noreferrer">{source.titulo}</a>)}
+    <section><h3>La palabra por dentro</h3><p className={styles.sectionLead}>Origen, formación y relaciones.</p><WordAnatomy result={result} />
+      <details className={styles.wordDetails}><summary>Ver el origen y la formación en detalle</summary><h4>Palabra raíz</h4><p>{inside.raiz}</p>
+        {result.fuentes.map((source) => <a className={styles.sourceInline} key={source.id} href={source.url} target="_blank" rel="noopener noreferrer">{source.titulo}</a>)}
+        <h4>Morfología</h4>{inside.linguistica ? <><p><strong>Clase de palabra.</strong> {inside.linguistica.categoria}</p><p><strong>Cómo está formada.</strong> {inside.linguistica.formacion}</p><p><strong>Cómo varía.</strong> {inside.linguistica.flexion}</p></> : <p>Esta entrada todavía necesita una descripción de su formación gramatical.</p>}
+      </details>
     </section>
-    <section><h3>Morfología</h3>{inside.linguistica ? <><p><strong>Clase de palabra.</strong> {inside.linguistica.categoria}</p><p><strong>Cómo está formada.</strong> {inside.linguistica.formacion}</p><p><strong>Cómo varía.</strong> {inside.linguistica.flexion}</p></> : <p>Esta entrada todavía necesita una descripción de su formación gramatical.</p>}</section>
-    <section><h3>Morfología mágica</h3><p>{inside.morfologia.nota}</p>
-      <div className={styles.tableWrap}><table><caption className={styles.srOnly}>Movimientos simbólicos de la lectura DIMA</caption><thead><tr><th scope="col">Movimiento</th><th scope="col">Pregunta que revela</th></tr></thead><tbody>{inside.morfologia.movimientos.map((movement) => <tr key={movement.nombre}><th scope="row">{movement.nombre}</th><td>{movement.pregunta}</td></tr>)}</tbody></table></div>
+    <section><h3>La lectura DIMA</h3><p className={styles.sectionLead}>Explorá estos movimientos y las preguntas que abren.</p>
+      <ul className={styles.movementCards} aria-label="Movimientos de la lectura simbólica DIMA">{inside.morfologia.movimientos.map((movement, index) => <li key={movement.nombre}><span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><h4>{movement.nombre}</h4><p>{movement.pregunta}</p></li>)}</ul>
+      <details className={styles.wordDetails}><summary>Sobre esta lectura simbólica</summary><p>{inside.morfologia.nota}</p></details>
     </section>
     <section><h3>¿Qué nos dice DIMA?</h3>{inside.lectura.map((paragraph, index) => <p key={index}>{paragraph}</p>)}</section>
     <section><h3>Frase transmutada</h3><blockquote>{inside.fraseTransmutada}</blockquote></section>
