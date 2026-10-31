@@ -24,7 +24,7 @@ const modulePath = path.join(directory,'component.mjs'); await fs.writeFile(modu
 const { default: Reading } = await import(pathToFileURL(modulePath).href);
 const render = (result,ampliado=false) => renderToStaticMarkup(React.createElement(Reading,{result,ampliado}));
 
-const headings = ['La palabra por dentro','La lectura DIMA','¿Qué nos dice DIMA?','Frase transmutada','Dictum Mutare','MPI Insight','Activación'];
+const headings = ['Palabra raíz','La palabra por dentro','La lectura DIMA','¿Qué nos dice DIMA?','Frase transmutada','Dictum Mutare','MPI Insight','Activación'];
 
 test('Devoción se presenta como la consulta editorial de referencia y no como ocho casilleros', () => {
  const html=render(getReviewedAnalysis('Devoción'));
@@ -32,18 +32,22 @@ test('Devoción se presenta como la consulta editorial de referencia y no como o
  for(const title of headings){const index=html.indexOf(`<h3>${title}</h3>`);assert.ok(index>previous,title);previous=index;}
  for(const text of ['Devoto · Devota','¿A qué te entregás con tanta dedicación','Orientación','Dedicación','Discernimiento','Que mi entrega tenga dirección,','que mi presencia sostenga mi elección.','El lenguaje revela el hechizo'])assert.ok(html.includes(text),text);
  assert.ok(html.includes('<figure'));assert.ok(html.includes('class="movementCards"'));
- assert.ok(html.includes('<details class="wordDetails"><summary>Ver el origen y la formación en detalle</summary>'));
+ assert.ok(!html.includes('Ver el origen y la formación en detalle'));
  assert.ok(!html.includes('<table>'));
  assert.ok(!html.includes('Ver el análisis ampliado')); assert.ok(!html.includes('PASO 1 DE 8')); assert.ok(!html.includes('Nodus · relación y agencia'));
 });
 
-test('Las 44 fichas muestran el mapa de la palabra, las tarjetas DIMA y los detalles lingüísticos', () => {
+test('Las 44 fichas conservan raíz y morfología completas visibles además del diagrama', () => {
  for(const word of REVIEWED_WORDS){
-  const html=render(getReviewedAnalysis(word));
-  assert.ok(getReviewedAnalysis(word).inside.linguistica,word);
+  const result=getReviewedAnalysis(word);
+  const html=render(result);
+  const visible=html.replace(/<details\b[\s\S]*?<\/details>/g,'');
+  const escape=(text)=>renderToStaticMarkup(React.createElement(React.Fragment,null,text));
+  assert.ok(result.inside.linguistica,word);
+  for(const text of [result.inside.raiz,...Object.values(result.inside.linguistica),result.inside.morfologia.nota])assert.ok(visible.includes(escape(text)),`${word}: texto completo fuera de desplegables`);
+  for(const label of ['Clase de palabra.','Cómo está formada.','Cómo varía.'])assert.ok(visible.includes(`<strong>${label}</strong>`),word);
   assert.ok(getWordMap(word),word);
   assert.ok(html.includes('<figure'),word);
-  assert.ok(html.includes('<h4>Morfología</h4>'),word);
   assert.equal((html.match(/class="movementCards"/g)||[]).length,1,word);
   for(const title of headings)assert.ok(html.includes(`<h3>${title}</h3>`),`${word}: ${title}`);
   assert.ok(!html.includes('Pendiente de análisis y revisión'),word);

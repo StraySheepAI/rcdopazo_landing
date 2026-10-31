@@ -24,15 +24,16 @@ export default function InsideReading({ result, ampliado = false }: { result: Di
       <p className={styles.opening}>{inside.apertura}</p>
       <p className={styles.consulted}>Consultamos a DIMA, el Dispositivo Inteligente de Magia Alquímica.</p>
     </header>
-    <section><h3>La palabra por dentro</h3><p className={styles.sectionLead}>Origen, formación y relaciones.</p><WordAnatomy result={result} />
-      <details className={styles.wordDetails}><summary>Ver el origen y la formación en detalle</summary><h4>Palabra raíz</h4><p>{inside.raiz}</p>
-        {result.fuentes.map((source) => <a className={styles.sourceInline} key={source.id} href={source.url} target="_blank" rel="noopener noreferrer">{source.titulo}</a>)}
-        <h4>Morfología</h4>{inside.linguistica ? <><p><strong>Clase de palabra.</strong> {inside.linguistica.categoria}</p><p><strong>Cómo está formada.</strong> {inside.linguistica.formacion}</p><p><strong>Cómo varía.</strong> {inside.linguistica.flexion}</p></> : <p>Esta entrada todavía necesita una descripción de su formación gramatical.</p>}
-      </details>
+    <section><h3>Palabra raíz</h3><p>{inside.raiz}</p>
+      {result.fuentes.map((source) => <a className={styles.sourceInline} key={source.id} href={source.url} target="_blank" rel="noopener noreferrer">{source.titulo}</a>)}
+    </section>
+    <section><h3>La palabra por dentro</h3><p className={styles.sectionLead}>Morfología: cómo está formada y cómo varía.</p>
+      {inside.linguistica ? <><p><strong>Clase de palabra.</strong> {inside.linguistica.categoria}</p><p><strong>Cómo está formada.</strong> {inside.linguistica.formacion}</p><p><strong>Cómo varía.</strong> {inside.linguistica.flexion}</p></> : <p>Esta entrada todavía necesita una descripción de su formación gramatical.</p>}
+      <WordAnatomy result={result} />
     </section>
     <section><h3>La lectura DIMA</h3><p className={styles.sectionLead}>Explorá estos movimientos y las preguntas que abren.</p>
+      <p>{inside.morfologia.nota}</p>
       <ul className={styles.movementCards} aria-label="Movimientos de la lectura simbólica DIMA">{inside.morfologia.movimientos.map((movement, index) => <li key={movement.nombre}><span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><h4>{movement.nombre}</h4><p>{movement.pregunta}</p></li>)}</ul>
-      <details className={styles.wordDetails}><summary>Sobre esta lectura simbólica</summary><p>{inside.morfologia.nota}</p></details>
     </section>
     <section><h3>¿Qué nos dice DIMA?</h3>{inside.lectura.map((paragraph, index) => <p key={index}>{paragraph}</p>)}</section>
     <section><h3>Frase transmutada</h3><blockquote>{inside.fraseTransmutada}</blockquote></section>

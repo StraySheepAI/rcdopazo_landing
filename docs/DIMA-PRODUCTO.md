@@ -8,8 +8,8 @@ Selección pública de palabras con una consulta legible:
 
 1. INSIDE DIMA · palabra y variantes.
 2. Pregunta de entrada.
-3. La palabra por dentro: diagrama del origen disponible, componentes gramaticales cuando están identificados, variaciones y relaciones. No se inventan prefijos ni sufijos para forzar una división. La raíz con referencias y la descripción morfológica completa quedan en un desplegable.
-4. La lectura DIMA: tarjetas de movimientos simbólicos y sus preguntas, con la nota metodológica desplegable. Las relaciones léxicas no se representan como antepasados históricos.
+3. Palabra raíz con texto completo y fuentes visibles. La palabra por dentro conserva la morfología completa a la vista: clase de palabra, formación y variaciones. El diagrama se agrega como complemento; no sustituye ni oculta esa explicación. No se inventan prefijos ni sufijos para forzar una división.
+4. La lectura DIMA: nota metodológica visible y tarjetas de movimientos simbólicos con sus preguntas. Las relaciones léxicas no se representan como antepasados históricos.
 5. ¿Qué nos dice DIMA?: qué habilita, qué puede limitar y cómo participa la persona con agencia.
 6. Frase transmutada.
 7. Dictum Mutare.
