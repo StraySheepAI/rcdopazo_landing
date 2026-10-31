@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import { normalize, readResult, type DimaResult } from "@/lib/dima/schema";
-import InsideReading from "./InsideReading";
+import ReadingJourney, { type ReadingDepth } from "./ReadingJourney";
 import shell from "./shell.module.css";
 import { PERSONAL_EMAIL } from "@/app/lib/contact";
 
@@ -29,8 +29,18 @@ export default function DimaPage() {
   const [accessError, setAccessError] = useState("");
   const activeRequest = useRef<AbortController | null>(null);
   const requestId = useRef(0);
+  const pendingLayer = useRef<ReadingDepth | null>(null);
   const words = mode === "libro" ? bookWords : publicWords;
   const locked = mode !== "free" && access !== mode;
+
+  function focusLayer(layer: ReadingDepth) {
+    const panel = document.getElementById(`dima-layer-${layer}`);
+    panel?.focus({ preventScroll: true });
+    panel?.scrollIntoView({ block: "start", behavior: "auto" });
+  }
+  useEffect(() => {
+    if (pendingLayer.current) { focusLayer(pendingLayer.current); pendingLayer.current = null; }
+  }, [depth]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -64,6 +74,7 @@ export default function DimaPage() {
 
   function clearReading() {
     requestId.current += 1; activeRequest.current?.abort();
+    pendingLayer.current = null;
     setResult(null); setError(""); setLoading(false); setSaved(false); setDepth(1);
   }
   function chooseWord(value: string) { clearReading(); setWord(value); }
@@ -113,9 +124,10 @@ export default function DimaPage() {
     } finally { if (!controller.signal.aborted && id === requestId.current) setLoading(false); }
   }
 
-  function advance(next: 1 | 2 | 3) {
-    setDepth(next);
-    document.getElementById("dima-reading-heading")?.scrollIntoView({ block: "start", behavior: "auto" });
+  function advance(next: ReadingDepth) {
+    if (next <= depth) { focusLayer(next); return; }
+    pendingLayer.current = next;
+    setDepth((current) => Math.max(current, next) as ReadingDepth);
   }
 
   return <main className={shell.page}>
@@ -157,11 +169,8 @@ export default function DimaPage() {
     </section>
     {mode === "free" && <div className={shell.startWords}><span>Podés empezar por</span>{INITIAL_WORDS.map((item) => <button key={item} type="button" onClick={() => consult(item)}>{item}</button>)}</div>}
     {result && !locked && <section className={shell.reading} aria-label={`Consulta DIMA de ${result.palabra}`}>
-      <header className={shell.readingHead} id="dima-reading-heading"><p className={shell.sectionLabel}>{mode === "free" ? "LECTURA GRATUITA" : mode === "libro" ? "COLECCIÓN · ¡QUÉ EMBOLE!" : "ANÁLISIS METALQUÍMICO"} · CAPA {depth} DE 3</p><h2>{result.palabra}</h2><p className={shell.contrast}>{depth === 1 ? "Primero, DIMA muestra qué configuración contiene la palabra." : depth === 2 ? "Ahora, abrí su origen y su construcción." : "Explorá qué puede abrir esta lectura en tu manera de participar."}</p></header>
-      <div className={shell.report}><InsideReading result={result} ampliado={mode === "plus"} layer={depth} showTitle={false} /></div>
-      <nav className={shell.depthNav} aria-label="Capas del informe DIMA">{([{ id: 1, title: "Qué contiene", detail: "Lectura esencial" }, { id: 2, title: "Cómo se construye", detail: "ATS · Morfología y Verbus Prime" }, { id: 3, title: "Qué puede abrir", detail: "ARS M · Reconfiguración" }] as const).map((item, index) => <div className={shell.depthItem} key={item.id}>{index > 0 && <i aria-hidden="true" />}<button type="button" className={depth === item.id ? shell.done : ""} aria-pressed={depth === item.id} onClick={() => advance(item.id)}><b>0{item.id}</b><span>{item.title}</span><small>{item.detail}</small></button></div>)}</nav>
-      {depth < 3 && <button type="button" className={shell.nextDepth} onClick={() => advance(depth === 1 ? 2 : 3)}>{depth === 1 ? "VER CÓMO ESTÁ CONSTRUIDA →" : "VER QUÉ PUEDE ABRIR →"}</button>}
-      {depth === 3 && <button type="button" className={shell.nextDepth} onClick={() => { clearReading(); setWord(""); document.getElementById("dima-consultation")?.scrollIntoView({ block: "start" }); document.getElementById("dima-word")?.focus(); }}>ABRIR OTRA PALABRA ↑</button>}
+      <header className={shell.readingHead} id="dima-reading-heading"><p className={shell.sectionLabel}>{mode === "free" ? "LECTURA GRATUITA" : mode === "libro" ? "COLECCIÓN · ¡QUÉ EMBOLE!" : "ANÁLISIS METALQUÍMICO"}</p><h2>{result.palabra}</h2><p className={shell.contrast}>Primero, DIMA muestra qué configuración contiene la palabra. Abrí las siguientes capas cuando quieras profundizar.</p></header>
+      <ReadingJourney result={result} depth={depth} ampliado={mode === "plus"} onAdvance={advance} onRestart={() => { clearReading(); setWord(""); document.getElementById("dima-consultation")?.scrollIntoView({ block: "start" }); document.getElementById("dima-word")?.focus(); }} />
     </section>}
     <section className={shell.valuePath}><p className={shell.sectionLabel}>DIMA CRECE CON TU PREGUNTA</p><h2>Una sola lectura. Distintas entregas.</h2><div><article><small>ABIERTO</small><b>Configuración oculta</b><p>{publicWords.length ? `${publicWords.length} lecturas completas` : "Lecturas de la selección"}, para recorrer sin clave y a tu ritmo.</p></article><article><small>AMPLIADO · CON CLAVE</small><b>Análisis Metalquímico</b><p>DIMA Plus: análisis ampliado, consulta libre y guardado en la base. Las palabras nuevas requieren la conexión de IA.</p><button type="button" onClick={() => { const selected = word; chooseMode("plus"); setWord(selected); document.getElementById("dima-consultation")?.scrollIntoView({ block: "start" }); }}>Abrir DIMA Plus</button></article><article><small>COLECCIÓN · CON CLAVE</small><b>¡Qué embole!</b><p>El glosario de la obra se abre con la clave que ya tenés en el libro.</p><button type="button" onClick={() => { chooseMode("libro"); document.getElementById("dima-consultation")?.scrollIntoView({ block: "start" }); }}>Abrir mi colección</button></article><article><small>PERSONAL</small><b>Integración acompañada</b><p>Un espacio para profundizar tu pregunta con acompañamiento.</p></article></div><a href={`mailto:${PERSONAL_EMAIL}?subject=Integraci%C3%B3n%20personalizada%20DIMA`}>CONSULTAR POR UNA INTEGRACIÓN PERSONALIZADA</a></section>
     <footer className={shell.footer}><span>DIMA · Magia para Atrevidos</span><Link href="/mpa">Volver al universo MPA →</Link></footer>

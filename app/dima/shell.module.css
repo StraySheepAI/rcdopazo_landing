@@ -62,3 +62,8 @@
 .footer a{color:var(--gold-light)}
 @media(max-width:560px){.startWords>span{width:100%;text-align:center}.notice{font-size:.84rem}.report{margin-top:30px}.footer{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.hero h1,.dimaFigure,.form>button,.valuePath>a,.nextDepth,.doors b,.consultCopy h2,.valuePath h2,.readingHead h2{animation:none}.doors button,.form>button,.valuePath>a,.nextDepth{transition:none}.doors button:hover,.doors .activeDoor{transform:none}}
+
+.reportLayer{margin:44px auto 0;scroll-margin-top:28px}
+.report,.reportLayer{outline:none;scroll-margin-top:28px}
+.report:focus-visible,.reportLayer:focus-visible{outline:2px solid var(--gold-light);outline-offset:8px;border-radius:30px}
+.journeyStatus{text-align:center;font:.8rem/1.6 Arial,sans-serif;color:#a58f9f;margin:26px 0 0}

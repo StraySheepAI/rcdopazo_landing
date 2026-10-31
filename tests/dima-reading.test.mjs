@@ -24,14 +24,21 @@ const modulePath = path.join(directory,'component.mjs'); await fs.writeFile(modu
 const { default: Reading } = await import(pathToFileURL(modulePath).href);
 const render = (result,ampliado=false) => renderToStaticMarkup(React.createElement(Reading,{result,ampliado}));
 
+const journeySource=await fs.readFile(new URL('../app/dima/ReadingJourney.tsx',import.meta.url),'utf8');
+let journeyCompiled=ts.transpileModule(journeySource,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext,jsx:ts.JsxEmit.ReactJSX}}).outputText;
+journeyCompiled=journeyCompiled.replaceAll('"react/jsx-runtime"',JSON.stringify(pathToFileURL(require.resolve('react/jsx-runtime')).href)).replaceAll('"./InsideReading"',JSON.stringify(pathToFileURL(modulePath).href));
+journeyCompiled=journeyCompiled.replace(/import shell from "\.\/shell\.module\.css";/,'const shell = new Proxy({}, {get: (_, key) => String(key)});');
+const journeyPath=path.join(directory,'journey.mjs');await fs.writeFile(journeyPath,journeyCompiled);
+const {default:ReadingJourney}=await import(pathToFileURL(journeyPath).href);
+
 const pageSource = await fs.readFile(new URL('../app/dima/page.tsx',import.meta.url),'utf8');
 let pageCompiled = ts.transpileModule(pageSource,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext,jsx:ts.JsxEmit.ReactJSX}}).outputText;
-for(const [specifier,target] of [['react',pathToFileURL(require.resolve('react')).href],['react/jsx-runtime',pathToFileURL(require.resolve('react/jsx-runtime')).href],['next/link',pathToFileURL(require.resolve('next/link')).href],['@/lib/dima/schema',new URL('../lib/dima/schema.ts',import.meta.url).href],['@/app/lib/contact',new URL('../app/lib/contact.ts',import.meta.url).href],['./InsideReading',pathToFileURL(modulePath).href]])pageCompiled=pageCompiled.replaceAll(JSON.stringify(specifier),JSON.stringify(target));
+for(const [specifier,target] of [['react',pathToFileURL(require.resolve('react')).href],['react/jsx-runtime',pathToFileURL(require.resolve('react/jsx-runtime')).href],['next/link',pathToFileURL(require.resolve('next/link')).href],['@/lib/dima/schema',new URL('../lib/dima/schema.ts',import.meta.url).href],['@/app/lib/contact',new URL('../app/lib/contact.ts',import.meta.url).href],['./ReadingJourney',pathToFileURL(journeyPath).href]])pageCompiled=pageCompiled.replaceAll(JSON.stringify(specifier),JSON.stringify(target));
 pageCompiled=pageCompiled.replace(/import shell from "\.\/shell\.module\.css";/,'const shell = new Proxy({}, {get: (_, key) => String(key)});');
 const pagePath=path.join(directory,'page.mjs');await fs.writeFile(pagePath,pageCompiled);
 const {default:DimaPage}=await import(pathToFileURL(pagePath).href);
 
-const headings = ['Palabra raíz','Configuración de la palabra','La lectura DIMA','¿Qué nos dice DIMA?','Frase transmutada','Dictum Mutare','MPI Insight','Activación'];
+const headings = ['Palabra raíz','Configuración de la palabra','¿Qué está diciendo esta palabra?','La lectura DIMA','Frase transmutada','Dictum Mutare','MPI Insight','Activación'];
 
 test('La entrada recupera las tres puertas y la cámara de la página publicada',async()=>{
  const html=renderToStaticMarkup(React.createElement(DimaPage));
@@ -100,7 +107,7 @@ test('El recorrido por capas conserva el informe completo y muestra la morfolog�
  for(const word of REVIEWED_WORDS){
   const result=getReviewedAnalysis(word);
   const layers=[1,2,3].map(layer=>renderToStaticMarkup(React.createElement(Reading,{result,layer,showTitle:false})));
-  assert.ok(layers[0].includes('¿Qué nos dice DIMA?'),word);
+  assert.ok(layers[0].includes('¿Qué está diciendo esta palabra?'),word);
   assert.ok(layers[1].includes('Configuración de la palabra'),word);
   assert.ok(layers[1].includes('Cómo está formada'),word);
   assert.ok(layers[1].includes('Cómo varía'),word);
@@ -110,6 +117,27 @@ test('El recorrido por capas conserva el informe completo y muestra la morfolog�
   const escape=(text)=>renderToStaticMarkup(React.createElement(React.Fragment,null,text));
   for(const text of [result.inside.raiz,...Object.values(result.inside.linguistica),...result.inside.lectura,result.inside.activacion])assert.ok(full.includes(escape(text)),word);
  }
+});
+
+test('Al avanzar se agregan paneles: la primera lectura y los desplegables se conservan en el recorrido',()=>{
+ const result=getReviewedAnalysis('Devoción');
+ const renderJourney=(depth)=>renderToStaticMarkup(React.createElement(ReadingJourney,{result,depth,ampliado:false,onAdvance:()=>{},onRestart:()=>{}}));
+ for(const depth of [1,2,3]){
+  const html=renderJourney(depth);
+  assert.ok(html.includes('id="dima-layer-1"'));
+  assert.ok(html.includes('¿Qué está diciendo esta palabra?'));
+  assert.ok(html.includes('¿Por qué DIMA llega a esta lectura?'));
+  assert.equal(html.includes('id="dima-layer-2"'),depth>=2);
+  assert.equal(html.includes('id="dima-layer-3"'),depth>=3);
+  assert.equal(html.includes('Cómo está construida'),depth>=2);
+  assert.equal(html.includes('Cómo puede reconfigurarse'),depth>=3);
+  assert.equal(html.includes('Escuchar el susurro de DIMA'),depth>=3);
+  assert.ok(!html.includes('open=""')); // Native details remain optional, closed initially.
+ }
+ const full=renderJourney(3);
+ assert.ok(full.indexOf('id="dima-layer-1"')<full.indexOf('id="dima-layer-2"'));
+ assert.ok(full.indexOf('id="dima-layer-2"')<full.indexOf('id="dima-layer-3"'));
+ assert.equal((full.match(/aria-expanded="true"/g)||[]).length,3);
 });
 
 await fs.rm(directory, { recursive: true, force: true });

@@ -29,28 +29,29 @@ export default function InsideReading({ result, ampliado = false, layer = "all",
   const structure = layer === "all" || layer === 2;
   const practice = layer === "all" || layer === 3;
   return <article className={styles.inside} aria-label={`Consulta DIMA de ${result.palabra}`}>
-    <header className={styles.insideHead}>
+    {meaning && <header className={styles.insideHead}>
       <p className={styles.eyebrow}>INSIDE DIMA</p>{showTitle && <h2 id="dima-result-title">{result.palabra}</h2>}
       {inside.variantes && <p className={styles.variants}>{inside.variantes}</p>}
       <p className={styles.opening}>{inside.apertura}</p>
       <p className={styles.consulted}>Consultamos a DIMA, el Dispositivo Inteligente de Magia Alquímica.</p>
-    </header>
-    {structure && <><section><h3>Palabra raíz</h3><p>{inside.raiz}</p>
+    </header>}
+    {structure && <><header className={styles.methodHeader}><span aria-hidden="true">ATS</span><div><p>DESARMAR PARA ENTENDER</p><h3>Cómo está construida</h3></div></header><div className={styles.methodGrid}><section><h3>Palabra raíz</h3><p>{inside.raiz}</p>
       {result.fuentes.map((source) => <a className={styles.sourceInline} key={source.id} href={source.url} target="_blank" rel="noopener noreferrer">{source.titulo}</a>)}
-    </section>
+    </section><section><h3>Configuración mínima</h3><p>{result.analisis.configuracion.texto}</p></section><section><h3>Pulsus · movimiento funcional</h3><p>{result.analisis.pulsus.texto}</p></section><section><h3>Pregunta de apertura</h3><p>{inside.apertura}</p></section></div>
     <section><h3>Configuración de la palabra</h3><p className={styles.sectionLead}>Su estructura, sus componentes y sus relaciones.</p>
       <WordAnatomy result={result} />
     </section></>}
-    {meaning && <><section><h3>La lectura DIMA</h3><p className={styles.sectionLead}>Explorá estos movimientos y las preguntas que abren.</p>
+    {meaning && <><section className={styles.essentialReading}><p className={styles.eyebrow}>LO ESENCIAL</p><h3>¿Qué está diciendo esta palabra?</h3>{inside.lectura.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+      <details className={styles.reportDetails}><summary>¿Por qué DIMA llega a esta lectura?</summary><div><h4>Movimiento propuesto</h4><p>{result.analisis.pulsus.texto}</p><h4>Distinciones que orientan la lectura</h4><p>{result.analisis.distinciones.texto}</p></div></details>
+    </section><section><h3>La lectura DIMA</h3><p className={styles.sectionLead}>Explorá estos movimientos y las preguntas que abren.</p>
       <p>{inside.morfologia.nota}</p>
       <ul className={styles.movementCards} aria-label="Movimientos de la lectura simbólica DIMA">{inside.morfologia.movimientos.map((movement, index) => <li key={movement.nombre}><span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><h4>{movement.nombre}</h4><p>{movement.pregunta}</p></li>)}</ul>
-    </section>
-    <section><h3>¿Qué nos dice DIMA?</h3>{inside.lectura.map((paragraph, index) => <p key={index}>{paragraph}</p>)}</section></>}
-    {practice && <><section><h3>Frase transmutada</h3><blockquote>{inside.fraseTransmutada}</blockquote></section>
+    </section></>}
+    {practice && <><header className={styles.methodHeader}><span aria-hidden="true">ARS M</span><div><p>VOLVER A ABRIR LO POSIBLE</p><h3>Cómo puede reconfigurarse</h3></div></header><div className={styles.methodGrid}><section><h3>Frase transmutada</h3><blockquote>{inside.fraseTransmutada}</blockquote></section>
     <section><h3>Dictum Mutare</h3><p className={styles.dictum}>{inside.dictum.map((line, index) => <span key={index}>{line}</span>)}</p></section>
-    <section className={styles.insight}><h3>MPI Insight</h3><p>{inside.insight}</p></section>
+    <section><h3>MPI Insight</h3><p>{inside.insight}</p></section>
     <section><h3>Activación</h3><p>{inside.activacion}</p></section>
-    <p className={styles.signature}>{inside.cierre}</p></>}
+    </div><details className={styles.reportDetails}><summary>Escuchar el susurro de DIMA</summary><p className={styles.signature}>{inside.cierre}</p></details></>}
     {structure && <details className={styles.sourceNotes}><summary>Fuentes y notas de esta lectura</summary>
       <p>La raíz conserva la información lingüística disponible y su alcance. La morfología mágica y la lectura DIMA son interpretativas.</p>
       <p>La descripción gramatical distingue formación y flexión, siguiendo el alcance de la <a href="https://www.rae.es/gtg/morfolog%C3%ADa" target="_blank" rel="noopener noreferrer">morfología</a>. Para las voces españolas, pueden consultarse también las <a href="https://www.rae.es/dpd/plural" target="_blank" rel="noopener noreferrer">reglas de plural</a>. Las relaciones históricas conservan la referencia propia de cada entrada.</p>
