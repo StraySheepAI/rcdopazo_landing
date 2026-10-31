@@ -9,7 +9,8 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:dima": "node --experimental-strip-types --test tests/dima.test.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",
