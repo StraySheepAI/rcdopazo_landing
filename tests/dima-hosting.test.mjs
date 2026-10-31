@@ -5,6 +5,8 @@ import { getReviewedAnalysis, REVIEWED_WORDS } from '../lib/dima/corpus.ts';
 import { dimaProvider } from '../lib/dima/provider.ts';
 import { createDimaHandlers } from '../lib/dima/service.ts';
 import { createDimaAccessHandlers, hashCode } from '../lib/dima/access.ts';
+import { createStore } from '../lib/dima/database.ts';
+import { createSqliteDriver } from '../lib/dima/database-sqlite.ts';
 
 function archive() {
  let value, version=0;
@@ -123,4 +125,30 @@ test('El catálogo privado de Plus reúne gratuita, libro y nuevas consultas sin
  assert.ok(!data.palabras.includes('Palabra descartada'));
  assert.ok(!JSON.stringify(data).includes('contexto privado'));
  assert.equal((await (await handlers.GET()).json()).palabras.length,44);
+});
+
+test('Plus recupera las consultas elaboradas en el chat sin API, sin inventar un modelo ni duplicar la ficha',async()=>{
+ const stores=[createSnapshotStore(archive().driver),createStore(createSqliteDriver(':memory:'))];
+ for(const store of stores){
+  try{
+   const reading=getReviewedAnalysis('Molde');reading.palabra='Ridículo';
+   const saved=await store.save(reading);
+   const localEnv={DIMA_SESSION_SECRET:env.DIMA_SESSION_SECRET,DIMA_PLUS_CODE_HASH:env.DIMA_PLUS_CODE_HASH,DIMA_BOOK_CODE_HASH:env.DIMA_BOOK_CODE_HASH};
+   let network=0;
+   const handlers=createDimaHandlers({env:localEnv,store,fetch:async()=>{network++;throw new Error('network must not be used');}});
+   const response=await handlers.POST(await request('Ridículo'));
+   assert.equal(response.status,200);
+   const data=await response.json();
+   assert.equal(data.registro.id,saved.id);
+   assert.equal(data.registro.guardado,true);
+   assert.deepEqual(data.inside,reading.inside);
+   assert.equal((await store.get(saved.id)).modelo,null);
+   assert.equal((await store.get(saved.id)).consultas,2);
+   assert.equal((await store.list()).total,1);
+   assert.equal(network,0);
+   assert.equal(await store.find('Ridículo','otro contexto',null),undefined);
+   await store.review(saved.id,'descartada');
+   assert.equal(await store.find('Ridículo','',null),undefined);
+  }finally{store.close();}
+ }
 });

@@ -46,6 +46,8 @@ export default function DimaPage() {
   useEffect(() => {
     const controller = new AbortController();
     const query = new URLSearchParams(window.location.search).get("palabra");
+    const requestedMode = new URLSearchParams(window.location.search).get("nivel");
+    if (requestedMode === "plus" || requestedMode === "libro") setMode(requestedMode);
     if (query) setWord(query.slice(0, 100));
     fetch("/api/dima", { signal: controller.signal }).then(async (response) => {
       const data = await response.json();

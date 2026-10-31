@@ -78,9 +78,11 @@ export function createStore(driver: SqlDriver) {
       const rows = await driver.query(`${select} WHERE r.id=$1`, [id]);
       return rows[0] ? decode(rows[0]) : undefined;
     },
-    async find(word: string, context: string, model: string) {
+    async find(word: string, context: string, model: string | null) {
       await initialize();
-      const rows = await driver.query(`${select} WHERE r.word_key=$1 AND r.context_hash=$2 AND r.prompt_version=$3 AND r.model=$4 AND r.status IN ('pendiente','revisada') ORDER BY r.updated_at DESC,r.id DESC LIMIT 1`, [wordKey(word), hash(context.trim()), DIMA_PROMPT_VERSION, model]);
+      const modelFilter = model === null ? "r.model IS NULL" : "r.model=$4";
+      const params = [wordKey(word), hash(context.trim()), DIMA_PROMPT_VERSION, ...(model === null ? [] : [model])];
+      const rows = await driver.query(`${select} WHERE r.word_key=$1 AND r.context_hash=$2 AND r.prompt_version=$3 AND ${modelFilter} AND r.status IN ('pendiente','revisada') ORDER BY r.updated_at DESC,r.id DESC LIMIT 1`, params);
       return rows[0] ? decode(rows[0]) : undefined;
     },
     async list(offset = 0, limit = 50) {

@@ -86,9 +86,9 @@ export function createDimaHandlers(deps: Dependencies) {
         }
         if (storage) {
           let previous;
-          try { previous = await storage.find(palabra, context, model); }
+          try { previous = await storage.find(palabra, context, model) || await storage.find(palabra, context, null); }
           catch { throw new DimaError("No pudimos consultar la base de DIMA. Intentá nuevamente.", 503); }
-          if (previous) return await deliver(previous.resultado, previous.modelo || model);
+          if (previous) return await deliver(previous.resultado, previous.modelo || undefined);
         }
         // Sheets and the extended archive are independent sources.
         const rows = await publicRows().catch(() => null);
