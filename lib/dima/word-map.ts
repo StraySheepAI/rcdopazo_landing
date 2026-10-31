@@ -2,6 +2,7 @@ import { normalize } from "./text.ts";
 
 export type WordMap = {
   origen?: { lengua: string; forma: string };
+  recorrido?: { lengua: string; forma: string }[];
   piezas?: { forma: string; funcion: string }[];
   ramas: { titulo: string; formas: string[] }[];
 };
@@ -49,7 +50,15 @@ const maps: Record<string, WordMap> = {
   correcto: { ramas: [{ titulo: "Género y número", formas: ["correcto", "correcta", "correctos", "correctas"] }, { titulo: "Familia de palabras", formas: ["corregir", "corrección"] }] },
   normal: { ramas: [{ titulo: "Singular → plural", formas: ["normal → normales"] }, { titulo: "Familia de palabras", formas: ["norma"] }] },
   presente: { ramas: [{ titulo: "Singular → plural", formas: ["presente → presentes"] }, { titulo: "Familia de palabras", formas: ["presencia", "presentar"] }] },
-  common: { ramas: [{ titulo: "Comparación", formas: ["common → more common"] }, { titulo: "Número", formas: ["El adjetivo no cambia"] }] },
+  common: {
+    recorrido: [{ lengua: "Latín", forma: "communis" }, { lengua: "Francés antiguo", forma: "comun" }],
+    piezas: [{ forma: "common", funcion: "Base léxica en el inglés actual" }],
+    ramas: [
+      { titulo: "Comparativo", formas: ["more common", "commoner"] },
+      { titulo: "Superlativo", formas: ["most common", "commonest"] },
+      { titulo: "Género y número", formas: ["a common interest → common interests"] },
+    ],
+  },
   right: { ramas: [{ titulo: "Como sustantivo", formas: ["right → rights"] }, { titulo: "Palabra derivada", formas: ["rightness"] }] },
   work: { ramas: [{ titulo: "Como verbo", formas: ["work", "works", "worked", "working"] }, { titulo: "Palabra derivada", formas: ["worker"] }] },
   influencer: { ...noun("influencers"), piezas: [{ forma: "influence", funcion: "Base inglesa; pierde la e final" }, { forma: "-er", funcion: "Nombre de agente" }] },

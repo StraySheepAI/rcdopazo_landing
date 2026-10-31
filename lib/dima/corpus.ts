@@ -45,7 +45,7 @@ for (const entry of EDITORIAL_ENTRIES) {
   const id = `lexico-${normalize(entry.palabra).replace(/\s+/g, "-")}`;
   entries.push(readResult({
     version: 2, palabra: entry.palabra, origen: "archivo", archivo: [],
-    fuentes: [{ id, titulo: `${entry.diccionario || "RAE-ASALE · DLE"}: ${entry.palabra.toLowerCase()}`, url: entry.url, consulta: checked }],
+    fuentes: [{ id, titulo: `${entry.diccionario || "RAE-ASALE · DLE"}: ${entry.palabra.toLowerCase()}`, url: entry.url, consulta: checked }, ...(entry.referencias || []).map((reference, index) => ({ id: `${id}-${index + 1}`, ...reference, consulta: checked }))],
     analisis: Object.fromEntries(DIMA_STEPS.map((step, index) => [step.id, {
       texto: entry.pasos[index], estado: index === 0 ? "documentado" : "interpretacion", fuentes: index === 0 ? [id] : [],
     }])),

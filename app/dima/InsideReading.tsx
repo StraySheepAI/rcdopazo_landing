@@ -8,22 +8,30 @@ function WordAnatomy({ result }: { result: DimaResult }) {
   const related = map?.ramas.filter((branch) => ["Familia de palabras", "Palabra derivada"].includes(branch.titulo)) || [];
   const variations = map?.ramas.filter((branch) => !related.includes(branch)) || [];
   const formation = morphology?.formacion || "";
+  const origins = map?.recorrido || (map?.origen ? [map.origen] : []);
   // An excerpt of the reviewed explanation, not a new linguistic analysis.
   const firstStop = map ? formation.indexOf(". ") : -1;
   const formationLead = firstStop >= 0 ? formation.slice(0, firstStop + 1) : formation;
   return <figure className={styles.wordMap} aria-label={`Origen, formación y relaciones de ${result.palabra}`}>
     <figcaption className={styles.srOnly}>El origen histórico, cuando está documentado, conduce a la forma consultada. Las ramas muestran variaciones y relaciones; la familia léxica no representa ascendencia.</figcaption>
-    {map?.origen && <><div className={styles.originNode}><span>{map.origen.lengua}</span><strong>{map.origen.forma}</strong></div><div className={styles.mapArrow} aria-hidden="true">↓</div></>}
+    {origins.length > 0 && <p className={styles.mapLabel}>Recorrido de origen</p>}
+    {origins.map((origin) => <div key={`${origin.lengua}-${origin.forma}`}><div className={styles.originNode}><span>{origin.lengua}</span><strong>{origin.forma}</strong></div><div className={styles.mapArrow} aria-hidden="true">↓</div></div>)}
     <div className={styles.wordNode}><span>La palabra</span><strong>{result.palabra}</strong>{morphology && <small><b>Clase de palabra.</b> {morphology.categoria}</small>}</div>
     {morphology && <ul className={styles.configurationBranches}>
       <li><h4>Cómo está formada</h4>
         {map?.piezas && <ol className={styles.wordPieces} aria-label="Componentes y función gramatical">{map.piezas.map((piece) => <li key={piece.forma}><strong>{piece.forma}</strong><span>{piece.funcion}</span></li>)}</ol>}
         <p>{formationLead}</p>
-        {formationLead !== formation && <details className={styles.wordDetails}><summary>Ver la explicación completa</summary><p>{formation}</p></details>}
       </li>
       <li><h4>Cómo varía</h4>{variations.map((branch) => <div className={styles.variationGroup} key={branch.titulo}><span>{branch.titulo}</span><div>{branch.formas.map((form) => <strong key={form}>{form}</strong>)}</div></div>)}<p>{morphology.flexion}</p></li>
     </ul>}
     {related.length > 0 && <ul className={styles.relatedWords}>{related.map((branch) => <li key={branch.titulo}><h4>{branch.titulo}</h4><div>{branch.formas.map((form) => <span key={form}>{form}</span>)}</div></li>)}</ul>}
+    {morphology && <details className={styles.reportDetails}><summary>Ampliar origen y morfología</summary><div>
+      <h4>Origen histórico</h4><p>{result.inside?.raiz}</p>
+      <h4>Clase de palabra</h4><p>{morphology.categoria}</p>
+      <h4>Formación de la palabra</h4><p>{formation}</p>
+      <h4>Variación y comparación</h4><p>{morphology.flexion}</p>
+      {result.fuentes.map((source) => <a className={styles.sourceInline} key={source.id} href={source.url} target="_blank" rel="noopener noreferrer">{source.titulo}</a>)}
+    </div></details>}
   </figure>;
 }
 

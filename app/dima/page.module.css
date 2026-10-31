@@ -113,4 +113,6 @@
 .reportDetails>div,.reportDetails>p{padding:0 22px 22px;margin:0!important}
 .reportDetails h4{font:600 .85rem/1.6 Arial,sans-serif;color:var(--dima-gold-light);margin:12px 0}
 .reportDetails p{font:1rem/1.75 Georgia,serif}
+.wordMap .reportDetails{text-align:left}
+.wordMap .reportDetails .sourceInline{display:block}
 @media(max-width:650px){.methodHeader{gap:22px;margin-bottom:28px}.methodHeader>span{width:54px;height:54px;font-size:.7rem}.methodHeader h3{font-size:1.6rem}.methodHeader>div>p{font-size:.55rem}.methodGrid{grid-template-columns:1fr;gap:13px}.methodGrid>section{padding:21px 18px}.methodGrid p{font-size:1rem}.reportDetails summary{font-size:.7rem;padding:18px 16px}.reportDetails>div,.reportDetails>p{padding:0 16px 18px}.reportDetails p{font-size:.95rem}}

@@ -93,12 +93,41 @@ test('Los diagramas distinguen relaciones de componentes sin inventar divisiones
  const brief=render(getReviewedAnalysis('Molde')).replace(/<details\b[\s\S]*?<\/details>/g,'');
  assert.ok(brief.includes('Base léxica: molde.'));
  const complete=render(getReviewedAnalysis('Molde'));
- assert.ok(complete.includes('Ver la explicación completa'));
+ assert.ok(complete.includes('Ampliar origen y morfología'));
  assert.equal(getWordMap('Una expresión nueva'),undefined);
  const result=getReviewedAnalysis('Devoción');result.palabra='Una expresión nueva';
  const html=render(result);
  assert.ok(html.includes('Cómo está formada'));
  assert.ok(!html.includes('class="wordPieces"'));
+});
+
+test('Common muestra su historia y las dos construcciones comparativas sin inventar morfemas ingleses', () => {
+ const result=getReviewedAnalysis('Common');
+ const html=renderToStaticMarkup(React.createElement(Reading,{result,layer:1,showTitle:false}));
+ const visible=html.replace(/<details\b[\s\S]*?<\/details>/g,'');
+ for(const text of ['communis','Francés antiguo','comun','commoner','commonest','more common','most common','Base léxica en el inglés actual'])assert.ok(visible.includes(text),text);
+ assert.ok(visible.indexOf('communis')<visible.indexOf('comun</strong>'));
+ assert.deepEqual(getWordMap('Common').piezas.map(piece=>piece.forma),['common']);
+ assert.ok(result.fuentes.some(source=>source.url==='https://www.oxfordlearnersdictionaries.com/definition/english/common_1'));
+ assert.ok(html.includes('estas construcciones de varias palabras no son sufijos'));
+ assert.ok(!html.includes('<h3>Síntesis DIMA</h3>'));
+});
+
+test('Las 44 palabras permiten ampliar su morfología desde la primera capa, incluso si la formación ocupa una sola oración', () => {
+ for(const word of REVIEWED_WORDS){
+  const result=getReviewedAnalysis(word);
+  for(const depth of [1,2,3]){
+   const html=renderToStaticMarkup(React.createElement(ReadingJourney,{result,depth,ampliado:false,onAdvance:()=>{},onRestart:()=>{}}));
+   const first=html.slice(html.indexOf('id="dima-layer-1"'),html.indexOf('<nav'));
+   const detail=first.match(/<details[^>]*><summary>Ampliar origen y morfología<\/summary>[\s\S]*?<\/details>/)?.[0];
+   assert.ok(detail,`${word}: ampliación en capa ${depth}`);
+   for(const text of [result.inside.raiz,...Object.values(result.inside.linguistica)]){
+    const escaped=renderToStaticMarkup(React.createElement(React.Fragment,null,text));
+    assert.ok(detail.includes(escaped),`${word}: contenido completo conservado`);
+   }
+   assert.ok(!detail.includes('open=""'));
+  }
+ }
 });
 
 test('El análisis técnico ampliado aparece solo cuando se solicita esa presentación', () => {

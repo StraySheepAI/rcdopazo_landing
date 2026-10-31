@@ -1,6 +1,6 @@
 // Every entry contains a word-specific reading. The cited dictionary supports only the linguistic step.
 // The other seven steps are editorial DIMA proposals, not additional historical claims.
-export type EditorialEntry = { palabra: string; url: string; diccionario?: string; pasos: [string, string, string, string, string, string, string, string] };
+export type EditorialEntry = { palabra: string; url: string; diccionario?: string; referencias?: { titulo: string; url: string }[]; pasos: [string, string, string, string, string, string, string, string] };
 export const EDITORIAL_ENTRIES: EditorialEntry[] = [
   { palabra: "Normal", url: "https://dle.rae.es/normal", pasos: [
     "El DLE remite al latín normālis. Sus usos actuales incluyen lo habitual y lo ajustado a una norma; también tiene un sentido geométrico. Esta fuente no justifica dividir la forma española en sílabas con significados independientes.",
@@ -352,7 +352,7 @@ export const EDITORIAL_ENTRIES: EditorialEntry[] = [
     "DIMA propone leer deseo como una orientación afectiva hacia una posibilidad, que señala una dirección sin decidir por sí sola el recorrido.",
     "Mi deseo señala una dirección; mis decisiones construyen el camino."
   ]},
-  { palabra: "Common", url: "https://www.etymonline.com/word/common", diccionario: "Online Etymology Dictionary", pasos: [
+  { palabra: "Common", url: "https://www.etymonline.com/word/common", diccionario: "Online Etymology Dictionary", referencias: [{ titulo: "Oxford Advanced Learner’s Dictionary: common", url: "https://www.oxfordlearnersdictionaries.com/definition/english/common_1" }], pasos: [
     "En inglés, Etymonline sitúa common en el francés antiguo comun y el latín communis. Registra sentidos de pertenencia compartida y de frecuencia. No son equivalentes en todos los contextos ni requieren que todas las personas sean iguales.",
     "Puesta en común: varias posiciones se relacionan con un recurso, una práctica o una referencia compartida.",
     "Un conjunto de participantes tiene algo en común. El alcance depende de quién integra ese conjunto y cómo se distribuye el acceso.",
