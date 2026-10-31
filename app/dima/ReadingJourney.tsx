@@ -12,12 +12,12 @@ export default function ReadingJourney({ result, depth, ampliado, onAdvance, onR
     <p className={shell.journeyStatus} role="status">{depth} de 3 capas abiertas. Lo que ya abriste permanece en la lectura.</p>
     <div className={shell.report} id="dima-layer-1" tabIndex={-1}><InsideReading result={result} layer={1} showTitle={false} /></div>
     <nav className={shell.depthNav} aria-label="Capas del informe DIMA">{([
-      { id: 1, title: "Qué contiene", detail: "Lectura esencial" },
-      { id: 2, title: "Cómo se construye", detail: "ATS · Morfología y Verbus Prime" },
-      { id: 3, title: "Qué puede abrir", detail: "ARS M · Reconfiguración" },
+      { id: 1, title: "Cómo se construye", detail: "Anátesis · Origen y morfología" },
+      { id: 2, title: "Cómo se reconfigura", detail: "Relaciones · ARS M" },
+      { id: 3, title: "Qué revela", detail: "Síntesis DIMA" },
     ] as const).map((item, index) => <div className={shell.depthItem} key={item.id}>{index > 0 && <i aria-hidden="true" />}<button type="button" className={depth >= item.id ? shell.done : ""} aria-expanded={depth >= item.id} aria-controls={`dima-layer-${item.id}`} onClick={() => onAdvance(item.id)}><b>0{item.id}</b><span>{item.title}</span><small>{item.detail}</small></button></div>)}</nav>
-    {depth === 1 && <button type="button" className={shell.nextDepth} onClick={() => onAdvance(2)}>VER CÓMO ESTÁ CONSTRUIDA →</button>}
-    {depth >= 2 && <div className={shell.reportLayer} id="dima-layer-2" tabIndex={-1}><InsideReading result={result} layer={2} showTitle={false} />{depth === 2 && <button type="button" className={shell.nextDepth} onClick={() => onAdvance(3)}>VER LA RECONFIGURACIÓN →</button>}</div>}
+    {depth === 1 && <button type="button" className={shell.nextDepth} onClick={() => onAdvance(2)}>EXPLORAR SUS RELACIONES Y RECONFIGURACIÓN →</button>}
+    {depth >= 2 && <div className={shell.reportLayer} id="dima-layer-2" tabIndex={-1}><InsideReading result={result} layer={2} showTitle={false} />{depth === 2 && <button type="button" className={shell.nextDepth} onClick={() => onAdvance(3)}>ABRIR LA SÍNTESIS DIMA →</button>}</div>}
     {depth >= 3 && <div className={shell.reportLayer} id="dima-layer-3" tabIndex={-1}><InsideReading result={result} layer={3} ampliado={ampliado} showTitle={false} /><button type="button" className={shell.nextDepth} onClick={onRestart}>ABRIR OTRA PALABRA ↑</button></div>}
   </>;
 }

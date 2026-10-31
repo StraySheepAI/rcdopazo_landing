@@ -38,7 +38,7 @@ pageCompiled=pageCompiled.replace(/import shell from "\.\/shell\.module\.css";/,
 const pagePath=path.join(directory,'page.mjs');await fs.writeFile(pagePath,pageCompiled);
 const {default:DimaPage}=await import(pathToFileURL(pagePath).href);
 
-const headings = ['Palabra raíz','Configuración de la palabra','¿Qué está diciendo esta palabra?','La lectura DIMA','Frase transmutada','Dictum Mutare','MPI Insight','Activación'];
+const headings = ['Palabra raíz','Configuración de la palabra','La lectura DIMA','Activación','¿Qué está diciendo esta palabra?','Definición DIMA','Frase transmutada','Dictum Mutare','MPI Insight'];
 
 test('La entrada recupera las tres puertas y la cámara de la página publicada',async()=>{
  const html=renderToStaticMarkup(React.createElement(DimaPage));
@@ -63,7 +63,7 @@ test('Devoción se presenta como la consulta editorial de referencia y no como o
  assert.ok(!html.includes('Ver el análisis ampliado')); assert.ok(!html.includes('PASO 1 DE 8')); assert.ok(!html.includes('Nodus · relación y agencia'));
 });
 
-test('Las 44 fichas explican toda la morfología dentro del diagrama, sin ocultarla ni duplicarla en párrafos externos', () => {
+test('Las 44 fichas integran la morfología en el diagrama con las precisiones completas disponibles', () => {
  for(const word of REVIEWED_WORDS){
   const result=getReviewedAnalysis(word);
   const html=render(result);
@@ -71,8 +71,8 @@ test('Las 44 fichas explican toda la morfología dentro del diagrama, sin oculta
   const figure=visible.match(/<figure\b[\s\S]*?<\/figure>/)?.[0]||'';
   const escape=(text)=>renderToStaticMarkup(React.createElement(React.Fragment,null,text));
   assert.ok(result.inside.linguistica,word);
-  for(const text of [result.inside.raiz,...Object.values(result.inside.linguistica),result.inside.morfologia.nota])assert.ok(visible.includes(escape(text)),`${word}: texto completo fuera de desplegables`);
-  for(const text of Object.values(result.inside.linguistica))assert.ok(figure.includes(escape(text)),`${word}: morfología dentro del diagrama`);
+  for(const text of [result.inside.raiz,result.inside.linguistica.categoria,result.inside.linguistica.flexion,result.inside.morfologia.nota])assert.ok(visible.includes(escape(text)),`${word}: estructura esencial visible`);
+  for(const text of Object.values(result.inside.linguistica))assert.ok(html.match(/<figure\b[\s\S]*?<\/figure>/)[0].includes(escape(text)),`${word}: explicación completa conservada dentro del diagrama`);
   for(const label of ['Cómo está formada','Cómo varía'])assert.ok(figure.includes(`<h4>${label}</h4>`),word);
   assert.ok(figure.includes('<b>Clase de palabra.</b>'),word);
   assert.ok(getWordMap(word),word);
@@ -90,6 +90,10 @@ test('Los diagramas distinguen relaciones de componentes sin inventar divisiones
  assert.deepEqual(devotion.ramas[1].formas,['devoto','devota']);
  assert.equal(getWordMap('Molde').piezas,undefined);
  assert.deepEqual(getWordMap('Productividad').piezas.map(piece=>piece.forma),['productiv-','-idad']);
+ const brief=render(getReviewedAnalysis('Molde')).replace(/<details\b[\s\S]*?<\/details>/g,'');
+ assert.ok(brief.includes('Base léxica: molde.'));
+ const complete=render(getReviewedAnalysis('Molde'));
+ assert.ok(complete.includes('Ver la explicación completa'));
  assert.equal(getWordMap('Una expresión nueva'),undefined);
  const result=getReviewedAnalysis('Devoción');result.palabra='Una expresión nueva';
  const html=render(result);
@@ -103,16 +107,21 @@ test('El análisis técnico ampliado aparece solo cuando se solicita esa present
  const html=render(result,true);assert.ok(html.includes('Ver el análisis ampliado'));assert.ok(html.includes('Nodus · relación y agencia'));
 });
 
-test('El recorrido por capas conserva el informe completo y muestra la morfología en la segunda', () => {
+test('Las 44 consultas comienzan por la anátesis, reconfiguran después y reservan la síntesis para el cierre', () => {
  for(const word of REVIEWED_WORDS){
   const result=getReviewedAnalysis(word);
   const layers=[1,2,3].map(layer=>renderToStaticMarkup(React.createElement(Reading,{result,layer,showTitle:false})));
-  assert.ok(layers[0].includes('¿Qué está diciendo esta palabra?'),word);
-  assert.ok(layers[1].includes('Configuración de la palabra'),word);
-  assert.ok(layers[1].includes('Cómo está formada'),word);
-  assert.ok(layers[1].includes('Cómo varía'),word);
+  assert.ok(layers[0].includes('Configuración de la palabra'),word);
+  assert.ok(layers[0].includes('Cómo está formada'),word);
+  assert.ok(layers[0].includes('Cómo varía'),word);
+  assert.ok(!layers[0].includes('<h3>Síntesis DIMA</h3>'),word);
+  assert.ok(!layers[0].includes('¿Qué está diciendo esta palabra?'),word);
+  assert.ok(layers[1].includes('Relación y agencia'),word);
+  assert.ok(layers[1].includes('Activación'),word);
+  assert.ok(!layers[1].includes('<h3>Definición DIMA</h3>'),word);
+  assert.ok(layers[2].includes('<h3>Síntesis DIMA</h3>'),word);
   assert.ok(layers[2].includes('Frase transmutada'),word);
-  assert.ok(layers[2].includes('Activación'),word);
+  assert.ok(layers[2].includes('¿Qué está diciendo esta palabra?'),word);
   const full=layers.join('');
   const escape=(text)=>renderToStaticMarkup(React.createElement(React.Fragment,null,text));
   for(const text of [result.inside.raiz,...Object.values(result.inside.linguistica),...result.inside.lectura,result.inside.activacion])assert.ok(full.includes(escape(text)),word);
@@ -125,12 +134,14 @@ test('Al avanzar se agregan paneles: la primera lectura y los desplegables se co
  for(const depth of [1,2,3]){
   const html=renderJourney(depth);
   assert.ok(html.includes('id="dima-layer-1"'));
-  assert.ok(html.includes('¿Qué está diciendo esta palabra?'));
-  assert.ok(html.includes('¿Por qué DIMA llega a esta lectura?'));
+  assert.ok(html.includes('Configuración de la palabra'));
   assert.equal(html.includes('id="dima-layer-2"'),depth>=2);
   assert.equal(html.includes('id="dima-layer-3"'),depth>=3);
-  assert.equal(html.includes('Cómo está construida'),depth>=2);
-  assert.equal(html.includes('Cómo puede reconfigurarse'),depth>=3);
+  assert.ok(html.includes('Cómo está construida'));
+  assert.equal(html.includes('Cómo se relaciona y qué puede cambiar'),depth>=2);
+  assert.equal(html.includes('<h3>Síntesis DIMA</h3>'),depth>=3);
+  assert.equal(html.includes('¿Qué está diciendo esta palabra?'),depth>=3);
+  assert.equal(html.includes('¿Por qué DIMA llega a esta lectura?'),depth>=3);
   assert.equal(html.includes('Escuchar el susurro de DIMA'),depth>=3);
   assert.ok(!html.includes('open=""')); // Native details remain optional, closed initially.
  }
