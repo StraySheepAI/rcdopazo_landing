@@ -13,8 +13,7 @@ export default function MpaPage() {
   const BRANDS = [
     { href: "/mpa/que-es-mpa", label: t.nav.queEsMpa, symbol: "/mpa-general-logo.png" },
     { href: "/mpa/universe", label: t.nav.mpaUniverse, symbol: "/mpa-universe-logo.png" },
-    { href: "/mpa/transmuta", label: t.nav.mpaTransmuta, symbol: "/mpa-coin-transmuta.png" },
-    { href: "/mpa/portal", label: "Ego SUM", symbol: "/mpa-coin-ego-sum-v2-transparent.png" },
+    { href: "/mpa/ego-sum", label: "Ego SUM", symbol: "/ego-sum-seal.png" },
     { href: "https://mpaflow.com", label: t.nav.mpaFlow, symbol: "/mpa-flow-logo.png" },
     { href: "/mpa/publishing-house", label: t.nav.mpaPublishingHouse, symbol: "/mpa-publishing-house-logo.png" },
   ];

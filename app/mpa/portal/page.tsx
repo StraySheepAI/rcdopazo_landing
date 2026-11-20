@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 
 const seals = [
   { src: "/mpa-coin-evigila.png", label: "Evigila" },
-  { src: "/mpa-coin-lude.png", label: "Lude" },
+  { src: "/lude-seal.png", label: "Lude" },
   { src: "/mpa-coin-transmuta.png", label: "Transmuta", href: "/mpa/transmuta" },
-  { src: "/mpa-coin-ego-sum-v3-antique.png", label: "Ego SUM", href: "/mpa/ego-sum" },
+  { src: "/ego-sum-seal.png", label: "Ego SUM", href: "/mpa/ego-sum" },
   { src: "/mpa-coin-stray-sheep-v1.png", label: "Stray Sheep", href: "/stray-sheep/universo" },
 ];
 

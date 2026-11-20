@@ -11,8 +11,8 @@ export default function QueEsMpaPage() {
   const { t } = useLanguage();
   const territories = [
     { href: "/mpa/universe", label: "Evigila", symbol: "/mpa-coin-evigila.png" },
-    { href: "/mpa/portal", label: "Lude", symbol: "/mpa-coin-lude.png" },
-    { href: "/mpa/transmuta", label: "Transmuta", symbol: "/mpa-coin-transmuta.png" },
+    { href: "/mpa/portal", label: "Lude", symbol: "/lude-seal.png" },
+    { href: "/mpa/ego-sum", label: "Ego SUM", symbol: "/ego-sum-seal.png" },
   ];
   return (
     <>

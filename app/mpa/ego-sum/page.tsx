@@ -52,7 +52,7 @@ export default function PrimerDestelloPage() {
             <div className="ego-sum-hero-copy">
               <p className="destello-kicker">Ego SUM · {tx("Laboratorio del Yo", "Laboratory of the Self")}</p>
               <span className="destello-medal">
-                <Image src="/mpa-coin-ego-sum-v3-antique.png" alt="Medalla Ego SUM" width={150} height={150} priority />
+                <Image src="/ego-sum-seal.png" alt="Medalla Ego SUM" width={150} height={150} priority />
               </span>
               <p className="destello-welcome">{tx("Bienvenido al laboratorio", "Welcome to the laboratory")}</p>
               <h1>{tx("La forma que llamás “yo”", "The form you call “I”")}</h1>
@@ -84,7 +84,7 @@ export default function PrimerDestelloPage() {
           <section className="ego-sum-sequence">
             <Image
               className="ego-sum-sequence-medal"
-              src="/mpa-coin-ego-sum-v3-antique.png"
+              src="/ego-sum-seal.png"
               alt="Medalla Ego SUM"
               width={1254}
               height={1254}

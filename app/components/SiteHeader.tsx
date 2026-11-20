@@ -30,7 +30,7 @@ export function SiteHeader() {
       children: [
         { href: "/mpa/que-es-mpa", label: t.nav.queEsMpa },
         { href: "/mpa/universe", label: t.nav.mpaUniverse },
-        { href: "/mpa/transmuta", label: t.nav.mpaTransmuta },
+        { href: "/mpa/ego-sum", label: "Ego SUM" },
         { href: "https://mpaflow.com", label: t.nav.mpaFlow },
         { href: "https://evigilatarot.rociodopazo.com/tarot", label: t.nav.mpaEvigila },
         { href: "/mpa/publishing-house", label: t.nav.mpaPublishingHouse },
@@ -116,10 +116,16 @@ export function SiteHeader() {
               </Link>
             )}
             {index === 1 && (
-              <a className="nav-stray-sheep" href="/stray-sheep" aria-label="Stray Sheep" title="Stray Sheep">
-                <Image src="/stray-sheep-glasses.png" alt="" width={120} height={44} />
-                <span role="tooltip">Stray Sheep</span>
-              </a>
+              <>
+                <a className="nav-stray-sheep" href="/stray-sheep" aria-label="Stray Sheep" title="Stray Sheep">
+                  <Image src="/stray-sheep-glasses.png" alt="" width={120} height={44} />
+                  <span role="tooltip">Stray Sheep</span>
+                </a>
+                <a className="nav-metalkimia" href="/mpa/transmuta/pulsus-fractum?entry=mpa" aria-label="Escuela de Metalkimia · Pulsus Fractum" title="Escuela de Metalkimia · Pulsus Fractum">
+                  <Image src="/escuela-metalkimia-seal.png" alt="" width={64} height={64} />
+                  <span role="tooltip">Escuela de Metalkimia</span>
+                </a>
+              </>
             )}
             </Fragment>
           ))}
@@ -181,10 +187,16 @@ export function SiteHeader() {
           )
           }
           {index === 1 && (
-            <a className="mobile-stray-sheep" href="/stray-sheep" onClick={closeMobileMenu}>
-              <Image src="/stray-sheep-glasses.png" alt="" width={90} height={34} />
-              <span>Stray Sheep</span>
-            </a>
+            <>
+              <a className="mobile-stray-sheep" href="/stray-sheep" onClick={closeMobileMenu}>
+                <Image src="/stray-sheep-glasses.png" alt="" width={90} height={34} />
+                <span>Stray Sheep</span>
+              </a>
+              <a className="mobile-metalkimia" href="/mpa/transmuta/pulsus-fractum?entry=mpa" onClick={closeMobileMenu}>
+                <Image src="/escuela-metalkimia-seal.png" alt="" width={52} height={52} />
+                <span>Escuela de Metalkimia</span>
+              </a>
+            </>
           )}
           </Fragment>
         ))}

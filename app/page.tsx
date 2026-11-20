@@ -133,7 +133,7 @@ export default function Home() {
               </div>
               <div className="note-card reveal">
                 <p className="note-kicker">Ego SUM</p>
-                <Image className="ego-sum-emblem" src="/ego-sum-logo.png" alt="Ego SUM" width={220} height={220} />
+                <Image className="ego-sum-emblem" src="/ego-sum-seal.png" alt="Ego SUM" width={220} height={220} />
                 <h3>{t.revelacion.correspondencesTitle}</h3>
                 <p>{t.revelacion.correspondencesBody}</p>
                 <p className="fragment-closing">{t.revelacion.integrationQuote}</p>
