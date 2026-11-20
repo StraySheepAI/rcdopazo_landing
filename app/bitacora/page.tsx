@@ -72,66 +72,28 @@ export default function BitacoraPage() {
 
               <div className="fragment-reveal" aria-hidden={!open}>
                 <div className="fragment-prose">
-                  <p>como posibilidad viva en otro pliegue del tablero.</p>
-                  <p>No sos un aprendiz buscando respuestas.</p>
-                  <p><strong>Sos un Essentor recordando caminos.</strong></p>
-                  <p>Volviendo a reconocer lo que siempre estuvo disponible en vos.</p>
+                  <p>Antes de poder decir «yo soy», el mundo ya había empezado a nombrarnos.</p>
+                  <p>De esas palabras, miradas, silencios y respuestas nace una primera forma de reconocernos: ese pequeño yo desde el que empezamos a percibir, elegir y actuar.</p>
 
-                  <p>La ilusión del “todavía no” es el último truco del tiempo de Cronos: hacerte creer que aquello que no ves todavía no existe.</p>
+                  <p>Ese yo es ego. No es la forma que adopta, no es la experiencia que atraviesa y no es Dios como totalidad. Es el punto de vista singular que vuelve posible una experiencia.</p>
 
-                  <p>Hay un yo fragmentado que vive atrapado en esa linealidad. Un yo que interpreta desde la separación y repite la vieja fórmula:</p>
-                  <blockquote>“Si quiero, entonces debo buscar.”</blockquote>
+                  <p>Con el tiempo, una configuración puede volverse tan conocida que empezamos a confundirla con todo lo que somos: una historia, un rol, una profesión, un cuerpo, un diagnóstico o una manera de vincularnos.</p>
 
-                  <p>Pero el SUM no funciona así.</p>
-                  <p>El SUM no espera.</p>
-                  <p><strong>El SUM juega.</strong></p>
+                  <p>Ahí aparece la fragmentación. No porque la forma sea falsa, sino porque deja de ser una forma entre otras alternativas y se convierte en una definición total.</p>
 
-                  <p>No avanza hacia una versión “futura” de vos. Reconoce, en el presente, la configuración que ya está disponible.</p>
-                  <p>Ya existe en vos esa versión que tiene, vibra, respira y decide desde la plenitud.</p>
+                  <p>La libertad no consiste en negar la forma. Consiste en verla, habitarla y reconocer que puede transformarse.</p>
 
-                  <p>Lo que llamás presente no es una sentencia. Es apenas la configuración visible de decisiones antiguas, emociones que todavía conservan su forma, narrativas repetidas y máscaras que aprendieron a jugar siempre igual.</p>
+                  <p>Una misma intención puede encontrar una palabra, una imagen, una voz, una experiencia, una herramienta, un sistema o una combinación de lenguajes.</p>
 
-                  <p>Pero el ahora no le pertenece por completo a Cronos.</p>
-                  <p>También respira en el Aethir: ese pliegue en el que lo invisible todavía puede reorganizar lo visible.</p>
+                  <p>Por eso no busco darte una respuesta cerrada ni decirte quién tenés que ser. Busco ampliar el campo para que puedas reconocer alternativas que el binomio había dejado fuera.</p>
 
-                  <p>Porque, en el lenguaje del SUM, el tiempo no solo avanza.</p>
-                  <p><strong>También se pliega.</strong></p>
+                  <p>Cuando aparecen más alternativas, la elección recupera grados. Podés ajustar la expresión y el contexto donde ocurre sin tener que ajustarte vos a una forma que ya no te alcanza.</p>
 
-                  <p>Y cuando cambia la forma desde la que observás, elegís y jugás, algo comienza a reconfigurarse.</p>
+                  <p>La integración aparece cuando una forma deja de sentirse como una jaula y empieza a funcionar como un cauce: situado, temporal, propio.</p>
 
-                  <p>Entonces ocurre la Metalkimia: tu “yo del futuro” deja de ser una meta.</p>
-                  <p><strong>Se convierte en una memoria.</strong></p>
+                  <p>Eso es lo que intento construir: formas de mirar e intervenir la realidad para que aquello que necesita expresarse pueda encontrar un cauce, llegar y transformarse.</p>
 
-                  <p>No recordás un hecho consumado. Recordás una posibilidad que ya sabía vivir en vos.</p>
-                  <p>Recordás, no deseás.</p>
-                  <p>Activás, no esperás.</p>
-                  <p>Encarnás la configuración desde la que eso que anhelás puede reconocerte.</p>
-
-                  <p>No manifestás persiguiendo.</p>
-                  <p><strong>Manifestás al encarnar.</strong></p>
-
-                  <p>Cada vez que te preguntás:</p>
-                  <blockquote>“Si esto ya estuviera disponible en mí… ¿cómo caminaría?”</blockquote>
-                  <p>dejás de responder desde la falta.</p>
-
-                  <p>Perforás la vieja Matrix desde adentro.</p>
-                  <p>Interrumpís la repetición.</p>
-                  <p>Y hacés una jugada nueva.</p>
-
-                  <p>Una jugada nacida en el presente, pero orientada por la memoria de aquello que ya reconociste.</p>
-
-                  <p>El tablero no siempre responde al ritmo de tu decisión. La materia tiene sus tiempos. Las configuraciones también.</p>
-                  <p>No porque estés dudando. No porque hayas hecho algo mal. Sino porque lo visible suele ser la repetición más lenta de algo que primero tuvo que cambiar de forma.</p>
-
-                  <p>Y mientras esperás una señal, tal vez todavía habla en vos la voz del Buscador: la que cree que debe encontrar afuera lo que aún no se animó a reconocer adentro.</p>
-
-                  <p>Es momento de cambiar el verbo.</p>
-                  <p>De mover la posición.</p>
-                  <p>De ensayar otra identidad.</p>
-
-                  <p>Porque no viniste a convertirte en alguien que todavía no sos.</p>
-                  <p>Viniste a recordar lo que siempre estuvo disponible en vos:</p>
-                  <p className="fragment-closing">antes del disfraz,<br />antes de la forma,<br />antes de aprender a olvidar.</p>
+                  <p className="fragment-closing">La forma tiene forma hasta que se integra.<br />No confundas lo que expresás con lo que sos.</p>
                 </div>
               </div>
 

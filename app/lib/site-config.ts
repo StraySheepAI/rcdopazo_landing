@@ -9,8 +9,8 @@ export interface ConfigurableCta {
   external?: boolean;
 }
 
-// CTA principal de la página personal hacia la puerta progresiva de MPA.
+// CTA principal de la portada: lleva a la nueva distinción, no al Universo MPA.
 export const EXPLORAR_UNIVERSO_CTA: ConfigurableCta = {
   label: "Explorar el universo",
-  href: "/mpa/universe",
+  href: "#distincion",
 };

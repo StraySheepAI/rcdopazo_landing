@@ -63,6 +63,25 @@ export default function Home() {
               sizes="100vw"
             />
           </div>
+          <div className="hero-portrait" aria-label="R.C. Dopazo">
+            <Image
+              src="/rc-bio-photo.jpg"
+              alt="R.C. Dopazo"
+              fill
+              priority
+              sizes="(max-width: 1000px) 80vw, 38vw"
+            />
+            <Image
+              className="hero-signature"
+              src="/rc-dopazo-signature.png"
+              alt="Firma de R.C. Dopazo"
+              width={688}
+              height={688}
+            />
+            <div className="hero-portrait-caption">
+              <small>Una configuración situada</small>
+            </div>
+          </div>
           <div className="container">
             <div className="hero-grid">
               <div className="hero-copy">
@@ -102,11 +121,79 @@ export default function Home() {
           </div>
         </section>
 
-        {/* OBRAS DESTACADAS — vidriera editorial (featured && published,
-            orden por featuredOrder), consultada desde lib/obras.ts. Misma
-            fuente que /obras: si una obra se desmarca como featured,
-            desaparece de acá automáticamente (y de la vista Destacadas de
-            /obras), sin dejar de existir en el catálogo general. */}
+        {/* DISTINCIÓN FUNDACIONAL — primera lectura del rebranding de esencia. */}
+        <section className="section" id="distincion">
+          <div className="container">
+            <p className="section-kicker">{t.revelacion.kicker}</p>
+            <div className="section-split">
+              <div>
+                <h2>{t.revelacion.title}</h2>
+                <p className="about-statement">{t.revelacion.intro}</p>
+                <p className="section-body">{t.revelacion.fragmentationBody}</p>
+              </div>
+              <div className="note-card reveal">
+                <p className="note-kicker">Ego SUM</p>
+                <Image className="ego-sum-emblem" src="/ego-sum-logo.png" alt="Ego SUM" width={220} height={220} />
+                <h3>{t.revelacion.correspondencesTitle}</h3>
+                <p>{t.revelacion.correspondencesBody}</p>
+                <p className="fragment-closing">{t.revelacion.integrationQuote}</p>
+                <div className="ego-sum-entry">
+                  <a
+                    className="ego-sum-motto"
+                    href="#ego-sum"
+                    aria-disabled="true"
+                    onClick={(event) => event.preventDefault()}
+                  >
+                    <span>Fragmentum · Amatur · Integratum</span>
+                    <small>Ego SUM · próximamente</small>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="gradient-rule" />
+            <div className="revelation-three">
+              <h3>{t.revelacion.threeTitle}</h3>
+              <p className="section-body">{t.revelacion.threeBody}</p>
+            </div>
+            <p className="section-body">{t.revelacion.integrationBody}</p>
+          </div>
+        </section>
+
+        {/* SOBRE R.C. — la persona y la foto aparecen después de la distinción,
+            para que la nueva esencia se entienda antes de entrar en la obra. */}
+        <section className="section" id="sobre">
+          <div className="container">
+            <p className="section-kicker">{t.sobreRC.kicker}</p>
+            <div className="about-layout">
+              <div className="about-copy">
+                <h2>{t.sobreRC.title}</h2>
+                <p className="about-statement">{t.sobreRC.statement}</p>
+                <p>{t.sobreRC.body}</p>
+
+                <div className="about-mensaje">
+                  <p className="section-kicker">{t.sobreRC.mensajeKicker}</p>
+                  <p>{t.sobreRC.mensajeIntro}</p>
+                  <Link href="/bitacora" className="home-section-link">
+                    {t.sobreRC.mensajeCta} <span aria-hidden="true">→</span>
+                  </Link>
+                </div>
+              </div>
+              <div className="about-photo reveal">
+                <Image src="/rc-bio-photo.jpg" alt="R.C. Dopazo" width={1000} height={1333} />
+                <Image
+                  className="about-signature"
+                  src="/rc-dopazo-signature.png"
+                  alt="Firma de R.C. Dopazo"
+                  width={688}
+                  height={688}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* OBRAS DESTACADAS — misma selección editorial que /obras.
+            No se duplica el catálogo: ambas vistas consumen getFeaturedObras(). */}
         <section className="novedades" id="libro">
           <div className="container">
             <p className="section-kicker">{t.obrasDestacadas.kicker}</p>
@@ -115,15 +202,6 @@ export default function Home() {
                 <span className="pulse-dot" /> {t.obrasDestacadas.tagRecien}
               </p>
             )}
-            <article className="creative-featured-card reveal">
-              <Image src="/portfolio-creativo/portfolio-creativo-hero.png" alt="Creative Portfolio de R.C. Dopazo" width={690} height={962} />
-              <div>
-                <p className="section-kicker">Creative Studio</p>
-                <h2>Creative Portfolio</h2>
-                <p>Una selección de universos editoriales, juegos, imágenes, música y experiencias construidas como Vision Builder.</p>
-                <Link href="/portfolio-creativo" className="home-section-link">Abrir portfolio <span aria-hidden="true">→</span></Link>
-              </div>
-            </article>
             {featuredObras.map((obra) => (
               <ObraCard key={obra.id} obra={obra} variant="featured" />
             ))}
@@ -155,40 +233,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        {/* SOBRE R.C. — ampliado: más protagonismo de la foto, espacio
-            para varios párrafos y un bloque "Un mensaje para ti" preparado
-            para recibir el contenido definitivo (no se inventa acá). */}
-        <section className="section" id="sobre">
-          <div className="container">
-            <p className="section-kicker">{t.sobreRC.kicker}</p>
-            <div className="about-layout">
-              <div className="about-copy">
-                <h2>{t.sobreRC.title}</h2>
-                <p className="about-statement">{t.sobreRC.statement}</p>
-                <p>{t.sobreRC.body}</p>
-
-                <div className="about-mensaje">
-                  <p className="section-kicker">{t.sobreRC.mensajeKicker}</p>
-                  <p>{t.sobreRC.mensajeIntro}</p>
-                  <Link href="/bitacora" className="home-section-link">
-                    {t.sobreRC.mensajeCta} <span aria-hidden="true">→</span>
-                  </Link>
-                </div>
-              </div>
-              <div className="about-photo reveal">
-                <Image src="/rc-bio-photo.jpg" alt="R.C. Dopazo" width={1000} height={1333} />
-                <Image
-                  className="about-signature"
-                  src="/rc-dopazo-signature.png"
-                  alt="Firma de R.C. Dopazo"
-                  width={688}
-                  height={688}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* EXCEDIENDO CARACTERES — oculta de Home a pedido explícito de una
             ronda anterior (sigue "en construcción" solo en el perfil
@@ -229,6 +273,27 @@ export default function Home() {
           </div>
         </section>
         */}
+
+        {/* DIMENSIONES — dos expresiones de una misma mirada. */}
+        <section className="section" id="dimensiones">
+          <div className="container">
+            <p className="section-kicker">{t.dimensiones.kicker}</p>
+            <h2>{t.dimensiones.title}</h2>
+            <div className="gradient-rule" />
+            <div className="nodes-grid">
+              <article className="node-card reveal">
+                <span>MPA</span>
+                <h3>{t.dimensiones.mpaLabel}</h3>
+                <p>{t.dimensiones.mpaBody}</p>
+              </article>
+              <article className="node-card reveal">
+                <span>FLOW</span>
+                <h3>{t.dimensiones.flowLabel}</h3>
+                <p>{t.dimensiones.flowBody}</p>
+              </article>
+            </div>
+          </div>
+        </section>
 
         {/* CONTACTO — canales centralizados en lib/contact.ts. Página
             personal, contacto propio: no se comparte con MPA Flow ni con
