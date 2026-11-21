@@ -8,7 +8,7 @@ const COPY = {
   es: {
     back: "Volver al Ágora", school: "Escuela de Metalkimia · Pulsus Fractum", saved: "Progreso guardado", done: "Taller completado",
     gateOver: "Taller en vivo · 60 minutos", gateTitle: "La sala se abre con la palabra de esta convocatoria.", gateBody: "La experiencia pública puede recorrerse libremente. Este espacio contiene el encuentro guiado, el cuaderno y el certificado de participación.", key: "Palabra de acceso", open: "Entrar al taller →", bad: "La Escuela todavía no reconoce esa palabra.", hint: "Ingresá la clave recibida con tu inscripción.",
-    degree: "Ágora libre · Taller con clave", title: "Principios universales", live: "Encuentro en vivo", pending: "El enlace de Zoom o Meet se habilita con la convocatoria", workbook: "Cuaderno del taller", workbookText: "Versión clara para imprimir, subrayar y completar", print: "Imprimir / guardar como PDF ↓",
+    degree: "Ágora libre · Taller con clave", title: "Principios universales", live: "Encuentro en vivo", pending: "El enlace aparece cuando se confirma la convocatoria", workbook: "Cuaderno del recorrido", workbookText: "Para llegar con una situación y volver con una observación", print: "Imprimir / guardar como PDF ↓",
     eyebrow: "Introducción a los principios universales", hero: "Su papel en la creación de tu realidad", sub: "Una perspectiva metalkímica de MPA", duration: "60 minutos", mode: "En vivo · Zoom / Meet", seven: "7 tramos guiados",
     previous: "← Anterior", next: "Guardar y continuar →", complete: "Completar el taller ✓", reopen: "Reabrir el taller", certificate: "Certificado de participación", name: "Nombre y apellido", attended: "Confirmo que participé del encuentro en vivo", issue: "Generar certificado →", lockedCert: "Completá los siete tramos y confirmá tu participación para habilitarlo.",
     sections: ["Preparación", "Umbral", "Siete lentes", "Hacer hablar", "Laboratorio", "El tercero", "Integración"],
@@ -16,14 +16,27 @@ const COPY = {
   en: {
     back: "Back to the Agora", school: "School of Metalkimia · Pulsus Fractum", saved: "Progress saved", done: "Workshop completed",
     gateOver: "Live workshop · 60 minutes", gateTitle: "The room opens with this session’s access word.", gateBody: "The public experience is open to everyone. This room contains the facilitated session, workbook and participation certificate.", key: "Access word", open: "Enter the workshop →", bad: "The School does not recognize that word yet.", hint: "Enter the key included with your registration.",
-    degree: "Open Agora · Gated workshop", title: "Universal principles", live: "Live session", pending: "The Zoom or Meet link will be enabled with the invitation", workbook: "Workshop notebook", workbookText: "A clear version to print, underline and complete", print: "Print / save as PDF ↓",
+    degree: "Open Agora · Gated workshop", title: "Universal principles", live: "Live session", pending: "The link appears once the session is confirmed", workbook: "Journey notebook", workbookText: "Bring a situation in and leave with a clearer observation", print: "Print / save as PDF ↓",
     eyebrow: "Introduction to universal principles", hero: "Their role in creating your reality", sub: "An MPA metalkimical perspective", duration: "60 minutes", mode: "Live · Zoom / Meet", seven: "7 facilitated stages",
     previous: "← Previous", next: "Save and continue →", complete: "Complete workshop ✓", reopen: "Reopen workshop", certificate: "Certificate of participation", name: "Full name", attended: "I confirm that I attended the live session", issue: "Create certificate →", lockedCert: "Complete all seven stages and confirm your participation to enable it.",
     sections: ["Preparation", "Threshold", "Seven lenses", "Make it speak", "Laboratory", "The third", "Integration"],
   },
 } as const;
 
-const ACCESS_HASH = "8fbf4074954d6fb97748edc2f0e67cfbf0bf2615d48cbcc2dc112c14338f0302";
+const JOURNEY = {
+  es: [
+    { label: "01", title: "Preparar el umbral", body: "Traé una situación concreta. No necesitás tener una respuesta.", start: 0 },
+    { label: "02", title: "Cruzar el encuentro", body: "Probá las siete lentes y mirá qué cambia cuando aparece el tercero.", start: 1 },
+    { label: "03", title: "Integrar lo visto", body: "Volvé a tu situación y elegí un movimiento posible.", start: 6 },
+  ],
+  en: [
+    { label: "01", title: "Prepare the threshold", body: "Bring one concrete situation. You do not need an answer.", start: 0 },
+    { label: "02", title: "Cross the session", body: "Test the seven lenses and notice what changes when the third appears.", start: 1 },
+    { label: "03", title: "Integrate what you saw", body: "Return to your situation and choose one possible movement.", start: 6 },
+  ],
+} as const;
+
+const ACCESS_HASH = "c41995a1773a7038b7eb8673cd5ff6d7c6755785c1117cc56ec5fcdf7069435f";
 const STORAGE_KEY = "pulsus-principios-universales-v1";
 
 const READINGS = {
@@ -67,6 +80,8 @@ export default function PrincipiosUniversalesWorkshop() {
   const t = COPY[lang];
   const liveLocale = experience.locales[lang];
   const liveStage = liveLocale.stages[active] || liveLocale.stages[0];
+  const journey = JOURNEY[lang];
+  const activeJourney = active === 0 ? 0 : active === liveLocale.stages.length - 1 ? 2 : 1;
 
   useEffect(() => {
     setAccess(window.sessionStorage.getItem("pulsus-principios-access") === "open");
@@ -108,6 +123,12 @@ export default function PrincipiosUniversalesWorkshop() {
     <div className="pf-classroom-layout">
       <aside className="pf-classroom-index"><p>{t.degree}</p><h2>{t.title}</h2><div className="pf-classroom-progress"><i style={{width: `${completed ? 100 : Math.max(12, visited.length / liveLocale.stages.length * 100)}%`}} /></div><small>{completed ? "100%" : `${visited.length} / ${liveLocale.stages.length}`}</small><nav>{liveLocale.stages.map((item, i) => <button key={item.id} className={active === i ? "is-active" : ""} onClick={() => go(i)}><em>{String(i + 1).padStart(2, "0")}</em><span>{item.name}</span>{visited.includes(i) ? <b>✓</b> : null}</button>)}</nav><div className="pf-classroom-resource"><span>{t.live}</span><b>{t.pending}</b><a aria-disabled="true">Zoom / Google Meet · pendiente</a></div><div className="pf-classroom-resource"><span>{t.workbook}</span><b>{t.workbookText}</b><a href={lang === "es" ? "/materiales/cuaderno-principios-universales-es.pdf" : "/materiales/cuaderno-principios-universales-en.pdf"} download>{lang === "es" ? "Descargar cuaderno PDF ↓" : "Download workbook PDF ↓"}</a><button onClick={() => printMode("workbook")}>{lang === "es" ? "Imprimir con mis respuestas" : "Print with my answers"}</button></div><div className="pu-campus-benefits"><span>{lang === "es" ? "Tu acceso hoy" : "Your access today"}</span><b>{lang === "es" ? "Ya estás viviendo el campus" : "You are already experiencing the campus"}</b><ul><li>{lang === "es" ? "Aula y recorrido personal" : "Classroom and personal journey"}</li><li>{lang === "es" ? "Progreso y bitácora guardados" : "Saved progress and notebook"}</li><li>{lang === "es" ? "Cuaderno imprimible" : "Printable workbook"}</li><li>{lang === "es" ? "Certificado de participación" : "Participation certificate"}</li></ul><small>{lang === "es" ? "Al iniciar un camino se abren clases, laboratorios, encuentros y biblioteca." : "Joining a pathway opens classes, laboratories, encounters and the library."}</small></div></aside>
       <section className="pf-classroom-content"><div className="pf-classroom-eyebrow">{liveLocale.eyebrow}</div><h1>{liveLocale.hero}</h1><blockquote>{liveLocale.subtitle}</blockquote><div className="pu-facts"><span>{t.duration}</span><span>{t.mode}</span><span>{t.seven}</span></div>
+        <section className="pu-journey" aria-label={lang === "es" ? "Recorrido del taller" : "Workshop journey"}>
+          <div className="pu-journey-intro"><p>{lang === "es" ? "Un recorrido en tres movimientos" : "A three-movement journey"}</p><span>{lang === "es" ? "No venís a acumular contenido: venís a mirar, probar y volver con una posibilidad concreta." : "You are not here to collect content: you are here to observe, test and return with one concrete possibility."}</span></div>
+          <div className="pu-journey-steps">
+            {journey.map((item, index) => <button key={item.label} className={activeJourney === index ? "is-active" : ""} onClick={() => go(item.start)} aria-current={activeJourney === index ? "step" : undefined}><em>{item.label}</em><span><b>{item.title}</b><small>{item.body}</small></span></button>)}
+          </div>
+        </section>
         <div className="pf-classroom-panel">
           {active === 0 && (lang === "es" ? <article><p className="pf-lesson-label">Antes del encuentro · 5 minutos</p><h2>Prepará una realidad que hoy te esté ocupando.</h2><p>No hace falta que sea extraordinaria. Elegí una conversación, una decisión, un vínculo o una situación que parezca tener una sola explicación.</p><div className="pf-lesson-callout"><b>No venimos a creer siete leyes.</b><span>Vamos a probar siete lentes de observación y verificar qué permiten distinguir.</span></div><label>La situación que traigo</label><textarea value={situation} onChange={(e) => save(setSituation, "situation", e.target.value)} placeholder="Hoy parece evidente que…" /></article> : <article><p className="pf-lesson-label">Before the session · 5 minutes</p><h2>Bring one reality that is occupying you today.</h2><p>Choose a conversation, decision, relationship or situation that seems to have only one explanation.</p><div className="pf-lesson-callout"><b>We are not here to believe seven laws.</b><span>We will test seven lenses and observe what each one allows us to distinguish.</span></div><label>The situation I bring</label><textarea value={situation} onChange={(e) => save(setSituation, "situation", e.target.value)} placeholder="Today it seems evident that…" /></article>)}
           {active === 1 && (lang === "es" ? <article><p className="pf-lesson-label">Umbral · minutos 0–8</p><h2>¿Creamos la realidad o participamos en las configuraciones que la vuelven posible?</h2><p>“Crear tu realidad” no significa controlar todo lo que sucede. Significa reconocer que observamos, elegimos y actuamos dentro de relaciones que también nos configuran.</p><div className="pf-lesson-callout"><b>Regla del taller</b><span>Cada afirmación se trata como una hipótesis para explorar, no como una verdad que debas adoptar.</span></div></article> : <article><p className="pf-lesson-label">Threshold · minutes 0–8</p><h2>Do we create reality, or take part in the configurations that make it possible?</h2><p>“Creating your reality” does not mean controlling everything. It means recognizing how we observe, choose and act within relationships that also configure us.</p><div className="pf-lesson-callout"><b>Workshop rule</b><span>Every statement is a hypothesis to explore, not a truth you must adopt.</span></div></article>)}

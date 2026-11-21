@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Cosmos } from "./components/Cosmos";
 import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
@@ -11,15 +11,41 @@ import { ObraCard } from "./components/ObraCard";
 import { ContactForm } from "./components/ContactForm";
 import { CosmicMotion } from "./components/CosmicMotion";
 import { useLanguage } from "./lib/i18n/LanguageContext";
-import { getFeaturedObras } from "./lib/obras";
+import { OBRA_CATEGORIES, getFeaturedObras, getObrasByCategory, getPublishedObras } from "./lib/obras";
 import { getVisibleContactChannels } from "./lib/contact";
-import { EXPLORAR_UNIVERSO_CTA } from "./lib/site-config";
 
 export default function Home() {
   const mainRef = useRef<HTMLElement>(null);
   const { t } = useLanguage();
-  const featuredObras = getFeaturedObras();
   const contactChannels = getVisibleContactChannels();
+  const [openPanel, setOpenPanel] = useState<"revelation" | "polaris" | "about" | null>(null);
+  const [obraFilter, setObraFilter] = useState<"destacadas" | "todas" | string>("destacadas");
+
+  const togglePanel = (panel: "revelation" | "polaris" | "about", id: string) => {
+    if (openPanel === panel) {
+      setOpenPanel(null);
+      return;
+    }
+    setOpenPanel(panel);
+    window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+  };
+
+  const obraFilters = useMemo(
+    () => [
+      { id: "destacadas", label: t.obrasPage.filtroDestacadas, glyph: "★" },
+      { id: "todas", label: t.obrasPage.filtroTodas, glyph: "◆" },
+      ...OBRA_CATEGORIES.map((category) => ({ id: category.id, label: category.label, glyph: category.glyph, description: category.description })),
+    ],
+    [t]
+  );
+
+  const visibleObras = useMemo(() => {
+    if (obraFilter === "destacadas") return getFeaturedObras();
+    if (obraFilter === "todas") return getPublishedObras();
+    return getObrasByCategory(obraFilter);
+  }, [obraFilter]);
+
+  const activeObraFilter = obraFilters.find((filter) => filter.id === obraFilter);
 
   useEffect(() => {
     const targets = mainRef.current?.querySelectorAll(".reveal");
@@ -39,7 +65,7 @@ export default function Home() {
 
     targets.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [openPanel]);
 
   return (
     <>
@@ -63,25 +89,6 @@ export default function Home() {
               sizes="100vw"
             />
           </div>
-          <div className="hero-portrait" aria-label="R.C. Dopazo">
-            <Image
-              src="/rc-bio-photo.jpg"
-              alt="R.C. Dopazo"
-              fill
-              priority
-              sizes="(max-width: 1000px) 80vw, 38vw"
-            />
-            <Image
-              className="hero-signature"
-              src="/rc-dopazo-signature.png"
-              alt="Firma de R.C. Dopazo"
-              width={688}
-              height={688}
-            />
-            <div className="hero-portrait-caption">
-              <small>Una configuración situada</small>
-            </div>
-          </div>
           <div className="container">
             <div className="hero-grid">
               <div className="hero-copy">
@@ -90,28 +97,31 @@ export default function Home() {
                 <p className="hero-tagline">{t.hero.tagline}</p>
                 <p className="hero-body">{t.hero.body}</p>
                 <div className="hero-actions">
-                  {/* CTA "Explorar el universo": destino todavía sin
-                      confirmar (ver lib/site-config.ts). Mientras no haya
-                      un href definido, el botón no simula una navegación
-                      real: queda deshabilitado visualmente en vez de
-                      apuntar a un ancla que no lleva a ningún lado. */}
-                  {EXPLORAR_UNIVERSO_CTA.href ? (
-                    <a
-                      className="button primary"
-                      href={EXPLORAR_UNIVERSO_CTA.href}
-                      target={EXPLORAR_UNIVERSO_CTA.external ? "_blank" : undefined}
-                      rel={EXPLORAR_UNIVERSO_CTA.external ? "noreferrer" : undefined}
-                    >
-                      {t.hero.ctaExplorar} <span aria-hidden="true">↗</span>
-                    </a>
-                  ) : (
-                    <span className="button primary" aria-disabled="true" style={{ cursor: "default" }}>
-                      {t.hero.ctaExplorar} <span aria-hidden="true">↗</span>
-                    </span>
-                  )}
-                  <a className="button secondary" href="#contacto">
-                    {t.hero.ctaContacto}
-                  </a>
+                  <button className="button primary" type="button" onClick={() => togglePanel("polaris", "polaris")}>
+                    {t.hero.ctaExplorar} <span aria-hidden="true">↗</span>
+                  </button>
+                  <button className="button secondary" type="button" onClick={() => togglePanel("revelation", "distincion")}>
+                    {t.hero.ctaRevelacion}
+                  </button>
+                </div>
+              </div>
+              <div className="hero-portrait" aria-label="R.C. Dopazo">
+                <Image
+                  src="/rc-bio-photo.jpg"
+                  alt="R.C. Dopazo"
+                  fill
+                  priority
+                  sizes="(max-width: 1000px) 80vw, 38vw"
+                />
+                <Image
+                  className="hero-signature"
+                  src="/rc-dopazo-signature.png"
+                  alt="Firma de R.C. Dopazo"
+                  width={688}
+                  height={688}
+                />
+                <div className="hero-portrait-caption">
+                  <small>Una configuración situada</small>
                 </div>
               </div>
               <div className="hero-field">
@@ -121,17 +131,79 @@ export default function Home() {
           </div>
         </section>
 
-        {/* DISTINCIÓN FUNDACIONAL — primera lectura del rebranding de esencia. */}
-        <section className="section" id="distincion">
+        {/* OBRAS DESTACADAS — queda inmediatamente después del hero para que
+            la página muestre primero la producción viva, antes de los bloques
+            conceptuales plegables. */}
+        <section className="novedades" id="libro">
+          <div className="container">
+            <p className="section-kicker">Novedades</p>
+            <p className="novedades-tag"><span className="pulse-dot" /> {t.obrasDestacadas.kicker}</p>
+
+            <div className="obras-filters home-obras-filters" role="tablist" aria-label={t.nav.obras}>
+              {obraFilters.map((filter) => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={obraFilter === filter.id}
+                  className={`filter-chip${obraFilter === filter.id ? " active" : ""}`}
+                  onClick={() => setObraFilter(filter.id)}
+                >
+                  <span className="filter-glyph" aria-hidden="true">{filter.glyph}</span>
+                  <span className="filter-label">{filter.label}</span>
+                </button>
+              ))}
+            </div>
+            {activeObraFilter && "description" in activeObraFilter && <p className="filter-description">{activeObraFilter.description}</p>}
+            {visibleObras.map((obra) => (
+              <ObraCard key={obra.id} obra={obra} variant={obraFilter === "destacadas" ? "featured" : "catalog"} />
+            ))}
+            <Link href="/obras" className="home-section-link">
+              {t.obrasDestacadas.verTodas} <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </section>
+
+        <section className="home-panel-nav" aria-label="Recorridos de la página">
+          <div className="container home-panel-grid">
+            <button
+              className={`home-panel-trigger ${openPanel === "revelation" ? "is-active" : ""}`}
+              type="button"
+              onClick={() => togglePanel("revelation", "distincion")}
+            >
+              <strong>{t.revelacion.kicker}</strong>
+              <small>Ego SUM · la forma no es el ser</small>
+            </button>
+            <button
+              className={`home-panel-trigger ${openPanel === "polaris" ? "is-active" : ""}`}
+              type="button"
+              onClick={() => togglePanel("polaris", "polaris")}
+            >
+              <strong>{t.revelacion.threeTitle}</strong>
+              <small>{t.hero.eyebrow}</small>
+            </button>
+            <button
+              className={`home-panel-trigger ${openPanel === "about" ? "is-active" : ""}`}
+              type="button"
+              onClick={() => togglePanel("about", "sobre")}
+            >
+              <strong>{t.sobreRC.kicker}</strong>
+              <small>{t.sobreRC.title}</small>
+            </button>
+          </div>
+        </section>
+
+        {/* REVELACIÓN FUNDACIONAL — se abre desde el botón correspondiente. */}
+        {openPanel === "revelation" && <section className="section home-panel-content" id="distincion">
           <div className="container">
             <p className="section-kicker">{t.revelacion.kicker}</p>
             <div className="section-split">
               <div>
-                <h2>{t.revelacion.title}</h2>
+                <h2 className="revelation-title">{t.revelacion.title}</h2>
                 <p className="about-statement">{t.revelacion.intro}</p>
                 <p className="section-body">{t.revelacion.fragmentationBody}</p>
               </div>
-              <div className="note-card reveal">
+              <div className="note-card" id="ego-sum">
                 <p className="note-kicker">Ego SUM</p>
                 <Image className="ego-sum-emblem" src="/ego-sum-seal.png" alt="Ego SUM" width={220} height={220} />
                 <h3>{t.revelacion.correspondencesTitle}</h3>
@@ -150,18 +222,44 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="gradient-rule" />
-            <div className="revelation-three">
-              <h3>{t.revelacion.threeTitle}</h3>
-              <p className="section-body">{t.revelacion.threeBody}</p>
-            </div>
-            <p className="section-body">{t.revelacion.integrationBody}</p>
           </div>
-        </section>
+        </section>}
+
+        {/* POLARIS — el recorrido de problema, alternativas y solución. */}
+        {openPanel === "polaris" && <section className="section home-panel-content" id="polaris">
+          <div className="container">
+            <p className="section-kicker">Polos · Grados · Configuración · Presente</p>
+            <h2 className="polaris-title">{t.revelacion.threeTitle}</h2>
+            <p className="section-body">{t.revelacion.threeBody}</p>
+            <p className="polaris-note">{t.revelacion.polarisNote}</p>
+            <div className="revelation-triad">
+              <article className="revelation-triad-card">
+                <p className="triad-label">{t.revelacion.problemLabel}</p>
+                <h4>{t.revelacion.problemTitle}</h4>
+                <p>{t.revelacion.problemBody}</p>
+              </article>
+              <article className="revelation-triad-card">
+                <p className="triad-label">{t.revelacion.alternativeLabel}</p>
+                <h4>{t.revelacion.alternativeTitle}</h4>
+                <p>{t.revelacion.alternativeBody}</p>
+              </article>
+              <article className="revelation-triad-card">
+                <p className="triad-label">{t.revelacion.solutionLabel}</p>
+                <h4>{t.revelacion.solutionTitle}</h4>
+                <p>{t.revelacion.solutionBody}</p>
+              </article>
+            </div>
+            <div className="polaris-diagram" aria-label="Diagrama animado de polos, grados y configuración">
+              <ArchitectureField />
+            </div>
+            <blockquote className="revelation-balance-quote">{t.revelacion.balanceQuote}</blockquote>
+            <p className="integration-highlight">{t.revelacion.integrationBody}</p>
+          </div>
+        </section>}
 
         {/* SOBRE R.C. — la persona y la foto aparecen después de la distinción,
             para que la nueva esencia se entienda antes de entrar en la obra. */}
-        <section className="section" id="sobre">
+        {openPanel === "about" && <section className="section home-panel-content" id="sobre">
           <div className="container">
             <p className="section-kicker">{t.sobreRC.kicker}</p>
             <div className="about-layout">
@@ -178,7 +276,7 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-              <div className="about-photo reveal">
+              <div className="about-photo">
                 <Image src="/rc-bio-photo.jpg" alt="R.C. Dopazo" width={1000} height={1333} />
                 <Image
                   className="about-signature"
@@ -190,26 +288,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
-
-        {/* OBRAS DESTACADAS — misma selección editorial que /obras.
-            No se duplica el catálogo: ambas vistas consumen getFeaturedObras(). */}
-        <section className="novedades" id="libro">
-          <div className="container">
-            <p className="section-kicker">{t.obrasDestacadas.kicker}</p>
-            {featuredObras.length > 0 && (
-              <p className="novedades-tag">
-                <span className="pulse-dot" /> {t.obrasDestacadas.tagRecien}
-              </p>
-            )}
-            {featuredObras.map((obra) => (
-              <ObraCard key={obra.id} obra={obra} variant="featured" />
-            ))}
-            <Link href="/obras" className="home-section-link">
-              {t.obrasDestacadas.verTodas} <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </section>
+        </section>}
 
         {/* PHRASE TICKER */}
         <div className="phrase-ticker">

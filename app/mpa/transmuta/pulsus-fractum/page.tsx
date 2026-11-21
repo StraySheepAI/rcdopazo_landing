@@ -4,6 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+const NEXT_AGORA_EVENT = {
+  title: "Principios universales",
+  detail: "Encuentro guiado · 60 minutos",
+  note: "La próxima convocatoria se anuncia en esta cartelera.",
+  startsAt: "",
+  href: "/mpa/transmuta/pulsus-fractum/agora/principios-universales",
+};
+
 export default function PulsusFractumPage() {
   const [hash, setHash] = useState("");
   const [view, setView] = useState<"arrival" | "agora" | "access" | "atlas">("arrival");
@@ -134,6 +142,14 @@ export default function PulsusFractumPage() {
           <div className="school-magic-lights" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
           <div className="school-light-beam beam-left" aria-hidden="true" />
           <div className="school-light-beam beam-right" aria-hidden="true" />
+          <section className="school-agora-agenda" aria-label="Cartelera viva">
+            <div className="school-agora-agenda-heading"><p>Cartelera viva</p><h2>Lo próximo</h2></div>
+            <article className="school-agora-agenda-event">
+              <div><small>Próximo encuentro</small><h3>{NEXT_AGORA_EVENT.title}</h3><p>{NEXT_AGORA_EVENT.detail}</p><span>{NEXT_AGORA_EVENT.note}</span></div>
+              <AgoraCountdown startsAt={NEXT_AGORA_EVENT.startsAt} />
+              <Link href={NEXT_AGORA_EVENT.href}>Ver aula →</Link>
+            </article>
+          </section>
           <button className="school-hotspot school-hotspot-board" type="button" onClick={() => setPlace("orientation")}><b>Cartelera viva</b><span>Orientación · talleres · encuentros</span></button>
           <button className="school-hotspot school-hotspot-custos school-hotspot-house" type="button" onClick={() => setPlace("custos")}><Image className="school-house-medallion" src="/simbolos-casas/custos-medallon-v2.png" alt="Símbolo del Pasaje a la Casa de Custos" width={724} height={724} /><span className="school-house-copy"><b>Pasaje a la Casa de Custos</b><span>Observar y delimitar</span></span></button>
           <button className="school-hotspot school-hotspot-center" type="button" onClick={() => ludusOpen ? closeVigilia() : openVigilia()}><small>Experiencia abierta</small><b>Vigilia I</b><span>Entrar al círculo</span></button>
@@ -201,4 +217,28 @@ export default function PulsusFractumPage() {
       <iframe className="pf-original-frame" src={`/pulsus-fractum-original.html${hash}`} title="Pulsus Fractum · Escuela de Metalkimia" />
     </main>
   );
+}
+
+function AgoraCountdown({ startsAt }: { startsAt: string }) {
+  const [remaining, setRemaining] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!startsAt) return;
+    const update = () => setRemaining(Math.max(0, new Date(startsAt).getTime() - Date.now()));
+    update();
+    const timer = window.setInterval(update, 1000);
+    return () => window.clearInterval(timer);
+  }, [startsAt]);
+
+  const units = remaining === null ? null : {
+    days: Math.floor(remaining / 86400000),
+    hours: Math.floor(remaining / 3600000) % 24,
+    minutes: Math.floor(remaining / 60000) % 60,
+    seconds: Math.floor(remaining / 1000) % 60,
+  };
+
+  return <div className="school-agora-countdown" aria-label="Cuenta regresiva del próximo encuentro">
+    <small>{units && remaining === 0 ? "El encuentro está comenzando" : "Cuenta regresiva"}</small>
+    {units ? <div>{Object.entries(units).map(([key, value]) => <span key={key}><b>{String(value).padStart(2, "0")}</b><i>{key === "days" ? "días" : key === "hours" ? "hs" : key === "minutes" ? "min" : "seg"}</i></span>)}</div> : <strong>Fecha a confirmar</strong>}
+  </div>;
 }
