@@ -102,7 +102,7 @@ export default function NoEntendiPage() {
     try {
       const bytes = await createWorkbookPdf(state.answers);
       const url = URL.createObjectURL(new Blob([Uint8Array.from(bytes).buffer], { type: "application/pdf" }));
-      const anchor = document.createElement("a"); anchor.href = url; anchor.download = "no-entendi-mi-cuaderno.pdf"; anchor.click(); URL.revokeObjectURL(url);
+      const anchor = document.createElement("a"); anchor.href = url; anchor.download = "no-entendi-mi-cuaderno.pdf"; document.body.appendChild(anchor); anchor.click(); anchor.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1500);
     } finally { setPdfBusy(false); }
   };
 
@@ -199,9 +199,10 @@ async function createWorkbookPdf(answers: AnswerMap) {
   const margin = 52;
   const ink = rgb(.12,.07,.12), gold = rgb(.44,.35,.19), pink = rgb(.72,.24,.52), paper = rgb(.98,.96,.94), muted = rgb(.42,.37,.41);
   let page = pdf.addPage(pageSize), y = pageSize[1] - margin;
+  const safe = (value: string) => (value || "—").replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/[–—]/g,"-").replace(/[^\x20-\x7E\xA0-\xFF\n]/g,"");
   const addPage = () => { page = pdf.addPage(pageSize); page.drawRectangle({ x:0,y:0,width:pageSize[0],height:pageSize[1],color:paper }); page.drawText("ESCUELA DE METALKIMIA · PULSUS FRACTUM",{x:margin,y:pageSize[1]-30,size:7,font:bold,color:gold}); y=pageSize[1]-58; };
   const ensure = (height: number) => { if (y-height < 48) addPage(); };
-  const wrap = (text: string, maxWidth: number, size: number, font = regular) => { const words=(text||"—").replace(/\s+/g," ").trim().split(" "); const lines:string[]=[]; let line=""; for(const word of words){ const next=line?`${line} ${word}`:word; if(font.widthOfTextAtSize(next,size)>maxWidth&&line){lines.push(line);line=word}else line=next} if(line) lines.push(line); return lines; };
+  const wrap = (text: string, maxWidth: number, size: number, font = regular) => { const words=safe(text).replace(/\s+/g," ").trim().split(" "); const lines:string[]=[]; let line=""; for(const word of words){ const next=line?`${line} ${word}`:word; if(font.widthOfTextAtSize(next,size)>maxWidth&&line){lines.push(line);line=word}else line=next} if(line) lines.push(line); return lines; };
   const text = (value:string,size=10,color=ink,font=regular,maxWidth=pageSize[0]-margin*2,leading=size*1.45) => { const lines=wrap(value,maxWidth,size,font); ensure(lines.length*leading+4); lines.forEach(line=>{page.drawText(line,{x:margin,y,size,font,color});y-=leading}); y-=4; };
   const section = (title:string) => { ensure(42); y-=9; page.drawText(title.toUpperCase(),{x:margin,y,size:8,font:bold,color:pink}); y-=16; page.drawLine({start:{x:margin,y:y+7},end:{x:pageSize[0]-margin,y:y+7},thickness:.5,color:gold}); };
   const response = (label:string,value?:string) => { ensure(55); page.drawText(label,{x:margin,y,size:9,font:bold,color:gold}); y-=15; text(value?.trim()||"No completado",10,ink,regular); y-=7; };
