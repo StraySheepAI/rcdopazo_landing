@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
 
@@ -72,6 +73,7 @@ export default function NoEntendiPage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [pdfBusy, setPdfBusy] = useState(false);
+  const [roomMode, setRoomMode] = useState(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY);
@@ -109,8 +111,8 @@ export default function NoEntendiPage() {
   if (!ready) return <main className={styles.loading} />;
   if (!access) return <main className={styles.gate}><div className={styles.stars}/><Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">← Volver al Ágora</Link><section><div className={styles.seal}>PF</div><p>Taller de comunicación · Nivel 1</p><h1>No entendí</h1><span>El recorrido presencial y sus fichas de práctica pertenecen al espacio de cursantes.</span><form onSubmit={unlock}><label htmlFor="no-entendi-code">Palabra de acceso</label><div><input id="no-entendi-code" type="password" value={code} onChange={event => { setCode(event.target.value); setError(""); }} autoFocus/><button type="submit">Abrir el taller</button></div><small className={error ? styles.error : ""}>{error || <>Clave de revisión: <b>NOENTENDI</b></>}</small></form></section></main>;
 
-  return <main className={styles.workshop}>
-    <header className={styles.header}><Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">Volver al Ágora</Link><span>Escuela de Metalkimia · Pulsus Fractum</span><b>{state.completed ? "Taller completado" : "Progreso guardado"}</b></header>
+  return <main className={`${styles.workshop} ${roomMode ? styles.roomMode : ""}`}>
+    <header className={styles.header}><Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">Volver al Ágora</Link><span>Escuela de Metalkimia · Pulsus Fractum</span><div className={styles.headerActions}><b>{state.completed ? "Taller completado" : "Progreso guardado"}</b><button type="button" aria-pressed={roomMode} onClick={() => setRoomMode(!roomMode)}>{roomMode ? "Modo personal" : "Modo sala"}</button></div></header>
     <div className={styles.layout}>
       <aside className={styles.sidebar}>
         <p>Comunicación · Nivel 1</p><h2>No entendí</h2><span>Entre explicar demasiado y hacer adivinar</span>
@@ -120,7 +122,7 @@ export default function NoEntendiPage() {
       </aside>
 
       <section className={styles.content}>
-        <div className={styles.hero}><div><p>Clase práctica MPA · Nivel 1</p><h1>No entendí</h1><strong>Entre explicar demasiado<br/>y hacer adivinar</strong></div><div><span>Objetivo de la experiencia</span><blockquote>Aprendé a calibrar tus conversaciones sin cargar con más procesamiento del que te corresponde.</blockquote><small>90–120 minutos en campus · 120 minutos en taller</small></div></div>
+        <div className={styles.hero}><Image className={styles.heroSphere} src="/imported-assets/embole-element.png" alt="Una persona trabajando dentro de una esfera, imagen del universo Kembole" width={1024} height={1024} priority/><div><p>Clase práctica MPA · Nivel 1</p><h1>No entendí</h1><strong>Entre explicar demasiado<br/>y hacer adivinar</strong></div><div><span>Objetivo de la experiencia</span><blockquote>Aprendé a calibrar tus conversaciones sin cargar con más procesamiento del que te corresponde.</blockquote><small>90–120 minutos en campus · 120 minutos en taller</small></div></div>
 
         <div className={styles.unitHeading}><span>Unidad {state.active + 1} de {units.length}</span><h2>{units[state.active][1]}</h2></div>
 
@@ -138,6 +140,7 @@ export default function NoEntendiPage() {
 }
 
 function UnitOne({ answers, answer }: UnitProps) { return <div className={styles.flow}>
+  <VideoMoment number="01" title="Bienvenida a la experiencia" duration="45–60 segundos" image="/imported-assets/embole-element.png" alt="Persona trabajando dentro de una esfera" prompt="Presentá el propósito de la clase y aclarales que no vienen a encontrar una lectura correcta: vienen a observar cuánto trabajo hacen para completar una conversación." live="Abrí con esta pregunta: ¿cuánto tiempo seguís trabajando después de que una conversación terminó?"/>
   <section className={styles.intro}><p>¿Terminás una conversación y seguís trabajando después? Repasás lo que te dijeron, completás lo que falta o mandás otra explicación por las dudas.</p><p>En esta clase vas a observar ese trabajo y practicar cómo distribuirlo mejor.</p></section>
   <Field label="Registro breve de apertura" hint="Pensá en una conversación que terminó, pero vos seguiste procesando. ¿Qué hiciste: releer, explicar, completar, anticipar o preguntar?" value={answers.opening} onChange={value => answer("opening", value)}/>
   <Anchor/>
@@ -146,6 +149,7 @@ function UnitOne({ answers, answer }: UnitProps) { return <div className={styles
   </div>; }
 
 function UnitTwo({ answers, answer }: UnitProps) { return <div className={styles.flow}>
+  <VideoMoment number="02" title="El trabajo que no se ve" duration="60–90 segundos" image="/stray-bola-triste-44.png" alt="Bola del universo Kembole acumulando peso" prompt="Mostrá que comprender también es trabajar: retener, relacionar, recordar acuerdos, completar referentes y decidir qué respuesta sería pertinente." live="Pediles que nombren en voz alta una conversación breve que, sin embargo, les dejó mucho trabajo después."/>
   <section><p>Para comprender hacemos trabajo: retenemos información, conectamos ideas, buscamos contexto y decidimos qué responder. Si tengo que reconstruir a qué te referís, adivinar qué necesitás y recordar tres acuerdos a la vez, el trabajo crece.</p><Note title="Distribuir el trabajo de comprensión">Compartida no significa mitad y mitad. La pregunta es si el reparto permite comprender y actuar en estas condiciones.</Note></section>
   <Exercise title="Microejercicio" message="Después vemos si hacemos la reunión."><Field label="Dato" hint="¿Qué está efectivamente dicho?" value={answers.micro_data} onChange={value => answer("micro_data", value)}/><Field label="Inferencia" hint="¿Qué lectura aparece?" value={answers.micro_inference} onChange={value => answer("micro_inference", value)}/><Field label="Hueco y pregunta" hint="¿Qué falta y cómo podrías pedirlo?" value={answers.micro_gap} onChange={value => answer("micro_gap", value)}/></Exercise>
   <section><h3>Elegir el grado que sirve ahora</h3><p>El punto útil puede estar lejos del medio. Para acordar una hora puede alcanzar una línea; para enseñar una tarea nueva puede hacer falta una demostración y una comprobación.</p><blockquote className={styles.question}>¿Qué grado de procesamiento necesita esta conversación, en este vínculo, con este objetivo y en este momento?</blockquote></section>
@@ -154,11 +158,13 @@ function UnitTwo({ answers, answer }: UnitProps) { return <div className={styles
 
 function UnitThree({ answers, answer }: UnitProps) { const biases = [["Te conozco","La familiaridad se toma como acceso directo al significado actual."],["Completado","Agregamos referentes, plazos o acuerdos que el mensaje no incluye."],["Intención","Pasamos de una conducta a una explicación de su motivo."],["Historial","Un antecedente domina la lectura del presente."],["Anticipación","Respondemos a una dificultad todavía no planteada."],["Responsabilidad","Nos atribuimos la tarea de resolver todo el intercambio."]] as const; return <div className={styles.flow}>
   <section><p>A veces entramos a una conversación con una respuesta que el otro todavía no dio. Esa información puede orientar. El problema aparece cuando ya no distinguimos lo que observamos de lo que esperamos encontrar.</p><Note title="Una precisión importante">Estos nombres son recursos pedagógicos de la clase, no diagnósticos. Pueden superponerse. No se trata de detectar todas las etiquetas, sino de reconocer la operación que más está influyendo.</Note></section>
+  <section className={styles.kemboleSequence}><div><p>Una imagen para distinguir</p><h3>Cómo una lectura se vuelve bola</h3><span>La bola no representa a la persona. Vuelve visible la carga que se forma cuando lo agregado empieza a pesar como si hubiera sido dicho.</span></div><div className={styles.kemboleSteps}><article><Image src="/stray-bola-triste-43.png" alt="Bola pequeña del universo Kembole" width={500} height={500}/><small>Lo dicho</small><b>Hay un mensaje parcial.</b></article><article><Image src="/stray-bola-triste-45.png" alt="Bola que parece conocer algo" width={500} height={500}/><small>Lo que completo</small><b>Una hipótesis ocupa el hueco.</b></article><article><Image src="/stray-bola-triste-44.png" alt="Bola cargada del universo Kembole" width={500} height={500}/><small>Lo que termina pesando</small><b>La lectura funciona como un hecho.</b></article></div></section>
   <div className={styles.cards}>{biases.map(([title, body]) => <article key={title}><h3>{title}</h3><p>{body}</p></article>)}</div>
   <Exercise title="Revisar una inferencia" message="Vos ya sabés cómo es. Si puso ‘ok’, está enojada. Mejor le explico todo otra vez antes de que me reclame."><Field label="¿Qué está observado?" value={answers.bias_observed} onChange={value => answer("bias_observed", value)}/><Field label="¿Qué fue agregado?" value={answers.bias_added} onChange={value => answer("bias_added", value)}/><Field label="Otra hipótesis posible" value={answers.bias_alternative} onChange={value => answer("bias_alternative", value)}/><Field label="¿Qué dato podría hacerte revisar tu lectura?" value={answers.bias_data} onChange={value => answer("bias_data", value)}/></Exercise>
   </div>; }
 
 function UnitFour({ answers, answer }: UnitProps) { const selected = (answers.case || "pedido") as keyof typeof cases; const item = cases[selected]; return <div className={styles.flow}>
+  <VideoMoment number="03" title="Demostración: del mensaje a la pregunta" duration="60–90 segundos" image="/imported-assets/stray-detective.png" alt="Stray observando detrás de una puerta" prompt="Tomá un mensaje breve y pensá en voz alta: qué está dicho, qué estás agregando, qué información falta y cuál sería la intervención mínima suficiente." live="Hacé la demostración con una conversación del grupo sin resolverla por la persona. Mostrá el procedimiento, no la respuesta correcta."/>
   <section><p>Elegí un caso. Un hueco relevante es uno cuya aclaración permite decidir o actuar. No hace falta pedir todos los detalles posibles.</p><div className={styles.caseTabs}>{Object.entries(cases).map(([key, value]) => <button type="button" key={key} className={selected === key ? styles.activeCase : ""} onClick={() => answer("case", key)}>{value.title}</button>)}</div></section>
   <Exercise title={item.title} message={item.message}><p>{item.context}</p><div className={styles.promptGrid}><Field label="Objetivo" hint="¿Para qué necesitás comprender este intercambio?" value={answers.map_goal} onChange={value => answer("map_goal", value)}/><Field label="Dato" hint="¿Qué se dijo o qué observaste?" value={answers.map_data} onChange={value => answer("map_data", value)}/><Field label="Inferencia" hint="Tu hipótesis y otra lectura posible." value={answers.map_inference} onChange={value => answer("map_inference", value)}/><Field label="Hueco relevante" hint="¿Qué falta para seguir?" value={answers.map_gap} onChange={value => answer("map_gap", value)}/><Field label="Distribución" hint="¿Qué puede aportar quien emite y quien recibe?" value={answers.map_distribution} onChange={value => answer("map_distribution", value)}/><Field label="Intervención mínima suficiente" hint="Una frase de hasta dos oraciones para la práctica." value={answers.map_move} onChange={value => answer("map_move", value)}/></div></Exercise>
   <section><h3>Banco de intervenciones</h3><p>Usá estas frases como puntos de partida. Elegí una que responda al hueco real y adaptala a tu vínculo.</p><div className={styles.phraseBank}>{interventions.map(phrase => <button type="button" key={phrase} onClick={() => answer("map_move", phrase)}>{phrase}</button>)}</div></section>
@@ -166,6 +172,7 @@ function UnitFour({ answers, answer }: UnitProps) { const selected = (answers.ca
   </div>; }
 
 function UnitFive({ answers, answer }: UnitProps) { return <div className={styles.flow}>
+  <VideoMoment number="04" title="Antes de la segunda lectura" duration="45–60 segundos" image="/stray-bola-triste-45.png" alt="Bola del universo Kembole mirando nuevamente" prompt="Invitá a releer sin buscar corregirse. El mensaje será exactamente el mismo; la observación está puesta en la forma desde la que ahora se lo lee." live="Leé el mensaje en voz alta exactamente igual que al comienzo. Dejá unos segundos de silencio antes de mostrar las preguntas."/>
   <p>Volvé al caso ancla. El mensaje no cambió. La variable que vamos a observar es tu lectura después de practicar.</p><Anchor/>
   <div className={styles.promptGrid}>{promptsB.map(([key, label, hint]) => <Field key={key} label={label} hint={hint} value={answers[key]} onChange={value => answer(key, value)}/>)}</div>
   <section className={styles.compare}><div><small>Primera lectura</small><p>{answers.a_complete || "Todavía no escribiste qué estabas completando."}</p></div><div><small>Segunda lectura</small><p>{answers.b_complete || "Completá la segunda lectura para verla acá."}</p></div></section>
@@ -188,6 +195,7 @@ function Anchor() { return <blockquote className={styles.anchor}><small>Caso anc
 function Note({ title, children }: { title: string; children: React.ReactNode }) { return <aside className={styles.note}><b>{title}</b><span>{children}</span></aside>; }
 function Exercise({ title, message, children }: { title: string; message: string; children: React.ReactNode }) { return <section className={styles.exercise}><p>Práctica</p><h3>{title}</h3><blockquote>“{message}”</blockquote>{children}</section>; }
 function PreviewRow({ label, value }: { label: string; value?: string }) { return <div className={styles.previewRow}><b>{label}</b><span>{value?.trim() || "Todavía no completado"}</span></div>; }
+function VideoMoment({ number, title, duration, image, alt, prompt, live }: { number: string; title: string; duration: string; image: string; alt: string; prompt: string; live: string }) { return <section className={styles.videoMoment}><div className={styles.videoPoster}><Image src={image} alt={alt} fill sizes="(max-width: 900px) 100vw, 48vw"/><span className={styles.playMark}>▶</span><small>Video {number} · por grabar</small></div><div className={styles.videoCopy}><p>Intervención audiovisual</p><h3>{title}</h3><span>{duration}</span><p>{prompt}</p><details><summary>Usarlo hoy en la clase presencial</summary><div>{live}</div></details></div></section>; }
 
 async function createWorkbookPdf(answers: AnswerMap) {
   const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
