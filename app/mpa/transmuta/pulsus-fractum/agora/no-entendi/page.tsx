@@ -75,7 +75,7 @@ export default function NoEntendiPage() {
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY);
     if (saved) try { setState({ ...initialState, ...JSON.parse(saved) }); } catch { /* Empieza con una ficha limpia. */ }
-    setAccess(window.sessionStorage.getItem("pulsus-campus-access") === "open");
+    setAccess(window.sessionStorage.getItem("pulsus-campus-access") === "open" || window.sessionStorage.getItem("pulsus-no-entendi-access") === "open");
     setReady(true);
   }, []);
 
@@ -90,7 +90,7 @@ export default function NoEntendiPage() {
     event.preventDefault();
     const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(code.trim().toUpperCase()));
     const hash = Array.from(new Uint8Array(digest)).map(byte => byte.toString(16).padStart(2, "0")).join("");
-    if (hash === ACCESS_HASH) { window.sessionStorage.setItem("pulsus-campus-access", "open"); setAccess(true); setError(""); }
+    if (hash === ACCESS_HASH) { window.sessionStorage.setItem("pulsus-no-entendi-access", "open"); setAccess(true); setError(""); }
     else setError("La Escuela todavía no reconoce esa palabra.");
   };
   const progress = state.completed ? 100 : Math.round(((state.active + 1) / units.length) * 100);
