@@ -71,6 +71,7 @@ export default function NoEntendiPage() {
   const [access, setAccess] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
+  const [pdfBusy, setPdfBusy] = useState(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY);
@@ -96,19 +97,13 @@ export default function NoEntendiPage() {
   const progress = state.completed ? 100 : Math.round(((state.active + 1) / units.length) * 100);
   const answered = useMemo(() => Object.values(state.answers).filter(value => value.trim()).length, [state.answers]);
 
-  const download = () => {
-    const lines = ["NO ENTENDÍ · NIVEL 1", "Entre explicar demasiado y hacer adivinar", "", `Fecha: ${new Date().toLocaleDateString("es-AR")}`, ""];
-    const add = (title: string, keys: readonly (readonly [string, string, string])[]) => {
-      lines.push(title.toUpperCase(), "");
-      keys.forEach(([key, prompt]) => lines.push(prompt, state.answers[key] || "—", ""));
-    };
-    add("Ficha A · Primera lectura", promptsA);
-    add("Ficha B · Segunda lectura y recalibración", promptsB);
-    lines.push("COMPARACIÓN", "¿Qué cambió sin que cambiara el mensaje?", state.answers.comparison || "—", "");
-    lines.push("MAPA DE CALIBRACIÓN", `Objetivo: ${state.answers.map_goal || "—"}`, `Dato: ${state.answers.map_data || "—"}`, `Inferencia: ${state.answers.map_inference || "—"}`, `Hueco relevante: ${state.answers.map_gap || "—"}`, `Intervención: ${state.answers.map_move || "—"}`, "");
-    lines.push("DESAFÍO DE SALIDA", `Dato: ${state.answers.exit_data || "—"}`, `Inferencia: ${state.answers.exit_inference || "—"}`, `Hueco: ${state.answers.exit_gap || "—"}`, `Intervención: ${state.answers.exit_move || "—"}`, "", `Mi señal de sobreprocesamiento es: ${state.answers.signal || "—"}`, `Mi próximo movimiento a probar es: ${state.answers.next_move || "—"}`);
-    const url = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" }));
-    const anchor = document.createElement("a"); anchor.href = url; anchor.download = "no-entendi-mi-recorrido.txt"; anchor.click(); URL.revokeObjectURL(url);
+  const download = async () => {
+    setPdfBusy(true);
+    try {
+      const bytes = await createWorkbookPdf(state.answers);
+      const url = URL.createObjectURL(new Blob([Uint8Array.from(bytes).buffer], { type: "application/pdf" }));
+      const anchor = document.createElement("a"); anchor.href = url; anchor.download = "no-entendi-mi-cuaderno.pdf"; anchor.click(); URL.revokeObjectURL(url);
+    } finally { setPdfBusy(false); }
   };
 
   if (!ready) return <main className={styles.loading} />;
@@ -134,9 +129,9 @@ export default function NoEntendiPage() {
         {state.active === 2 && <UnitThree answers={state.answers} answer={answer}/>} 
         {state.active === 3 && <UnitFour answers={state.answers} answer={answer}/>} 
         {state.active === 4 && <UnitFive answers={state.answers} answer={answer}/>} 
-        {state.active === 5 && <UnitSix answers={state.answers} answer={answer}/>} 
+        {state.active === 5 && <UnitSix answers={state.answers} answer={answer} go={go}/>} 
 
-        <footer className={styles.controls}><button type="button" disabled={state.active === 0} onClick={() => go(state.active - 1)}>Anterior</button>{state.active < units.length - 1 ? <button type="button" className={styles.primary} onClick={() => go(state.active + 1)}>Guardar y continuar</button> : <div className={styles.finalActions}><button type="button" onClick={download}>Descargar mis respuestas</button><button type="button" onClick={() => window.print()}>Imprimir</button><button type="button" className={styles.primary} onClick={() => save({ ...state, completed: !state.completed })}>{state.completed ? "Reabrir práctica" : "Completar taller"}</button></div>}</footer>
+        <footer className={styles.controls}><button type="button" disabled={state.active === 0} onClick={() => go(state.active - 1)}>Anterior</button>{state.active < units.length - 1 ? <button type="button" className={styles.primary} onClick={() => go(state.active + 1)}>Guardar y continuar</button> : <div className={styles.finalActions}><button type="button" disabled={pdfBusy} onClick={download}>{pdfBusy ? "Preparando PDF…" : "Descargar mi cuaderno PDF"}</button><button type="button" className={styles.primary} onClick={() => save({ ...state, completed: !state.completed })}>{state.completed ? "Reabrir práctica" : "Completar taller"}</button></div>}</footer>
       </section>
     </div>
   </main>;
@@ -178,10 +173,12 @@ function UnitFive({ answers, answer }: UnitProps) { return <div className={style
   <Note title="La propuesta">La clase no te exige desconfiar de todo. Te propone reconocer dónde termina lo que tenés y empieza lo que estás construyendo.</Note>
   </div>; }
 
-function UnitSix({ answers, answer }: UnitProps) { return <div className={styles.flow}>
+function UnitSix({ answers, answer, go }: UnitProps & { go: (index: number) => void }) { const criteria = [["eval_data","Dato e inferencia están separados"],["eval_gap","Identifiqué el hueco relevante"],["eval_degree","Puedo explicar por qué elegí ese grado"],["eval_move","Mi intervención se puede responder"]] as const; return <div className={styles.flow}>
   <Exercise title="Desafío final de salida" message={EXIT_CASE}><p>Tu objetivo es saber si tenés una tarea a cargo. No resuelvas el trabajo antes de saber qué te están pidiendo.</p><div className={styles.promptGrid}><Field label="Dato explícito" value={answers.exit_data} onChange={value => answer("exit_data", value)}/><Field label="Inferencia" value={answers.exit_inference} onChange={value => answer("exit_inference", value)}/><Field label="Hueco relevante" value={answers.exit_gap} onChange={value => answer("exit_gap", value)}/><Field label="Intervención y grado elegido" value={answers.exit_move} onChange={value => answer("exit_move", value)}/></div></Exercise>
   <section><h3>Siete conversaciones para practicar</h3><p>En tus próximas siete conversaciones, detectá una ocasión en la que estés por completar información o explicar por las dudas. No es necesario buscar siete conflictos ni terminar en una semana.</p><div className={styles.conversationList}>{Array.from({ length: 7 }, (_, index) => <details key={index}><summary>Conversación {index + 1}<span>{answers[`conversation_${index}`] ? "Registrada" : "Pendiente"}</span></summary><Field label="D · dato / H · hipótesis / F · información que falta / M · movimiento / R · resultado" value={answers[`conversation_${index}`]} onChange={value => answer(`conversation_${index}`, value)}/></details>)}</div></section>
   <div className={styles.promptGrid}><Field label="Mi señal de sobreprocesamiento es…" value={answers.signal} onChange={value => answer("signal", value)}/><Field label="Mi próximo movimiento a probar es…" value={answers.next_move} onChange={value => answer("next_move", value)}/></div>
+  <section className={styles.evaluation}><p>Cierre de la experiencia</p><h3>Antes de descargar, revisá tu recorrido</h3><span>No es un examen. Esta evaluación te ayuda a decidir si tu cuaderno ya representa lo que aprendiste o si querés volver a editar algo.</span><div>{criteria.map(([key, label]) => <button type="button" key={key} aria-pressed={answers[key] === "logrado"} className={answers[key] === "logrado" ? styles.achieved : ""} onClick={() => answer(key, answers[key] === "logrado" ? "" : "logrado")}><i>{answers[key] === "logrado" ? "✓" : "○"}</i>{label}</button>)}</div><Field label="Mi aprendizaje principal" hint="Esta frase abre tu cuaderno final." value={answers.final_learning} onChange={value => answer("final_learning", value)}/></section>
+  <section className={styles.preview}><header><div><p>Vista previa del PDF</p><h3>Mi cuaderno · No entendí</h3></div><span>{Object.values(answers).filter(Boolean).length} registros</span></header><PreviewRow label="Primera lectura" value={answers.a_understand}/><PreviewRow label="Lo que reconocí que completaba" value={answers.b_complete}/><PreviewRow label="El cambio que observé" value={answers.comparison}/><PreviewRow label="Mi intervención" value={answers.map_move}/><PreviewRow label="Mi aprendizaje principal" value={answers.final_learning}/><nav><button type="button" onClick={() => go(0)}>Editar primera lectura</button><button type="button" onClick={() => go(3)}>Editar mi mapa</button><button type="button" onClick={() => go(4)}>Editar comparación</button></nav></section>
   <Note title="Cierre">No hace falta resolver toda la conversación en una respuesta. Podés reconocer lo que entendiste, mostrar lo que falta y pedir el aporte necesario.</Note>
   </div>; }
 
@@ -190,3 +187,36 @@ function Field({ label, hint, value = "", onChange }: { label: string; hint?: st
 function Anchor() { return <blockquote className={styles.anchor}><small>Caso ancla · conservá el texto exacto</small>“{ANCHOR}”</blockquote>; }
 function Note({ title, children }: { title: string; children: React.ReactNode }) { return <aside className={styles.note}><b>{title}</b><span>{children}</span></aside>; }
 function Exercise({ title, message, children }: { title: string; message: string; children: React.ReactNode }) { return <section className={styles.exercise}><p>Práctica</p><h3>{title}</h3><blockquote>“{message}”</blockquote>{children}</section>; }
+function PreviewRow({ label, value }: { label: string; value?: string }) { return <div className={styles.previewRow}><b>{label}</b><span>{value?.trim() || "Todavía no completado"}</span></div>; }
+
+async function createWorkbookPdf(answers: AnswerMap) {
+  const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
+  const pdf = await PDFDocument.create();
+  const regular = await pdf.embedFont(StandardFonts.Helvetica);
+  const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+  const italic = await pdf.embedFont(StandardFonts.HelveticaOblique);
+  const pageSize: [number, number] = [595.28, 841.89];
+  const margin = 52;
+  const ink = rgb(.12,.07,.12), gold = rgb(.44,.35,.19), pink = rgb(.72,.24,.52), paper = rgb(.98,.96,.94), muted = rgb(.42,.37,.41);
+  let page = pdf.addPage(pageSize), y = pageSize[1] - margin;
+  const addPage = () => { page = pdf.addPage(pageSize); page.drawRectangle({ x:0,y:0,width:pageSize[0],height:pageSize[1],color:paper }); page.drawText("ESCUELA DE METALKIMIA · PULSUS FRACTUM",{x:margin,y:pageSize[1]-30,size:7,font:bold,color:gold}); y=pageSize[1]-58; };
+  const ensure = (height: number) => { if (y-height < 48) addPage(); };
+  const wrap = (text: string, maxWidth: number, size: number, font = regular) => { const words=(text||"—").replace(/\s+/g," ").trim().split(" "); const lines:string[]=[]; let line=""; for(const word of words){ const next=line?`${line} ${word}`:word; if(font.widthOfTextAtSize(next,size)>maxWidth&&line){lines.push(line);line=word}else line=next} if(line) lines.push(line); return lines; };
+  const text = (value:string,size=10,color=ink,font=regular,maxWidth=pageSize[0]-margin*2,leading=size*1.45) => { const lines=wrap(value,maxWidth,size,font); ensure(lines.length*leading+4); lines.forEach(line=>{page.drawText(line,{x:margin,y,size,font,color});y-=leading}); y-=4; };
+  const section = (title:string) => { ensure(42); y-=9; page.drawText(title.toUpperCase(),{x:margin,y,size:8,font:bold,color:pink}); y-=16; page.drawLine({start:{x:margin,y:y+7},end:{x:pageSize[0]-margin,y:y+7},thickness:.5,color:gold}); };
+  const response = (label:string,value?:string) => { ensure(55); page.drawText(label,{x:margin,y,size:9,font:bold,color:gold}); y-=15; text(value?.trim()||"No completado",10,ink,regular); y-=7; };
+  page.drawRectangle({x:0,y:0,width:pageSize[0],height:pageSize[1],color:paper});
+  page.drawText("NO ENTENDÍ",{x:margin,y,size:34,font:bold,color:gold}); y-=34;
+  page.drawText("Entre explicar demasiado y hacer adivinar",{x:margin,y,size:15,font:italic,color:ink}); y-=28;
+  text(answers.final_learning?.trim() || "Mi recorrido de comunicación · Nivel 1",13,pink,bold);
+  text(`Cuaderno generado el ${new Date().toLocaleDateString("es-AR")}`,8,muted,regular); y-=16;
+  section("Ficha A · Primera lectura"); promptsA.forEach(([key,label])=>response(label,answers[key]));
+  section("Ficha B · Segunda lectura y recalibración"); promptsB.forEach(([key,label])=>response(label,answers[key]));
+  section("Comparación"); response("¿Qué cambió sin que cambiara el mensaje?",answers.comparison);
+  section("Mapa de calibración"); [["Objetivo","map_goal"],["Dato","map_data"],["Inferencia","map_inference"],["Hueco relevante","map_gap"],["Distribución del trabajo","map_distribution"],["Intervención mínima suficiente","map_move"]].forEach(([label,key])=>response(label,answers[key]));
+  section("Desafío de salida"); [["Dato explícito","exit_data"],["Inferencia","exit_inference"],["Hueco relevante","exit_gap"],["Intervención y grado elegido","exit_move"]].forEach(([label,key])=>response(label,answers[key]));
+  section("Mi autoevaluación"); [["Dato e inferencia separados","eval_data"],["Hueco relevante identificado","eval_gap"],["Grado elegido con criterio","eval_degree"],["Intervención respondible","eval_move"]].forEach(([label,key])=>response(label,answers[key]==="logrado"?"Logrado":"A revisar")); response("Mi señal de sobreprocesamiento",answers.signal); response("Mi próximo movimiento a probar",answers.next_move);
+  section("Siete conversaciones para practicar"); Array.from({length:7},(_,index)=>response(`Conversación ${index+1}`,answers[`conversation_${index}`]));
+  const pages=pdf.getPages(); pages.forEach((item,index)=>{item.drawText(`${index+1} / ${pages.length}`,{x:pageSize[0]-margin-24,y:26,size:7,font:regular,color:muted}); item.drawLine({start:{x:margin,y:38},end:{x:pageSize[0]-margin,y:38},thickness:.4,color:gold});});
+  return pdf.save();
+}
