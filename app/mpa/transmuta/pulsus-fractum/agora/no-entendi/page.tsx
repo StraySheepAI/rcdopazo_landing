@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
 
-const ACCESS_HASH = "53a262023ec1056f291cf2b332ffacbb2b790b9306ff9869e72c0d419d95e6eb";
+const ACCESS_HASH = "b6c06f8cda124de6de5c7969f49e1c572392a772b2f1b8a6c7fca63df54b6ca4";
 const STORAGE_KEY = "pulsus-no-entendi-nivel-1-v1";
 const ANCHOR = "Hablé lo del espacio. En realidad no era como pensábamos, pero ya quedó. Igual después vemos con Juan porque capaz conviene hacerlo distinto.";
 const EXIT_CASE = "Ya está lo de mañana. Fijate si podés dejar eso listo, así no volvemos con lo mismo.";
@@ -112,7 +112,7 @@ export default function NoEntendiPage() {
   };
 
   if (!ready) return <main className={styles.loading} />;
-  if (!access) return <main className={styles.gate}><div className={styles.stars}/><Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">Volver al Ágora</Link><section><div className={styles.seal}>PF</div><p>Taller de comunicación · Nivel 1</p><h1>No entendí</h1><span>El recorrido presencial y sus fichas de práctica pertenecen al espacio de cursantes.</span><form onSubmit={unlock}><label htmlFor="no-entendi-code">Palabra de acceso</label><div><input id="no-entendi-code" type="password" value={code} onChange={event => { setCode(event.target.value); setError(""); }} autoFocus/><button type="submit">Abrir el taller</button></div><small className={error ? styles.error : ""}>{error || "Usá la misma palabra de acceso que recibiste para el campus."}</small></form></section></main>;
+  if (!access) return <main className={styles.gate}><div className={styles.stars}/><Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">← Volver al Ágora</Link><section><div className={styles.seal}>PF</div><p>Taller de comunicación · Nivel 1</p><h1>No entendí</h1><span>El recorrido presencial y sus fichas de práctica pertenecen al espacio de cursantes.</span><form onSubmit={unlock}><label htmlFor="no-entendi-code">Palabra de acceso</label><div><input id="no-entendi-code" type="password" value={code} onChange={event => { setCode(event.target.value); setError(""); }} autoFocus/><button type="submit">Abrir el taller</button></div><small className={error ? styles.error : ""}>{error || <>Clave de revisión: <b>NOENTENDI</b></>}</small></form></section></main>;
 
   return <main className={styles.workshop}>
     <header className={styles.header}><Link href="/mpa/transmuta/pulsus-fractum?entry=mpa">Volver al Ágora</Link><span>Escuela de Metalkimia · Pulsus Fractum</span><b>{state.completed ? "Taller completado" : "Progreso guardado"}</b></header>
